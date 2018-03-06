@@ -1,7 +1,7 @@
 {
   "name": "cloudcannon-suite",
   "version": "1.0.0",
-  "description": "A gulp suite of tools to work with static sites",
+  "description": "A suite of gulp tools to manage static sites",
   "main": "index.js",
   "directories": {
     "doc": "docs"
@@ -9,6 +9,37 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CloudCannon/cloudcannon-suite.git"
+  },
+  "keywords": [
+    "Gulp",
+    "CloudCannon",
+    "Jekyll",
+    "Static sites"
+  ],
   "author": "CloudCannon",
-  "license": "MIT"
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/CloudCannon/cloudcannon-suite/issues"
+  },
+  "homepage": "https://github.com/CloudCannon/cloudcannon-suite#readme",
+  "dependencies": {
+    "async": "^2.6.0",
+    "cheerio": "^1.0.0-rc.2",
+    "defaults": "^1.0.3",
+    "del": "^3.0.0",
+    "gulp": "^3.9.1",
+    "gulp-imagemin": "^4.1.0",
+    "gulp-props2json": "^2.0.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-sequence": "^1.0.0",
+    "gulp-task-listing": "^1.0.1",
+    "gulp-util": "^3.0.8",
+    "gulp-webserver": "^0.9.1",
+    "gulp-webshot": "^0.2.3",
+    "sort-object-keys": "^1.1.2",
+    "through2": "^2.0.3"
+  }
 }
