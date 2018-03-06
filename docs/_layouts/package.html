@@ -2,69 +2,48 @@
 layout: default
 ---
 
-{{ content }}
+<p>Now that you have <code>cloudcannon-suite</code> and <code>gulp</code> installed, we have to configure our gulpfile. For a basic setup you can add:</p>
 
-<h3>Install</h3>
-
-{% capture example %}
-Now that you have `cloudcannon-suite` and `gulp` installed, we have to configure our gulpfile. For a basic setup you can add:
-
-```js
+{% highlight javascript %}
 const gulp = require("gulp");
 const suite = require("cloudcannon-suite");
 
 suite.{{ page.namespace }}(gulp);
-```
-{% endcapture %}
-
-{{ example | markdownify }}
+{% endhighlight %}
 
 <h3>Usage</h3>
 
-{% capture example %}
-```sh
-$ gulp {{ page.namespace }}
-```
-{% endcapture %}
+{{ page.output_markdown | markdownify }}
 
-{{ example | markdownify }}
+{% highlight sh %}
+$ gulp {{ page.namespace }}
+{{ page.output_code }}
+{% endhighlight %}
 
 {% if page.commands %}
-<h3>Subtasks</h3>
-{% for entry in page.commands %}
-<h4>{{ entry }}</h4>
+	<h3>Subtasks</h3>
+	{% for entry in page.commands %}
+		<h4>{{ entry }}</h4>
 
-{% capture example %}
-```sh
-$ gulp {{ page.namespace }}:{{ entry }}
-```
-{% endcapture %}
-
-{{ example | markdownify }}
-{% endfor %}
+		{% highlight sh %}$ gulp {{ page.namespace }}:{{ entry }}{% endhighlight %}
+	{% endfor %}
 {% endif %}
 
 {% if page.default_json_code %}
-<h3>Default Configuration</h3>
+	<h3>Default Configuration</h3>
 
-<p>Below is the default configuration for the {{ page.title }} package:</p>
+	<p>Below is the default configuration for the {{ page.title }} package:</p>
 
-{% capture example %}
-```json
-{{ page.default_json_code }}
-```
-{% endcapture %}
-
-{{ example | markdownify }}
+	{% highlight json %}{{ page.default_json_code }}{% endhighlight %}
 {% endif %}
 
 {% if page.config %}
-<h3>Configuration</h3>
+	<h3>Configuration</h3>
 
-<p>If you have a more complex set up you can use any of the following options with the {{ page.title }} package.</p>
+	<p>If you have a more complex set up you can use any of the following options with the {{ page.title }} package.</p>
 
-{% for entry in page.config %}
-	<h4>{{ entry.key }}</h4>
-	{{ entry.description_markdown | markdownify }}
-{% endfor %}
+	{% for entry in page.config %}
+		<h4>{{ entry.key }}</h4>
+		{{ entry.description_markdown | markdownify }}
+	{% endfor %}
 {% endif %}

@@ -1,6 +1,6 @@
 ---
-title: Reports
-namespace: reports
+title: Screenshots
+namespace: screenshots
 commands:
   - install
   - build

@@ -1,4 +1,20 @@
-<svg fill="#ffffff" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
-    <path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2z"/>
-    <path d="M0 0h24v24H0z" fill="none"/>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 21.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 34 24" style="enable-background:new 0 0 34 24;" xml:space="preserve">
+<style type="text/css">
+	.st0{clip-path:url(#SVGID_2_);fill:#FFFFFF;}
+</style>
+<g>
+	<g>
+		<defs>
+			<rect id="SVGID_1_" width="34" height="24"/>
+		</defs>
+		<clipPath id="SVGID_2_">
+			<use xlink:href="#SVGID_1_"  style="overflow:visible;"/>
+		</clipPath>
+		<path class="st0" d="M4,18v3h3v-3h20v3h3v-6H4V18z M29,10h3v3h-3V10z M2,10h3v3H2V10z M27,13H7V5c0-1.1,0.9-2,2-2h16
+			c1.1,0,2,0.9,2,2V13z"/>
+	</g>
+</g>
 </svg>
