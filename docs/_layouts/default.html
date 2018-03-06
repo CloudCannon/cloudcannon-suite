@@ -36,38 +36,35 @@
 				<input type="text" name="q" id="search-input" placeholder="Search" autofocus>
 				<input type="submit" value="Search" style="display: none;">
 			</form>
-
-			<nav {% if site.show_full_navigation %}class="full-navigation"{% endif %}>
-				<ul>
-					<li class="nav-item top-level {% if page.url == '/' %}current{% endif %}">
-						{% assign home = site.html_pages | where: 'url', '/' | first %}
-						<a href="{{ site.baseurl }}/">{{ home.title }}</a>
-					</li>
-				</ul>
-
-				<ul>
-					{% assign grouped = site.docs | group_by: 'category' %}
-					{% for group in grouped %}
-						<li class="nav-item top-level {% if group.name == page.category %}current{% endif %}">
-							{% assign items = group.items | sort: 'order' %}
-							<a href="{{ site.baseurl }}{{ items.first.url }}">{{ group.name }}</a>
-							<ul>
-								{% for item in items %}
-									<li class="nav-item {% if item.url == page.url %}current{% endif %}"><a href="{{ site.baseurl }}{{ item.url }}">{{ item.title }}</a></li>
-								{% endfor %}
-							</ul>
-						</li>
-					{% endfor %}
-				</ul>
-
-				<ul>
-					<li class="nav-item top-level {% if page.url == '/changelog/' %}current{% endif %}">
-						{% assign changelog = site.html_pages | where: 'url', '/changelog/' | first %}
-						<a href="{{ site.baseurl }}/changelog/">{{ changelog.title }}</a>
-					</li>
-				</ul>
-			</nav>
 		</header>
+
+		<nav>
+			<ul>
+				{% for package in site.html_pages %}
+					{% if package.in_nav %}
+						<li class="nav-item top-level {% if package.url == page.url %}current{% endif %}">
+							<a href="{{ site.baseurl }}{{ package.url }}">{{ package.title }}</a>
+						</li>
+					{% endif %}
+				{% endfor %}
+			</ul>
+
+			<strong>packages</strong>
+			<ul>
+				{% for package in site.packages %}
+					<li class="nav-item top-level {% if package.url == page.url %}current{% endif %}">
+						<a href="{{ site.baseurl }}{{ package.url }}">{{ package.title }}</a>
+					</li>
+				{% endfor %}
+			</ul>
+
+			<ul>
+				<li class="nav-item top-level {% if page.url == '/changelog/' %}current{% endif %}">
+					{% assign changelog = site.html_pages | where: 'url', '/changelog/' | first %}
+					<a href="{{ site.baseurl }}/changelog/">{{ changelog.title }}</a>
+				</li>
+			</ul>
+		</nav>
 
 		<section class="main">
 			<div class="page-header">

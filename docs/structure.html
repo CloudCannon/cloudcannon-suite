@@ -1,0 +1,22 @@
+---
+title: Structure
+in_nav: true
+---
+
+<p>The opinionated file structure for all of your sites. This is defined to increase consistency between sites.</p>
+
+<h3>Folder structure</h3>
+
+{% assign sorted = site.data.structure | sort: 'path' %}
+<ul>
+{% for file in sorted %}
+	<li><a href="#{{ file.path | slugify }}">{{ file.path }}</a></li>
+{% endfor %}
+</ul>
+
+
+{% for file in sorted %}
+	<h4 id="{{ file.path | slugify }}">{{ file.path }}</h4>
+
+	{{ file.description_markdown | markdownify }}
+{% endfor %}

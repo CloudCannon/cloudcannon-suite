@@ -1,5 +1,5 @@
 ---
 title:
-category:
+path:
 order: 1
 ---
