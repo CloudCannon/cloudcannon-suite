@@ -1,0 +1,14 @@
+{
+  "name": "cloudcannon-suite",
+  "version": "1.0.0",
+  "description": "A gulp suite of tools to work with static sites",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "CloudCannon",
+  "license": "MIT"
+}
