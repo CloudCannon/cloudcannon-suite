@@ -5,18 +5,19 @@ in_nav: true
 
 <p>The opinionated file structure for all of your sites. This is defined to increase consistency between sites.</p>
 
-<h4>Folder structure</h4>
-
 {% assign sorted = site.data.structure | sort: 'path' %}
-<ul>
+<ul class="file-structure">
 {% for file in sorted %}
-	<li><a href="#{{ file.path | slugify }}">{{ file.path }}</a></li>
+	{% assign parts = file.path | split: "/" %}
+	{% assign filename = parts | last %}
+
+	<li class="indent-{{ parts | size }}">
+		<strong>
+			<i class="material-icons">{% include file-icon.html filename=filename %}</i>
+			{{ filename }}
+		</strong>
+
+		{{ file.description_markdown | markdownify }}
+</li>
 {% endfor %}
 </ul>
-
-
-{% for file in sorted %}
-	<h4 id="{{ file.path | slugify }}">{{ file.path }}</h4>
-
-	{{ file.description_markdown | markdownify }}
-{% endfor %}
