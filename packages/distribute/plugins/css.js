@@ -5,11 +5,6 @@ var gutil = require("gulp-util"),
 
 module.exports = function (options) {
 	options = options || {};
-
-	function rewrite(file, href) {
-		return "/" + path.join(options.baseurl, href);
-	}
-
 	return through(function (file, encoding, callback) {
 		if (file.isNull()) {
 			return callback(null, file);
@@ -22,9 +17,12 @@ module.exports = function (options) {
 		file.sitePath = "/" + file.path.substring(file.base.length);
 		file.sitePath = file.sitePath.replace(/\/index.html?/i, "/");
 
+
 		var css = file.contents.toString(encoding);
 
-		css = rewriteCssUrls(css, rewrite);
+		css = rewriteCssUrls(css, function rewrite(href) {
+			return "/" + path.join(options.baseurl, href);
+		});
 
 		file.contents = new Buffer(css);
 		callback();
