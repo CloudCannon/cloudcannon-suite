@@ -69,6 +69,7 @@ module.exports = function (options) {
 			}
 		});
 
+		file.contents = new Buffer($.html());
 		callback();
 	});
 };
