@@ -23,9 +23,11 @@ $ gulp {{ page.namespace }}
 {% if page.commands %}
 	<h3>Subtasks</h3>
 	{% for entry in page.commands %}
-		<h4>{{ entry }}</h4>
+		<h4>{{ entry.task }}</h4>
 
-		{% highlight sh %}$ gulp {{ page.namespace }}:{{ entry }}{% endhighlight %}
+		{{ entry.description_markdown | markdownify }}
+
+		{% highlight sh %}$ gulp {{ page.namespace }}:{{ entry.task }}{% endhighlight %}
 	{% endfor %}
 {% endif %}
 

@@ -4,5 +4,22 @@ show_intro: true
 in_nav: false
 ---
 
+<p>Welcome to a new life of maintainable static sites using Jekyll and Gulp. </p>
 
+<ul>
+	<li><a href="/install">New to CloudCannon Suite</a></li>
+	<li><a href="/install">Adding CloudCannon Suite to a new site</a></li>
+	<li><a href="#packages">Adding a package to an existing site</a></li>
+</ul>
 
+<h3 id="packages">Packages</h3>
+<p>Choose a package to install:</p>
+<ul>
+	{% for package in site.packages %}
+		<li>
+			<a href="{{ site.baseurl }}{{ package.url }}">{{ package.title }}</a>
+		</li>
+	{% endfor %}
+</ul>
+
+<p>Don't see what you need? Contact <a href="mailto:george@cloudcannon.com">george@cloudcannon.com</a>.</p>

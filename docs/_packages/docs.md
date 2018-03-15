@@ -2,15 +2,19 @@
 title: Docs
 namespace: docs
 commands:
-  - install
-  - build
-  - serve
-  - watch
+  - task: install
+    description_markdown: Runs `bundle install` on the `src` folder
+  - task: build
+    description_markdown: Runs `bundle exec jekyll serve` on the `src` folder
+  - task: serve
+    description_markdown: Runs a local webserver on the `dest` folder
+  - task: watch
+    description_markdown: Watches the `src` folder and triggers builds
 
 output_markdown: |
   Running `gulp docs` runs jekyll build on the `docs` directory and outputs the site to `dist/docs`. Once completed the a local webserver will be started on port 5000. Any changes to the `docs` folder will trigger a rebuild of the contents.
 output_code: |
-  [12:04:12] Using gulpfile ~/Work/cloudcannon/suite/gulpfile.js
+  [12:04:12] Using gulpfile ./gulpfile.js
   [12:04:12] Starting 'docs'...
   [12:04:12] Starting 'docs:build'...
   [12:04:12] $ bundle exec jekyll build --destination /Users/george/Work/cloudcannon/suite/dist/docs --baseurl

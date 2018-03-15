@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<!-- Begin Jekyll SEO tag v2.4.0 -->
+<title>Install | CloudCannon Suite</title>
+<meta name="generator" content="Jekyll v3.7.2" />
+<meta property="og:title" content="Install" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Product documentation template for Jekyll." />
+<meta property="og:description" content="Product documentation template for Jekyll." />
+<link rel="canonical" href="https://long-pig.cloudvent.net/install/" />
+<meta property="og:url" content="https://long-pig.cloudvent.net/install/" />
+<meta property="og:site_name" content="CloudCannon Suite" />
+<script type="application/ld+json">
+{"description":"Product documentation template for Jekyll.","url":"https://long-pig.cloudvent.net/install/","headline":"Install","@type":"WebPage","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://long-pig.cloudvent.net/siteicon.png"}},"@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+		<link type="application/atom+xml" rel="alternate" href="https://long-pig.cloudvent.net/feed.xml" title="CloudCannon Suite" />
+
+		<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Merriweather:400,400italic,700,700italic|Open+Sans:400,400italic,600,600italic,700,700italic|Inconsolata:400,700">
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		<link rel="stylesheet" href="/css/main.css">
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+		<link rel="icon" type="image/png" href="/touch-icon.png" sizes="192x192">
+		<link rel="icon" type="image/png" href="/images/favicon.png">
+
+		
+	</head>
+
+	<body>
+		
+		<header id="header">
+			<div class="container">
+				<h1>
+					<a href="/"><img src="/images/emblem.svg" width="40" height="40" alt="CloudCannon Suite logo"></a>
+					CloudCannon Suite
+					<button type="button" class="open-nav" id="open-nav"></button>
+				</h1>
+
+				<form action="/search/" method="get">
+					<input type="text" name="q" id="search-input" placeholder="Search">
+					<input type="submit" value="Search" style="display: none;">
+				</form>
+			</div>
+		</header>
+
+		<main>
+			<div class="container">
+				<nav>
+					<ul>
+						
+							
+						
+							
+						
+							
+						
+							
+								<li class="nav-item top-level current">
+									<a href="/install/">Install</a>
+								</li>
+							
+						
+							
+						
+							
+								<li class="nav-item top-level ">
+									<a href="/structure/">Structure</a>
+								</li>
+							
+						
+					</ul>
+
+					<ul>
+						
+							<li class="nav-item top-level ">
+								<a href="/packages/dev/">Dev</a>
+							</li>
+						
+							<li class="nav-item top-level ">
+								<a href="/packages/docs/">Docs</a>
+							</li>
+						
+							<li class="nav-item top-level ">
+								<a href="/packages/help/">Help</a>
+							</li>
+						
+							<li class="nav-item top-level ">
+								<a href="/packages/i18n/">I18n</a>
+							</li>
+						
+							<li class="nav-item top-level ">
+								<a href="/packages/screenshots/">Screenshots</a>
+							</li>
+						
+					</ul>
+
+					<ul>
+						<li class="nav-item top-level ">
+							
+							<a href="/changelog/">Change Log</a>
+						</li>
+					</ul>
+				</nav>
+
+				<section>
+					<div class="page-header">
+						<h3>Install</h3>
+					</div>
+					<article class="content">
+						<p>Welcome to the install guide. This assumes you have a site already and wish to convert it to the opinionated format.</p>
+
+<h4 id="prepare-source">Prepare source</h4>
+
+<p>A custom source directory keeps the root directory clean and free for configuration. Move all jekyll source including Gemfile and Gemfile.lock to the <code class="highlighter-rouge">src</code> folder. To do this with bash use the following command:</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">mkdir </span>src
+<span class="nv">$ </span><span class="nb">mv</span> <span class="sb">`</span><span class="nb">ls</span> <span class="nt">-A</span> | <span class="nb">grep</span> <span class="nt">-v</span> src<span class="sb">`</span> ./src
+</code></pre></div></div>
+
+<h4 id="check-that-you-have-node-and-npm-installed">Check that you have node and npm installed</h4>
+
+<p>To check if you have Node.js installed, run this command in your terminal:</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>node <span class="nt">-v</span>
+</code></pre></div></div>
+
+<p>To confirm that you have npm installed you can run this command in your terminal:</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>npm <span class="nt">-v</span>
+</code></pre></div></div>
+
+<p>If either of these commands fail, follow the <a href="https://www.npmjs.com/get-npm">npm install guide</a>.</p>
+
+<h4 id="install-the-gulp-cli">Install the gulp-cli</h4>
+
+<p>Installing the gulp cli allows you to run the <code class="highlighter-rouge">gulp</code> command in your terminal:</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>npm <span class="nb">install</span> <span class="nt">--global</span> gulp-cli
+</code></pre></div></div>
+
+<h4 id="create-a-packagejson-in-your-project-directory">Create a <code class="highlighter-rouge">package.json</code> in your project directory</h4>
+<p>If you don’t have a package.json, create one. If you need help, run an <code class="highlighter-rouge">npm init</code> which will walk you through giving it a name, version, description, etc.</p>
+
+<h4 id="install-your-dependencies">Install your dependencies</h4>
+
+<p>Run this command in your project directory:</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>npm <span class="nb">install</span> <span class="nt">--save-dev</span> gulp@next cloudcannon-suite
+</code></pre></div></div>
+
+<h4 id="create-a-gulpfile">Create a <code class="highlighter-rouge">gulpfile</code></h4>
+
+<p>In your project directory, create a file named <code class="highlighter-rouge">gulpfile.js</code> in your project root with these contents:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">gulp</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">"gulp"</span><span class="p">);</span>
+<span class="kd">const</span> <span class="nx">suite</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">"cloudcannon-suite"</span><span class="p">);</span>
+
+<span class="nx">suite</span><span class="p">.</span><span class="nx">dev</span><span class="p">(</span><span class="nx">gulp</span><span class="p">);</span>
+</code></pre></div></div>
+
+<h4 id="test-it-out">Test it out</h4>
+
+<p>Run the gulp command in your project directory:</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>gulp dev
+</code></pre></div></div>
+
+<h4 id="result">Result</h4>
+
+<p>Voila! This will build your site to <code class="highlighter-rouge">dist/site</code> and serve it on localhost:4000. Any changes made in <code class="highlighter-rouge">src</code> will trigger another build.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>gulp dev
+<span class="o">[</span>19:14:48] Using gulpfile ~/Work/cloudcannon/suite/gulpfile.js
+<span class="o">[</span>19:14:48] Starting <span class="s1">'dev'</span>...
+<span class="o">[</span>19:14:48] Starting <span class="s1">'dev:build'</span>...
+<span class="o">[</span>19:14:48] <span class="nv">$ </span>bundle <span class="nb">exec </span>jekyll build <span class="nt">--destination</span> dist/site
+Configuration file: src/_config.yml
+            Source: src
+       Destination: dist/src
+ Incremental build: disabled. Enable with <span class="nt">--incremental</span>
+      Generating...
+                    <span class="k">done in </span>0.73 seconds.
+ Auto-regeneration: disabled. Use <span class="nt">--watch</span> to enable.
+<span class="o">[</span>19:14:50] Finished <span class="s1">'dev:build'</span> after 1.58 s
+<span class="o">[</span>19:14:50] Starting <span class="s1">'dev:watch'</span>...
+<span class="o">[</span>19:14:50] Finished <span class="s1">'dev:watch'</span> after 45 ms
+<span class="o">[</span>19:14:50] Starting <span class="s1">'dev:serve'</span>...
+<span class="o">[</span>19:14:50] Webserver started at http://localhost:4000
+<span class="o">[</span>19:14:50] Finished <span class="s1">'dev:serve'</span> after 40 ms
+<span class="o">[</span>19:14:50] Finished <span class="s1">'dev'</span> after 1.67 s
+</code></pre></div></div>
+
+<h3 id="what-now">What now</h3>
+
+<p>Now that you have dev setup you can check out all of the packages available. These can be used to assist with i18n, reporting, testing and more.</p>
+
+					</article>
+				</section>
+			<div>
+		</main>
+
+		<script>
+			document.getElementById("open-nav").addEventListener("click", function () {
+				document.body.classList.toggle("nav-open");
+			});
+		</script>
+	</body>
+</html>

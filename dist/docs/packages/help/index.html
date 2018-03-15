@@ -6,17 +6,19 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 
 		<!-- Begin Jekyll SEO tag v2.4.0 -->
-<title>Welcome | CloudCannon Suite</title>
+<title>Help | CloudCannon Suite</title>
 <meta name="generator" content="Jekyll v3.7.2" />
-<meta property="og:title" content="Welcome" />
+<meta property="og:title" content="Help" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Product documentation template for Jekyll." />
 <meta property="og:description" content="Product documentation template for Jekyll." />
-<link rel="canonical" href="https://long-pig.cloudvent.net/" />
-<meta property="og:url" content="https://long-pig.cloudvent.net/" />
+<link rel="canonical" href="https://long-pig.cloudvent.net/packages/help/" />
+<meta property="og:url" content="https://long-pig.cloudvent.net/packages/help/" />
 <meta property="og:site_name" content="CloudCannon Suite" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-03-13T04:03:29+00:00" />
 <script type="application/ld+json">
-{"name":"Edition Template","description":"Product documentation template for Jekyll.","url":"https://long-pig.cloudvent.net/","headline":"Welcome","sameAs":["https://github.com/CloudCannon/edition-jekyll-template"],"@type":"WebSite","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://long-pig.cloudvent.net/siteicon.png"}},"@context":"http://schema.org"}</script>
+{"description":"Product documentation template for Jekyll.","url":"https://long-pig.cloudvent.net/packages/help/","headline":"Help","dateModified":"2018-03-13T04:03:29+00:00","datePublished":"2018-03-13T04:03:29+00:00","@type":"Article","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://long-pig.cloudvent.net/siteicon.png"}},"@context":"http://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 		<link type="application/atom+xml" rel="alternate" href="https://long-pig.cloudvent.net/feed.xml" title="CloudCannon Suite" />
@@ -32,20 +34,6 @@
 	</head>
 
 	<body>
-		
-			<div class="intro-section">
-				<div>
-					<img src="/images/emblem.svg" width="300" height="300" alt="CloudCannon Suite logo">
-					<h1>CloudCannon Suite</h1>
-					<p>An opinionated set of tools used to build and maintain static sites.</p>
-					<div class="technologies">
-						<div><img src="/images/jekyll-logo.svg"></div>
-						<div><img src="/images/gulp.svg"></div>
-						<div><img src="/images/cloudcannon.svg" style="height: 50px;"></div>
-					</div>
-				</div>
-				<a href="#header">Learn More <i class="material-icons">keyboard_arrow_down</i></a>
-			</div>
 		
 		<header id="header">
 			<div class="container">
@@ -99,7 +87,7 @@
 								<a href="/packages/docs/">Docs</a>
 							</li>
 						
-							<li class="nav-item top-level ">
+							<li class="nav-item top-level current">
 								<a href="/packages/help/">Help</a>
 							</li>
 						
@@ -123,44 +111,48 @@
 
 				<section>
 					<div class="page-header">
-						<h3>Welcome</h3>
+						<h3>Help</h3>
 					</div>
 					<article class="content">
-						<p>Welcome to a new life of maintainable static sites using Jekyll and Gulp. </p>
+						<p>Now that you have <code>cloudcannon-suite</code> and <code>gulp</code> installed, we have to configure our gulpfile. For a basic setup you can add:</p>
 
-<ul>
-	<li><a href="/install">New to CloudCannon Suite</a></li>
-	<li><a href="/install">Adding CloudCannon Suite to a new site</a></li>
-	<li><a href="#packages">Adding a package to an existing site</a></li>
-</ul>
 
-<h3 id="packages">Packages</h3>
-<p>Choose a package to install:</p>
-<ul>
-	
-		<li>
-			<a href="/packages/dev/">Dev</a>
-		</li>
-	
-		<li>
-			<a href="/packages/docs/">Docs</a>
-		</li>
-	
-		<li>
-			<a href="/packages/help/">Help</a>
-		</li>
-	
-		<li>
-			<a href="/packages/i18n/">I18n</a>
-		</li>
-	
-		<li>
-			<a href="/packages/screenshots/">Screenshots</a>
-		</li>
-	
-</ul>
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">const</span> <span class="nx">gulp</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">"gulp"</span><span class="p">);</span>
+<span class="kd">const</span> <span class="nx">suite</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">"cloudcannon-suite"</span><span class="p">);</span>
 
-<p>Don't see what you need? Contact <a href="mailto:george@cloudcannon.com">george@cloudcannon.com</a>.</p>
+<span class="nx">suite</span><span class="p">.</span><span class="nx">help</span><span class="p">(</span><span class="nx">gulp</span><span class="p">);</span></code></pre></figure>
+
+
+<h3>Usage</h3>
+
+<p>Running <code class="highlighter-rouge">gulp help</code> lists all tasks installed in your gulp configuration.</p>
+
+
+
+<figure class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="nv">$ </span>gulp <span class="nb">help</span>
+<span class="o">[</span>09:54:07] Using gulpfile ./gulpfile.js
+<span class="o">[</span>09:54:07] Starting <span class="s1">'help'</span>...
+
+Main Tasks
+<span class="nt">------------------------------</span>
+    docs
+    <span class="nb">help
+
+</span>Sub Tasks
+<span class="nt">------------------------------</span>
+    docs:build
+    docs:install
+    docs:serve
+    docs:watch
+
+<span class="o">[</span>09:54:07] Finished <span class="s1">'help'</span> after 1.86 ms</code></pre></figure>
+
+
+
+
+
+
+
 					</article>
 				</section>
 			<div>

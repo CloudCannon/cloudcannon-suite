@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<!-- Begin Jekyll SEO tag v2.4.0 -->
+<title>Structure | CloudCannon Suite</title>
+<meta name="generator" content="Jekyll v3.7.2" />
+<meta property="og:title" content="Structure" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Product documentation template for Jekyll." />
+<meta property="og:description" content="Product documentation template for Jekyll." />
+<link rel="canonical" href="https://long-pig.cloudvent.net/structure/" />
+<meta property="og:url" content="https://long-pig.cloudvent.net/structure/" />
+<meta property="og:site_name" content="CloudCannon Suite" />
+<script type="application/ld+json">
+{"description":"Product documentation template for Jekyll.","url":"https://long-pig.cloudvent.net/structure/","headline":"Structure","@type":"WebPage","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://long-pig.cloudvent.net/siteicon.png"}},"@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+		<link type="application/atom+xml" rel="alternate" href="https://long-pig.cloudvent.net/feed.xml" title="CloudCannon Suite" />
+
+		<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Merriweather:400,400italic,700,700italic|Open+Sans:400,400italic,600,600italic,700,700italic|Inconsolata:400,700">
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		<link rel="stylesheet" href="/css/main.css">
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+		<link rel="icon" type="image/png" href="/touch-icon.png" sizes="192x192">
+		<link rel="icon" type="image/png" href="/images/favicon.png">
+
+		
+	</head>
+
+	<body>
+		
+		<header id="header">
+			<div class="container">
+				<h1>
+					<a href="/"><img src="/images/emblem.svg" width="40" height="40" alt="CloudCannon Suite logo"></a>
+					CloudCannon Suite
+					<button type="button" class="open-nav" id="open-nav"></button>
+				</h1>
+
+				<form action="/search/" method="get">
+					<input type="text" name="q" id="search-input" placeholder="Search">
+					<input type="submit" value="Search" style="display: none;">
+				</form>
+			</div>
+		</header>
+
+		<main>
+			<div class="container">
+				<nav>
+					<ul>
+						
+							
+						
+							
+						
+							
+						
+							
+								<li class="nav-item top-level ">
+									<a href="/install/">Install</a>
+								</li>
+							
+						
+							
+						
+							
+								<li class="nav-item top-level current">
+									<a href="/structure/">Structure</a>
+								</li>
+							
+						
+					</ul>
+
+					<ul>
+						
+							<li class="nav-item top-level ">
+								<a href="/packages/dev/">Dev</a>
+							</li>
+						
+							<li class="nav-item top-level ">
+								<a href="/packages/docs/">Docs</a>
+							</li>
+						
+							<li class="nav-item top-level ">
+								<a href="/packages/help/">Help</a>
+							</li>
+						
+							<li class="nav-item top-level ">
+								<a href="/packages/i18n/">I18n</a>
+							</li>
+						
+							<li class="nav-item top-level ">
+								<a href="/packages/screenshots/">Screenshots</a>
+							</li>
+						
+					</ul>
+
+					<ul>
+						<li class="nav-item top-level ">
+							
+							<a href="/changelog/">Change Log</a>
+						</li>
+					</ul>
+				</nav>
+
+				<section>
+					<div class="page-header">
+						<h3>Structure</h3>
+					</div>
+					<article class="content">
+						<p>The opinionated file structure for all of your sites. This is defined to increase consistency between sites.</p>
+
+
+<ul class="file-structure">
+
+	
+	
+
+	<li class="indent-1">
+		<strong>
+			<i class="material-icons">
+
+
+
+
+
+
+code</i>
+			.gitignore
+		</strong>
+
+		<p>Gitignore file.</p>
+
+</li>
+
+	
+	
+
+	<li class="indent-1">
+		<strong>
+			<i class="material-icons">
+
+
+
+
+
+
+code</i>
+			README.md
+		</strong>
+
+		<p>This should describe the site and how to manage it.</p>
+
+</li>
+
+	
+	
+
+	<li class="indent-1">
+		<strong>
+			<i class="material-icons">
+
+
+
+
+
+
+folder</i>
+			dist
+		</strong>
+
+		<p>The output folder for the different states of the sites in the repo.</p>
+
+</li>
+
+	
+	
+
+	<li class="indent-2">
+		<strong>
+			<i class="material-icons">
+
+
+
+
+
+
+folder</i>
+			docs
+		</strong>
+
+		<p>The output for the <code class="highlighter-rouge">gulp docs</code> command.</p>
+
+</li>
+
+	
+	
+
+	<li class="indent-2">
+		<strong>
+			<i class="material-icons">
+
+
+
+
+
+
+folder</i>
+			reports
+		</strong>
+
+		<p>The output for the <code class="highlighter-rouge">gulp reports</code> command.</p>
+
+</li>
+
+	
+	
+
+	<li class="indent-2">
+		<strong>
+			<i class="material-icons">
+
+
+
+
+
+
+folder</i>
+			site
+		</strong>
+
+		<p>The output for the <code class="highlighter-rouge">gulp dev</code> command.</p>
+
+</li>
+
+	
+	
+
+	<li class="indent-2">
+		<strong>
+			<i class="material-icons">
+
+
+
+
+
+
+folder</i>
+			translated_site
+		</strong>
+
+		<p>The output for the <code class="highlighter-rouge">gulp i18n</code> command.</p>
+
+</li>
+
+	
+	
+
+	<li class="indent-1">
+		<strong>
+			<i class="material-icons">
+
+
+
+
+
+
+folder</i>
+			docs
+		</strong>
+
+		<p>The jekyll source of the documentation site.</p>
+
+</li>
+
+	
+	
+
+	<li class="indent-1">
+		<strong>
+			<i class="material-icons">
+
+
+
+
+
+
+folder</i>
+			gulp
+		</strong>
+
+		<p>The folder for additional gulp scripts.</p>
+
+</li>
+
+	
+	
+
+	<li class="indent-1">
+		<strong>
+			<i class="material-icons">
+
+
+
+
+
+
+code</i>
+			gulpfile.js
+		</strong>
+
+		<p>A javascript file required to configure cloudcannon suite.</p>
+
+</li>
+
+	
+	
+
+	<li class="indent-1">
+		<strong>
+			<i class="material-icons">
+
+
+
+
+
+
+folder</i>
+			i18n
+		</strong>
+
+		<p>The folder for the i18n steps.</p>
+
+</li>
+
+	
+	
+
+	<li class="indent-2">
+		<strong>
+			<i class="material-icons">
+
+
+
+
+
+
+folder</i>
+			locales
+		</strong>
+
+		<p>The folder for the translated locale (.json) files for dist/site. These are used to generate a translated version of the site by running <code class="highlighter-rouge">gulp i18n:translate</code></p>
+
+</li>
+
+	
+	
+
+	<li class="indent-2">
+		<strong>
+			<i class="material-icons">
+
+
+
+
+
+
+code</i>
+			source.json
+		</strong>
+
+		<p>The generated locale file from dist/site. To regenerate, run <code class="highlighter-rouge">gulp i18n:generate</code></p>
+
+</li>
+
+	
+	
+
+	<li class="indent-1">
+		<strong>
+			<i class="material-icons">
+
+
+
+
+
+
+code</i>
+			package-lock.json
+		</strong>
+
+		<p>A generated file from <code class="highlighter-rouge">npm install</code> that prevents unexpected package changes.</p>
+
+</li>
+
+	
+	
+
+	<li class="indent-1">
+		<strong>
+			<i class="material-icons">
+
+
+
+
+
+
+code</i>
+			package.json
+		</strong>
+
+		<p>Defines the required installs and repo information.</p>
+
+</li>
+
+	
+	
+
+	<li class="indent-1">
+		<strong>
+			<i class="material-icons">
+
+
+
+
+
+
+code</i>
+			siteicon.png
+		</strong>
+
+		<p>The jekyll source of the site.</p>
+
+</li>
+
+	
+	
+
+	<li class="indent-1">
+		<strong>
+			<i class="material-icons">
+
+
+
+
+
+
+folder</i>
+			src
+		</strong>
+
+		<p>The jekyll source of the site.</p>
+
+</li>
+
+</ul>
+					</article>
+				</section>
+			<div>
+		</main>
+
+		<script>
+			document.getElementById("open-nav").addEventListener("click", function () {
+				document.body.classList.toggle("nav-open");
+			});
+		</script>
+	</body>
+</html>

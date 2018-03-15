@@ -28,6 +28,7 @@
   "dependencies": {
     "async": "^2.6.0",
     "cheerio": "^1.0.0-rc.2",
+    "css-url-rewrite": "^0.9.0",
     "defaults": "^1.0.3",
     "del": "^3.0.0",
     "gulp": "^3.9.1",

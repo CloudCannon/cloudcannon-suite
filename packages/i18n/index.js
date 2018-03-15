@@ -21,6 +21,10 @@ var configDefaults = {
 		generated_locale_dest: "i18n",
 
 		legacy_path: "_locales"
+	},
+	serve: {
+		port: 8000,
+		open: true
 	}
 };
 
@@ -28,6 +32,7 @@ module.exports = function (gulp, config) {
 	config = config || {};
 
 	config.i18n = defaults(config.i18n, configDefaults.i18n);
+	config.serve = defaults(config.serve, configDefaults.serve);
 
 	var cwd = process.cwd();
 	config.i18n._src = config.i18n.src;
@@ -176,7 +181,7 @@ module.exports = function (gulp, config) {
 		return gulp.src(config.i18n.dest)
 			.pipe(webserver({
 				open: path.join(config.i18n.baseurl || "", config.i18n.default_language) + "/",
-				port: config.i18n.port
+				port: config.serve.port
 			}));
 	});
 

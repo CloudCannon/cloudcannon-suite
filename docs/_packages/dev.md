@@ -2,15 +2,19 @@
 title: Dev
 namespace: dev
 commands:
-  - install
-  - build
-  - serve
-  - watch
+  - task: install
+    description_markdown: Runs `bundle install` on the `src` folder
+  - task: build
+    description_markdown: Runs `bundle exec jekyll serve` on the `src` folder
+  - task: serve
+    description_markdown: Runs a local webserver on the `dest` folder
+  - task: watch
+    description_markdown: Watches the `src` folder and triggers builds
 
 output_markdown: |
   Running `gulp dev` runs jekyll build on the `src` directory and outputs the site to `dist/site`. Once completed the a local webserver will be started on port 4000. Any changes to the `src` folder will trigger a rebuild of the contents.
 output_code: |
-  [12:02:13] Using gulpfile ~/Work/cloudcannon/suite/gulpfile.js
+  [12:02:13] Using gulpfile ./gulpfile.js
   [12:02:13] Starting 'dev'...
   [12:02:13] Starting 'dev:build'...
   [12:02:13] $ bundle exec jekyll build --destination dist/site --baseurl

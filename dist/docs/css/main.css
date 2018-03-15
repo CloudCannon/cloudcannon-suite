@@ -905,6 +905,15 @@ main {
   display: flex;
   align-items: center;
   justify-content: center; }
+  .intro-section .technologies {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    line-height: 0; }
+    .intro-section .technologies > div {
+      flex: 1; }
+    .intro-section .technologies img {
+      max-height: 100px; }
   .intro-section > a {
     position: absolute;
     bottom: 0;
@@ -916,6 +925,9 @@ main {
     width: 100%; }
     .intro-section > a:hover {
       opacity: 1; }
+    .intro-section > a i {
+      position: relative;
+      top: 5px; }
   .intro-section > div {
     flex: 0 0 500px; }
   .intro-section,
