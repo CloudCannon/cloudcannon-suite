@@ -22,7 +22,7 @@ module.exports = function (options) {
 		file.sitePath = "/" + file.path.substring(file.base.length);
 		file.sitePath = file.sitePath.replace(/\/index.html?/i, "/");
 
-		var css = file.content.toString(encoding);
+		var css = file.contents.toString(encoding);
 
 		css = rewriteCssUrls(css, rewrite);
 
