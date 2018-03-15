@@ -1,5 +1,6 @@
 var gutil = require("gulp-util"),
 	through = require("through2").obj,
+	cheerio = require("cheerio"),
 	path = require("path");
 
 var IGNORE_URL_REGEX = /^([a-z]+\:|\/\/|\#)/;
