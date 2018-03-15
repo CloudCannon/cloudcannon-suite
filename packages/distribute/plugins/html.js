@@ -33,7 +33,6 @@ module.exports = function (options) {
 				updated = rewritePath(file, href);
 
 			if (updated !== href) {
-				console.log(file.sitePath + ": " + href);
 				$el.attr("href", updated);
 			}
 		});
@@ -44,7 +43,6 @@ module.exports = function (options) {
 				updated = rewritePath(file, src);
 
 			if (updated !== src) {
-				console.log(file.sitePath + ": " + src);
 				$el.attr("src", updated);
 			}
 		});
