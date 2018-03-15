@@ -27,23 +27,23 @@ module.exports = function (options) {
 
 		var $ = cheerio.load(file.contents.toString(encoding));
 
-		$("[href]").each(function processLink() {
+		$("[href]").each(function () {
 			var $el = $(this),
 				href = $el.attr("href"),
 				updated = rewritePath(file, href);
 
-			if (updated) {
+			if (updated !== href) {
 				console.log(file.sitePath + ": " + href);
 				$el.attr("href", updated);
 			}
 		});
 
-		$("[src]").each(function processLink() {
+		$("[src]").each(function () {
 			var $el = $(this),
 				src = $el.attr("src"),
 				updated = rewritePath(file, src);
 
-			if (updated) {
+			if (updated !== src) {
 				console.log(file.sitePath + ": " + src);
 				$el.attr("src", updated);
 			}
@@ -51,7 +51,7 @@ module.exports = function (options) {
 
 		// TODO source set
 
-		$("meta[http-equiv='refresh']").each(function processLink() {
+		$("meta[http-equiv='refresh']").each(function () {
 			var $el = $(this),
 				content = $el.attr("content"),
 				parts = content.split(";");
@@ -61,7 +61,7 @@ module.exports = function (options) {
 					var href = parts[i].substring(4),
 						updated = rewritePath(file, href);
 
-					if (updated) {
+					if (updated !== href) {
 						parts[i] = "url=" + updated;
 						$el.attr("content", parts.join(";"));
 					}
