@@ -11,7 +11,8 @@ module.exports = function (gulp, config) {
 		},
 		serve: {
 			port: 5000,
-			open: true
+			open: true,
+			path: "/"
 		}
 	});
 

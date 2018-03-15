@@ -142,17 +142,10 @@ module.exports = {
 		options = options || {};
 		var targetLocale = options.targetLocale,
 			locale = options.locales[targetLocale],
-			localeNames = options.localeNames,
-			baseurl = options.baseurl || "";
+			localeNames = options.localeNames;
 
 		return handleHTMLFile({
 			skipFile: function (file) {
-				var pathWithoutBase = file.sitePath.substring(baseurl.length + 1);
-
-				if (!pathWithoutBase) {
-					return false;
-				}
-
 				var baseFolder = pathWithoutBase.split(path.sep).shift(),
 					isLocaleString = false;
 
@@ -170,10 +163,6 @@ module.exports = {
 				}
 
 				var parts = href.replace(/^\/+/, "").split("/");
-				if (baseurl && parts.length > 2 && parts[0] !== baseurl) {
-					return;
-				}
-
 				if (parts.length >= 2) {
 					for (var i = 0; i < localeNames.length; i++) {
 						if (parts[1] === localeNames[i]) {
@@ -188,13 +177,7 @@ module.exports = {
 					return;
 				}
 
-				if (baseurl) {
-					parts.shift();
-					parts.unshift(targetLocale);
-					parts.unshift(baseurl);
-				} else {
-					parts.unshift(targetLocale);
-				}
+				parts.unshift(targetLocale);
 
 				var updated = "/" + parts.join("/") + "/";
 				return updated.replace(/\/+/g, "/");
@@ -230,7 +213,7 @@ module.exports = {
 				$("head").append('<meta http-equiv="content-language" content="' + targetLocale + '">\n');
 				localeNames.forEach(function (localeName) {
 					if (localeName != targetLocale) {
-						var redirectUrl = baseurl + '/' + localeName + file.sitePath;
+						var redirectUrl = localeName + file.sitePath;
 						$("head").append('<link rel="alternate" href="' + redirectUrl + '" hreflang="' + localeName + '">\n');
 					}
 				});

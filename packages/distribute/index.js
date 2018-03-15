@@ -16,7 +16,8 @@ var configDefaults = {
 	},
 	serve: {
 		port: 9000,
-		open: true
+		open: true,
+		path: "/"
 	}
 };
 
@@ -76,7 +77,7 @@ module.exports = function (gulp, config) {
 	gulp.task("dist:serve", ["dist:build"], function() {
 		return gulp.src(config.dist.dest)
 			.pipe(webserver({
-				open: config.dist.baseurl,
+				open: path.join(config.dist.baseurl, config.serve.path),
 				port: config.serve.port
 			}));
 	});

@@ -15,7 +15,6 @@ var configDefaults = {
 		src: "dist/site",
 		dest: "dist/translated_site",
 
-		baseurl: "",
 		default_language: "en",
 		locale_src: "i18n/locales",
 		generated_locale_dest: "i18n",
@@ -24,7 +23,8 @@ var configDefaults = {
 	},
 	serve: {
 		port: 8000,
-		open: true
+		open: true,
+		path: "/"
 	}
 };
 
@@ -139,17 +139,14 @@ module.exports = function (gulp, config) {
 
 	gulp.task("i18n:translate-html-pages", function (done) {
 		async.each(localeNames, function (targetLocale, next) {
-			var baseurl = (config.i18n.baseurl || "").replace(/^\/+/, "");
-
 			return gulp.src(config.i18n.src + "/**/*.html")
 				.pipe(i18n.translate({
-					baseurl: baseurl,
 					targetLocale: targetLocale,
 					localeNames: localeNames,
 					locales: locales
 				})).pipe(rename(function (path) {
-					path.dirname = path.dirname.substring(baseurl.length).replace(/^\/+/, "") || ".";
-				})).pipe(gulp.dest(path.join(config.i18n.dest, baseurl, targetLocale)))
+					path.dirname = path.dirname.replace(/^\/+/, "") || ".";
+				})).pipe(gulp.dest(path.join(config.i18n.dest, targetLocale)))
 				.on('end', next);
 		}, done);
 	});
@@ -180,7 +177,7 @@ module.exports = function (gulp, config) {
 	gulp.task("i18n:serve", ["i18n:build"], function() {
 		return gulp.src(config.i18n.dest)
 			.pipe(webserver({
-				open: path.join(config.i18n.baseurl || "", config.i18n.default_language) + "/",
+				open: path.join(config.i18n.default_language) + config.serve.path,
 				port: config.serve.port
 			}));
 	});

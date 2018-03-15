@@ -10,12 +10,12 @@ var configDefaults = {
 	jekyll: {
 		src: "src",
 		dest: "dist/site",
-		baseurl: "", // TODO read from jekyll config
 	},
 	tasks: [],
 	serve: {
 		port: 4000,
-		open: true
+		open: true,
+		path: "/"
 	}
 };
 
@@ -39,8 +39,7 @@ module.exports = function (gulp, config) {
 	// Jekyll
 
 	var JEKYLL_OPTIONS = {
-		"--destination": path.join(config.jekyll.dest, config.jekyll.baseurl.replace(/^\/+/, "")),
-		"--baseurl": config.jekyll.baseurl
+		"--destination": config.jekyll.dest
 	};
 
 	function runBundleCommand(commands, done) {
@@ -101,7 +100,7 @@ module.exports = function (gulp, config) {
 		};
 
 		if (config.serve.open) {
-			options.open = config.jekyll.baseurl || "/";
+			options.open = config.serve.path || "/";
 		}
 
 		return gulp.src(config.jekyll.dest)
