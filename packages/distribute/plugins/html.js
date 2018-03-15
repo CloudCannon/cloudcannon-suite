@@ -32,9 +32,8 @@ module.exports = function (options) {
 				href = $el.attr("href"),
 				updated = rewritePath(file, href);
 
-			console.log(file.sitePath + ": " + href);
-
 			if (updated) {
+				console.log(file.sitePath + ": " + href);
 				$el.attr("href", updated);
 			}
 		});
@@ -44,9 +43,8 @@ module.exports = function (options) {
 				src = $el.attr("src"),
 				updated = rewritePath(file, src);
 
-			console.log(file.sitePath + ": " + src);
-
 			if (updated) {
+				console.log(file.sitePath + ": " + src);
 				$el.attr("src", updated);
 			}
 		});
