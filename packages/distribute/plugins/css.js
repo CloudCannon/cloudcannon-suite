@@ -3,6 +3,7 @@ var gutil = require("gulp-util"),
 	rewriteCssUrls = require("css-url-rewrite"),
 	path = require("path");
 
+var IGNORE_URL_REGEX = /^([a-z]+\:|\/\/|\#)/;
 module.exports = function (options) {
 	options = options || {};
 	return through(function (file, encoding, callback) {
@@ -21,6 +22,9 @@ module.exports = function (options) {
 		var css = file.contents.toString(encoding);
 
 		css = rewriteCssUrls(css, function rewrite(href) {
+			if (IGNORE_URL_REGEX.test(href)) {
+				return href;
+			}
 			return "/" + path.join(options.baseurl, href);
 		});
 

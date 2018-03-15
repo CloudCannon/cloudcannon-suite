@@ -8,6 +8,9 @@ module.exports = function (options) {
 	options = options || {};
 
 	function rewritePath(file, href) {
+		if (IGNORE_URL_REGEX.test(href)) {
+			return href;
+		}
 		return "/" + path.join(options.baseurl, href);
 	}
 

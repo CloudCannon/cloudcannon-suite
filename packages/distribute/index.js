@@ -64,7 +64,7 @@ module.exports = function (gulp, config) {
 			.pipe(gulp.dest(fullDest));
 	});
 
-	gulp.task("dist:build", ["dist:rewrite-html", "dist:rewrite-css", "dist:clone-assets"]);
+	gulp.task("dist:build", gulpSequence("dist:clean", ["dist:rewrite-html", "dist:rewrite-css", "dist:clone-assets"]));
 
 	// -----
 	// Serve
