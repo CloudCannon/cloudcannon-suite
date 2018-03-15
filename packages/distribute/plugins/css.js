@@ -25,6 +25,7 @@ module.exports = function (options) {
 		});
 
 		file.contents = new Buffer(css);
+		this.push(file);
 		callback();
 	});
 };
