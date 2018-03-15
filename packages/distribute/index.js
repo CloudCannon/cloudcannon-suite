@@ -43,19 +43,19 @@ module.exports = function (gulp, config) {
 		return del(config.dist.dest);
 	});
 
-	gulp.task("dist:rewrite-html", function (done) {
+	gulp.task("dist:rewrite-html", function () {
 		return gulp.src(config.dist.src + "/**/*.html")
 			.pipe(htmlRewrite({baseurl: config.dist.baseurl}))
 			.pipe(gulp.dest(fullDest));
 	});
 
-	gulp.task("dist:rewrite-css", function (done) {
+	gulp.task("dist:rewrite-css", function () {
 		return gulp.src(config.dist.src + "/**/*.css")
 			.pipe(cssRewrite({baseurl: config.dist.baseurl}))
 			.pipe(gulp.dest(fullDest));
 	});
 
-	gulp.task("dist:clone-assets",  function () {
+	gulp.task("dist:clone-assets", function () {
 		return gulp.src([
 				config.dist.src + "/**/*",
 				"!" + config.dist.src + "/**/*.html",
