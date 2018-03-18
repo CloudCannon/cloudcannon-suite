@@ -1,6 +1,7 @@
 var gutil = require("gulp-util"),
 	through = require("through2").obj,
 	cheerio = require("cheerio"),
+	srcsetParser = require("srcset"),
 	path = require("path");
 
 var IGNORE_URL_REGEX = /^([a-z]+\:|\/\/|\#)/;
@@ -47,7 +48,21 @@ module.exports = function (options) {
 			}
 		});
 
-		// TODO source set
+		$("[srcset]").each(function () {
+			var $el = $(this),
+				srcset = $el.attr("srcset"),
+				parsed = srcsetParser.parse(srcset);
+
+			for (var i = 0; i < parsed.length; i++) {
+				parsed[i].url = rewritePath(file, parsed[i].url);
+			}
+
+			var updated = srcsetParser.stringify(parsed);
+
+			if (updated !== srcset) {
+				$el.attr("srcset", updated);
+			}
+		});
 
 		$("meta[http-equiv='refresh']").each(function () {
 			var $el = $(this),

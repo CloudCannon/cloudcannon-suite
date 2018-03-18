@@ -69,27 +69,27 @@ module.exports = function (gulp, config) {
 	// Custom Tasks
 
 	var customTasks = [];
-  	for (var taskName in config.tasks) {
-  		if (config.tasks.hasOwnProperty(taskName)) {
+	for (var taskName in config.tasks) {
+		if (config.tasks.hasOwnProperty(taskName)) {
 			gulp.task(nspc + ":" + taskName, config.tasks[taskName].task);
 			customTasks.push(nspc + ":" + taskName);
-  		}
-  	}
+		}
+	}
 
 	// -----
 	// Serve
 
 	gulp.task(nspc + ":watch", function () {
-    	var jekyllWatchFiles = [config.jekyll._src + "/**/*"];
-	  	for (var taskName in config.tasks) {
-	  		if (config.tasks.hasOwnProperty(taskName)) {
+		var jekyllWatchFiles = [config.jekyll._src + "/**/*"];
+		for (var taskName in config.tasks) {
+			if (config.tasks.hasOwnProperty(taskName)) {
 				gulp.watch(config.tasks[taskName].watch, [nspc + ":" + taskName]);
 
 				config.tasks[taskName].watch.forEach(function (glob) {
 					jekyllWatchFiles.push("!" + glob);
 				});
-	  		}
-	  	}
+			}
+		}
 
 		gulp.watch(jekyllWatchFiles, [nspc + ":build"]);
 	});

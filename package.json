@@ -41,6 +41,7 @@
     "gulp-webserver": "^0.9.1",
     "gulp-webshot": "^0.2.3",
     "sort-object-keys": "^1.1.2",
+    "srcset": "^1.0.0",
     "through2": "^2.0.3"
   }
 }
