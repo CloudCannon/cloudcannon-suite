@@ -1,30 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.7.2">Jekyll</generator><link href="https://long-pig.cloudvent.net/feed.xml" rel="self" type="application/atom+xml" /><link href="https://long-pig.cloudvent.net/" rel="alternate" type="text/html" /><updated>2018-03-13T04:03:29+00:00</updated><id>https://long-pig.cloudvent.net/</id><title type="html">CloudCannon Suite</title><subtitle>Product documentation template for Jekyll.</subtitle><author><name>{&quot;name&quot;=&gt;nil, &quot;email&quot;=&gt;nil, &quot;twitter&quot;=&gt;nil}</name></author><entry><title type="html">General fixes and improvements</title><link href="https://long-pig.cloudvent.net/2016/02/05/general-fixes-and-improvements/" rel="alternate" type="text/html" title="General fixes and improvements" /><published>2016-02-05T00:00:00+00:00</published><updated>2016-02-05T00:00:00+00:00</updated><id>https://long-pig.cloudvent.net/2016/02/05/general-fixes-and-improvements</id><content type="html" xml:base="https://long-pig.cloudvent.net/2016/02/05/general-fixes-and-improvements/">&lt;p&gt;This release fixes a few minor issues reported by users. We’ve also made a few quality of life improvements.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.7.2">Jekyll</generator><link href="https://long-pig.cloudvent.net/feed.xml" rel="self" type="application/atom+xml" /><link href="https://long-pig.cloudvent.net/" rel="alternate" type="text/html" /><updated>2018-03-19T03:00:42+00:00</updated><id>https://long-pig.cloudvent.net/</id><title type="html">CloudCannon Suite</title><subtitle>Product documentation template for Jekyll.</subtitle><author><name>{&quot;name&quot;=&gt;nil, &quot;email&quot;=&gt;nil, &quot;twitter&quot;=&gt;nil}</name></author><entry><title type="html">First Release</title><link href="https://long-pig.cloudvent.net/2017/03/19/initial-private-release/" rel="alternate" type="text/html" title="First Release" /><published>2017-03-19T00:00:00+00:00</published><updated>2017-03-19T00:00:00+00:00</updated><id>https://long-pig.cloudvent.net/2017/03/19/initial-private-release</id><content type="html" xml:base="https://long-pig.cloudvent.net/2017/03/19/initial-private-release/">&lt;p&gt;First private release of the CloudCannon Suite&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Features:&lt;/strong&gt;&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;Streamlined access to contact details&lt;/li&gt;
-  &lt;li&gt;Better sort order for archived messages&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;strong&gt;Fixes:&lt;/strong&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Input sometimes getting stuck&lt;/li&gt;
-  &lt;li&gt;One more memory leak obliterated&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>{&quot;name&quot;=&gt;nil, &quot;email&quot;=&gt;nil, &quot;twitter&quot;=&gt;nil}</name></author><summary type="html">This release fixes a few minor issues reported by users. We’ve also made a few quality of life improvements.</summary></entry><entry><title type="html">Media support</title><link href="https://long-pig.cloudvent.net/2016/01/12/media-support/" rel="alternate" type="text/html" title="Media support" /><published>2016-01-12T00:00:00+00:00</published><updated>2016-01-12T00:00:00+00:00</updated><id>https://long-pig.cloudvent.net/2016/01/12/media-support</id><content type="html" xml:base="https://long-pig.cloudvent.net/2016/01/12/media-support/">&lt;p&gt;ChatApp introduces media support! Send images, videos and documents to your contacts.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Features:&lt;/strong&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Image support&lt;/li&gt;
-  &lt;li&gt;Video support&lt;/li&gt;
-  &lt;li&gt;Document support&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;strong&gt;Fixes:&lt;/strong&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Edge case contact syncing issue&lt;/li&gt;
-  &lt;li&gt;All memory leaks obliterated&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>{&quot;name&quot;=&gt;nil, &quot;email&quot;=&gt;nil, &quot;twitter&quot;=&gt;nil}</name></author><summary type="html">ChatApp introduces media support! Send images, videos and documents to your contacts.</summary></entry></feed>
+  &lt;li&gt;Internationalisation&lt;/li&gt;
+  &lt;li&gt;Better baseurl&lt;/li&gt;
+  &lt;li&gt;Local development&lt;/li&gt;
+  &lt;li&gt;Local documentation&lt;/li&gt;
+  &lt;li&gt;Combined distribution folder&lt;/li&gt;
+  &lt;li&gt;Easy commands&lt;/li&gt;
+  &lt;li&gt;Well defined folder structure&lt;/li&gt;
+&lt;/ul&gt;</content><author><name>{&quot;name&quot;=&gt;nil, &quot;email&quot;=&gt;nil, &quot;twitter&quot;=&gt;nil}</name></author><summary type="html">First private release of the CloudCannon Suite</summary></entry></feed>

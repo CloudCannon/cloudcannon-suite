@@ -8,12 +8,12 @@
 		{% seo %}
 		{% feed_meta %}
 
-		<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Merriweather:400,400italic,700,700italic|Open+Sans:400,400italic,600,600italic,700,700italic|Inconsolata:400,700">
+		<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Nixie+One|Inconsolata:400,700">
 		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-		<link rel="stylesheet" href="{{ site.baseurl }}/css/main.css">
-		<link rel="apple-touch-icon" href="{{ site.baseurl }}/apple-touch-icon.png">
-		<link rel="icon" type="image/png" href="{{ site.baseurl }}/touch-icon.png" sizes="192x192">
-		<link rel="icon" type="image/png" href="{{ site.baseurl }}/images/favicon.png">
+		<link rel="stylesheet" href="/css/main.css">
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+		<link rel="icon" type="image/png" href="/touch-icon.png" sizes="192x192">
+		<link rel="icon" type="image/png" href="/images/favicon.png">
 
 		{% if jekyll.environment == 'production' and site.google_analytics_key != '' %}
 			<script>
@@ -29,7 +29,7 @@
 		{% if page.show_intro %}
 			<div class="intro-section">
 				<div>
-					<img src="{{ site.baseurl }}/images/emblem.svg" width="300" height="300" alt="{{ site.title }} logo">
+					<img src="/images/emblem.svg" width="300" height="300" alt="{{ site.title }} logo">
 					<h1>CloudCannon Suite</h1>
 					<p>An opinionated set of tools used to build and maintain static sites.</p>
 					<div class="technologies">
@@ -44,15 +44,18 @@
 		<header id="header">
 			<div class="container">
 				<h1>
-					<a href="{{ site.baseurl }}/"><img src="{{ site.baseurl }}/images/emblem.svg" width="40" height="40" alt="{{ site.title }} logo"></a>
+					<a href="/"><img src="/images/emblem.svg" width="40" height="40" alt="{{ site.title }} logo"></a>
 					{{ site.title }}
 					<button type="button" class="open-nav" id="open-nav"></button>
 				</h1>
 
-				<form action="{{ site.baseurl }}/search/" method="get">
-					<input type="text" name="q" id="search-input" placeholder="Search">
-					<input type="submit" value="Search" style="display: none;">
-				</form>
+				<div class="search-container">
+					<form action="/search/" method="get">
+						<input type="text" name="q" id="search-input" placeholder="Search" required>
+						<i class="material-icons">search</i>
+						<input type="submit" value="Search" style="display: none;">
+					</form>
+				</div>
 			</div>
 		</header>
 
@@ -60,10 +63,11 @@
 			<div class="container">
 				<nav>
 					<ul>
-						{% for package in site.html_pages %}
+						{% assign sorted = site.html_pages | sort: 'weight' %}
+						{% for package in sorted %}
 							{% if package.in_nav %}
 								<li class="nav-item top-level {% if package.url == page.url %}current{% endif %}">
-									<a href="{{ site.baseurl }}{{ package.url }}">{{ package.title }}</a>
+									<a href="{{ package.url }}">{{ package.title }}</a>
 								</li>
 							{% endif %}
 						{% endfor %}
@@ -72,7 +76,7 @@
 					<ul>
 						{% for package in site.packages %}
 							<li class="nav-item top-level {% if package.url == page.url %}current{% endif %}">
-								<a href="{{ site.baseurl }}{{ package.url }}">{{ package.title }}</a>
+								<a href="{{ package.url }}">{% if package.image %}<img src="{{ package.image }}" width="18" height="18">{% endif %} {{ package.title }}</a>
 							</li>
 						{% endfor %}
 					</ul>
@@ -80,14 +84,15 @@
 					<ul>
 						<li class="nav-item top-level {% if page.url == '/changelog/' %}current{% endif %}">
 							{% assign changelog = site.html_pages | where: 'url', '/changelog/' | first %}
-							<a href="{{ site.baseurl }}/changelog/">{{ changelog.title }}</a>
+							<a href="/changelog/">{{ changelog.title }}</a>
 						</li>
 					</ul>
 				</nav>
 
 				<section>
 					<div class="page-header">
-						<h3>{{ page.title }}</h3>
+						<h3>{% if page.image %}<img src="{{ page.image }}" width="50" height="50">{% endif %} {{ page.title }}</h3>
+						{% if page.tagline %}<p class="tagline">{{ page.tagline }}</p>{% endif %}
 					</div>
 					<article class="content">
 						{{ content }}

@@ -16,6 +16,9 @@ module.exports = function (gulp, config) {
 			},
 			i18n: {
 				"src": "dist/translated_site"
+			},
+			dist: {
+				"src": "dist/prod"
 			}
 		},
 

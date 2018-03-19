@@ -89,6 +89,9 @@ main {
 	align-items: center;
 	justify-content: center;
 
+	h1 {
+		margin-top: 40px;
+	}
 
 	.technologies {
 		display: flex;
@@ -126,7 +129,7 @@ main {
 	}
 
 	> div {
-		flex: 0 0 500px;
+		flex: 0 0 550px;
 	}
 
 	&,
@@ -150,8 +153,38 @@ header {
 		padding: 10px 0;
 	}
 
-	form {
-		flex: 0 1 250px;
+	.search-container {
+		flex: 0;
+		position: relative;
+
+		i {
+			position: absolute;
+			left: 10px;
+			top: 9px;
+			color: $brand-colour;
+			pointer-events: none;
+			transition: opacity ease 200ms;
+			opacity: 0.5;
+		}
+
+		#search-input {
+			padding-left: 20px;
+			width: 20px;
+			box-sizing: border-box;
+			transition: width ease 300ms;
+			cursor: pointer;
+
+			&:focus,
+			&:valid {
+				padding-left: 40px;
+				width: 280px;
+				cursor: text;
+
+				+ i {
+					opacity: 1;
+				}
+			}
+		}
 	}
 
 	ul {
@@ -249,6 +282,15 @@ header {
 	h3 {
 		font-size: 4rem;
 		margin-left: -4px;
+		line-height: 1;
+	}
+
+	img {
+		width: 50px;
+		float: left;
+		margin-right: 10px;
+		position: relative;
+		top: 2px;
 	}
 
 	@media (min-width: $mobile-break) {
@@ -268,7 +310,7 @@ header {
 
 .nav-item {
 	display: block;
-	font-family: "Open Sans", sans-serif;
+		font-family: 'Nunito Sans', sans-serif;
 	line-height: 1;
 	margin: 0;
 
@@ -286,6 +328,13 @@ header {
 		font-size: 1.4rem;
 		padding: $space / 2 0 $space / 2 $space * 2;
 		display: block;
+	}
+
+	img {
+		float: left;
+		width: 18px;
+		vertical-align: middle;
+		margin-right: 10px;
 	}
 
 	&.current > a,
@@ -436,7 +485,7 @@ h4 svg {
 }
 
 .badge {
-	font-family: "Open Sans", sans-serif;
+	font-family: 'Nunito Sans', sans-serif;
 	padding: 2px 5px;
 	text-transform: uppercase;
 	font-size: 0.8rem;
@@ -532,4 +581,37 @@ img {
 	}
 
 	color: #666;
+}
+
+.large-boxes {
+	display: flex;
+	flex-wrap: wrap;
+	padding: 0;
+	margin: 20px -10px;
+	list-style: none;
+
+	> li {
+		margin: 10px;
+		flex: 1 1 200px;
+		display: flex;
+	}
+
+	a {
+		flex: 1;
+		padding: 20px;
+		display: block;
+		background: #eee;
+		border-radius: 5px;
+		text-decoration: none;
+		line-height: 1.5;
+	}
+
+	strong {
+		display: block;
+	}
+
+	small {
+		display: block;
+		margin-top: 10px;
+	}
 }

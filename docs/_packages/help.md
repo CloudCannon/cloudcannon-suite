@@ -1,6 +1,8 @@
 ---
 title: Help
 namespace: help
+tagline: List the available tasks
+image: /images/help.svg
 output_markdown: |
   Running `gulp help` lists all tasks installed in your gulp configuration.
 output_code: |

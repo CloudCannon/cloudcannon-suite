@@ -21,7 +21,7 @@
 
 		<link type="application/atom+xml" rel="alternate" href="https://long-pig.cloudvent.net/feed.xml" title="CloudCannon Suite" />
 
-		<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Merriweather:400,400italic,700,700italic|Open+Sans:400,400italic,600,600italic,700,700italic|Inconsolata:400,700">
+		<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Nixie+One|Inconsolata:400,700">
 		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 		<link rel="stylesheet" href="/css/main.css">
 		<link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -41,10 +41,13 @@
 					<button type="button" class="open-nav" id="open-nav"></button>
 				</h1>
 
-				<form action="/search/" method="get">
-					<input type="text" name="q" id="search-input" placeholder="Search">
-					<input type="submit" value="Search" style="display: none;">
-				</form>
+				<div class="search-container">
+					<form action="/search/" method="get">
+						<input type="text" name="q" id="search-input" placeholder="Search" required>
+						<i class="material-icons">search</i>
+						<input type="submit" value="Search" style="display: none;">
+					</form>
+				</div>
 			</div>
 		</header>
 
@@ -52,6 +55,9 @@
 			<div class="container">
 				<nav>
 					<ul>
+						
+						
+							
 						
 							
 						
@@ -61,10 +67,14 @@
 						
 							
 								<li class="nav-item top-level ">
-									<a href="/install/">Install</a>
+									<a href="/prerequisites/">Prerequisites</a>
 								</li>
 							
 						
+							
+								<li class="nav-item top-level ">
+									<a href="/install/">Install</a>
+								</li>
 							
 						
 							
@@ -78,23 +88,27 @@
 					<ul>
 						
 							<li class="nav-item top-level ">
-								<a href="/packages/dev/">Dev</a>
+								<a href="/packages/dev/"><img src="/images/build.svg" width="18" height="18"> Dev</a>
 							</li>
 						
 							<li class="nav-item top-level ">
-								<a href="/packages/docs/">Docs</a>
+								<a href="/packages/dist/"><img src="/images/shipping.svg" width="18" height="18"> Distribute</a>
 							</li>
 						
 							<li class="nav-item top-level ">
-								<a href="/packages/help/">Help</a>
+								<a href="/packages/docs/"><img src="/images/docs.svg" width="18" height="18"> Docs</a>
 							</li>
 						
 							<li class="nav-item top-level ">
-								<a href="/packages/i18n/">I18n</a>
+								<a href="/packages/help/"><img src="/images/help.svg" width="18" height="18"> Help</a>
 							</li>
 						
 							<li class="nav-item top-level ">
-								<a href="/packages/screenshots/">Screenshots</a>
+								<a href="/packages/i18n/"><img src="/images/translate.svg" width="18" height="18"> I18n</a>
+							</li>
+						
+							<li class="nav-item top-level ">
+								<a href="/packages/screenshots/"><img src="/images/devices.svg" width="18" height="18"> Screenshots</a>
 							</li>
 						
 					</ul>
@@ -109,7 +123,8 @@
 
 				<section>
 					<div class="page-header">
-						<h3>Not Found</h3>
+						<h3> Not Found</h3>
+						
 					</div>
 					<article class="content">
 						<p>This page doesn’t exist!</p>

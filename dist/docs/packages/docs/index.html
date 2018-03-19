@@ -15,15 +15,16 @@
 <link rel="canonical" href="https://long-pig.cloudvent.net/packages/docs/" />
 <meta property="og:url" content="https://long-pig.cloudvent.net/packages/docs/" />
 <meta property="og:site_name" content="CloudCannon Suite" />
+<meta property="og:image" content="https://long-pig.cloudvent.net/images/docs.svg" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2018-03-13T04:03:29+00:00" />
+<meta property="article:published_time" content="2018-03-19T03:00:42+00:00" />
 <script type="application/ld+json">
-{"description":"Product documentation template for Jekyll.","url":"https://long-pig.cloudvent.net/packages/docs/","headline":"Docs","dateModified":"2018-03-13T04:03:29+00:00","datePublished":"2018-03-13T04:03:29+00:00","@type":"Article","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://long-pig.cloudvent.net/siteicon.png"}},"@context":"http://schema.org"}</script>
+{"description":"Product documentation template for Jekyll.","url":"https://long-pig.cloudvent.net/packages/docs/","headline":"Docs","dateModified":"2018-03-19T03:00:42+00:00","datePublished":"2018-03-19T03:00:42+00:00","@type":"Article","image":"https://long-pig.cloudvent.net/images/docs.svg","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://long-pig.cloudvent.net/siteicon.png"}},"@context":"http://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 		<link type="application/atom+xml" rel="alternate" href="https://long-pig.cloudvent.net/feed.xml" title="CloudCannon Suite" />
 
-		<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Merriweather:400,400italic,700,700italic|Open+Sans:400,400italic,600,600italic,700,700italic|Inconsolata:400,700">
+		<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Nixie+One|Inconsolata:400,700">
 		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 		<link rel="stylesheet" href="/css/main.css">
 		<link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -43,10 +44,13 @@
 					<button type="button" class="open-nav" id="open-nav"></button>
 				</h1>
 
-				<form action="/search/" method="get">
-					<input type="text" name="q" id="search-input" placeholder="Search">
-					<input type="submit" value="Search" style="display: none;">
-				</form>
+				<div class="search-container">
+					<form action="/search/" method="get">
+						<input type="text" name="q" id="search-input" placeholder="Search" required>
+						<i class="material-icons">search</i>
+						<input type="submit" value="Search" style="display: none;">
+					</form>
+				</div>
 			</div>
 		</header>
 
@@ -54,6 +58,9 @@
 			<div class="container">
 				<nav>
 					<ul>
+						
+						
+							
 						
 							
 						
@@ -63,10 +70,14 @@
 						
 							
 								<li class="nav-item top-level ">
-									<a href="/install/">Install</a>
+									<a href="/prerequisites/">Prerequisites</a>
 								</li>
 							
 						
+							
+								<li class="nav-item top-level ">
+									<a href="/install/">Install</a>
+								</li>
 							
 						
 							
@@ -80,23 +91,27 @@
 					<ul>
 						
 							<li class="nav-item top-level ">
-								<a href="/packages/dev/">Dev</a>
+								<a href="/packages/dev/"><img src="/images/build.svg" width="18" height="18"> Dev</a>
+							</li>
+						
+							<li class="nav-item top-level ">
+								<a href="/packages/dist/"><img src="/images/shipping.svg" width="18" height="18"> Distribute</a>
 							</li>
 						
 							<li class="nav-item top-level current">
-								<a href="/packages/docs/">Docs</a>
+								<a href="/packages/docs/"><img src="/images/docs.svg" width="18" height="18"> Docs</a>
 							</li>
 						
 							<li class="nav-item top-level ">
-								<a href="/packages/help/">Help</a>
+								<a href="/packages/help/"><img src="/images/help.svg" width="18" height="18"> Help</a>
 							</li>
 						
 							<li class="nav-item top-level ">
-								<a href="/packages/i18n/">I18n</a>
+								<a href="/packages/i18n/"><img src="/images/translate.svg" width="18" height="18"> I18n</a>
 							</li>
 						
 							<li class="nav-item top-level ">
-								<a href="/packages/screenshots/">Screenshots</a>
+								<a href="/packages/screenshots/"><img src="/images/devices.svg" width="18" height="18"> Screenshots</a>
 							</li>
 						
 					</ul>
@@ -111,7 +126,8 @@
 
 				<section>
 					<div class="page-header">
-						<h3>Docs</h3>
+						<h3><img src="/images/docs.svg" width="50" height="50"> Docs</h3>
+						<p class="tagline">Document your site using the same tools</p>
 					</div>
 					<article class="content">
 						<p>Now that you have <code>cloudcannon-suite</code> and <code>gulp</code> installed, we have to configure our gulpfile. For a basic setup you can add:</p>
@@ -120,7 +136,7 @@
 <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">const</span> <span class="nx">gulp</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">"gulp"</span><span class="p">);</span>
 <span class="kd">const</span> <span class="nx">suite</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">"cloudcannon-suite"</span><span class="p">);</span>
 
-<span class="nx">suite</span><span class="p">.</span><span class="nx">docs</span><span class="p">(</span><span class="nx">gulp</span><span class="p">);</span></code></pre></figure>
+<span class="nx">suite</span><span class="p">.</span><span class="nx">jekyllDocs</span><span class="p">(</span><span class="nx">gulp</span><span class="p">);</span></code></pre></figure>
 
 
 <h3>Usage</h3>
@@ -129,7 +145,7 @@
 
 
 
-<figure class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="nv">$ </span>gulp docs
+<figure class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="nv">$ </span>gulp jekyllDocs
 <span class="o">[</span>12:04:12] Using gulpfile ./gulpfile.js
 <span class="o">[</span>12:04:12] Starting <span class="s1">'docs'</span>...
 <span class="o">[</span>12:04:12] Starting <span class="s1">'docs:build'</span>...
@@ -159,7 +175,7 @@ Configuration file: /Users/george/Work/cloudcannon/suite/docs/_config.yml
 
 
 		
-<figure class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="nv">$ </span>gulp docs:install</code></pre></figure>
+<figure class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="nv">$ </span>gulp jekyllDocs:install</code></pre></figure>
 
 	
 		<h4>build</h4>
@@ -168,7 +184,7 @@ Configuration file: /Users/george/Work/cloudcannon/suite/docs/_config.yml
 
 
 		
-<figure class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="nv">$ </span>gulp docs:build</code></pre></figure>
+<figure class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="nv">$ </span>gulp jekyllDocs:build</code></pre></figure>
 
 	
 		<h4>serve</h4>
@@ -177,7 +193,7 @@ Configuration file: /Users/george/Work/cloudcannon/suite/docs/_config.yml
 
 
 		
-<figure class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="nv">$ </span>gulp docs:serve</code></pre></figure>
+<figure class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="nv">$ </span>gulp jekyllDocs:serve</code></pre></figure>
 
 	
 		<h4>watch</h4>
@@ -186,7 +202,7 @@ Configuration file: /Users/george/Work/cloudcannon/suite/docs/_config.yml
 
 
 		
-<figure class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="nv">$ </span>gulp docs:watch</code></pre></figure>
+<figure class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="nv">$ </span>gulp jekyllDocs:watch</code></pre></figure>
 
 	
 
@@ -217,23 +233,28 @@ Configuration file: /Users/george/Work/cloudcannon/suite/docs/_config.yml
 	<p>If you have a more complex set up you can use any of the following options with the Docs package.</p>
 
 	
-		<h4>jekyll.src</h4>
+		<h4>jekyll.src </h4>
+
 		<p>Sets the input folder for jekyll</p>
 
 	
-		<h4>jekyll.dest</h4>
+		<h4>jekyll.dest </h4>
+
 		<p>Sets the output folder for docs build</p>
 
 	
-		<h4>tasks</h4>
+		<h4>tasks </h4>
+
 		<p>Adds additional tasks to be run before the jekyll build. This is useful for reducing build time in jekyll.</p>
 
 	
-		<h4>serve.port</h4>
+		<h4>serve.port </h4>
+
 		<p>Specifies the port to serve the built site from.</p>
 
 	
-		<h4>serve.open</h4>
+		<h4>serve.open </h4>
+
 		<p>Should the docs:serve task automatically open a tab in a browser</p>
 
 	

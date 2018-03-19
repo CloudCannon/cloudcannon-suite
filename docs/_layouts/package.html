@@ -8,7 +8,7 @@ layout: default
 const gulp = require("gulp");
 const suite = require("cloudcannon-suite");
 
-suite.{{ page.namespace }}(gulp);
+{% if page.required_config %}suite.{{ page.namespace }}(gulp, {{ page.required_config | jsonify }});{% else %}suite.{{ page.namespace }}(gulp);{% endif %}
 {% endhighlight %}
 
 <h3>Usage</h3>
@@ -45,7 +45,8 @@ $ gulp {{ page.namespace }}
 	<p>If you have a more complex set up you can use any of the following options with the {{ page.title }} package.</p>
 
 	{% for entry in page.config %}
-		<h4>{{ entry.key }}</h4>
+		<h4>{{ entry.key }} {% if entry.required %}<small class="config-label">required</small>{% endif %}</h4>
+
 		{{ entry.description_markdown | markdownify }}
 	{% endfor %}
 {% endif %}

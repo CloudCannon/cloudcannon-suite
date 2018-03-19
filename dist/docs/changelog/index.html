@@ -21,7 +21,7 @@
 
 		<link type="application/atom+xml" rel="alternate" href="https://long-pig.cloudvent.net/feed.xml" title="CloudCannon Suite" />
 
-		<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Merriweather:400,400italic,700,700italic|Open+Sans:400,400italic,600,600italic,700,700italic|Inconsolata:400,700">
+		<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Nixie+One|Inconsolata:400,700">
 		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 		<link rel="stylesheet" href="/css/main.css">
 		<link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -41,10 +41,13 @@
 					<button type="button" class="open-nav" id="open-nav"></button>
 				</h1>
 
-				<form action="/search/" method="get">
-					<input type="text" name="q" id="search-input" placeholder="Search">
-					<input type="submit" value="Search" style="display: none;">
-				</form>
+				<div class="search-container">
+					<form action="/search/" method="get">
+						<input type="text" name="q" id="search-input" placeholder="Search" required>
+						<i class="material-icons">search</i>
+						<input type="submit" value="Search" style="display: none;">
+					</form>
+				</div>
 			</div>
 		</header>
 
@@ -52,6 +55,9 @@
 			<div class="container">
 				<nav>
 					<ul>
+						
+						
+							
 						
 							
 						
@@ -61,10 +67,14 @@
 						
 							
 								<li class="nav-item top-level ">
-									<a href="/install/">Install</a>
+									<a href="/prerequisites/">Prerequisites</a>
 								</li>
 							
 						
+							
+								<li class="nav-item top-level ">
+									<a href="/install/">Install</a>
+								</li>
 							
 						
 							
@@ -78,23 +88,27 @@
 					<ul>
 						
 							<li class="nav-item top-level ">
-								<a href="/packages/dev/">Dev</a>
+								<a href="/packages/dev/"><img src="/images/build.svg" width="18" height="18"> Dev</a>
 							</li>
 						
 							<li class="nav-item top-level ">
-								<a href="/packages/docs/">Docs</a>
+								<a href="/packages/dist/"><img src="/images/shipping.svg" width="18" height="18"> Distribute</a>
 							</li>
 						
 							<li class="nav-item top-level ">
-								<a href="/packages/help/">Help</a>
+								<a href="/packages/docs/"><img src="/images/docs.svg" width="18" height="18"> Docs</a>
 							</li>
 						
 							<li class="nav-item top-level ">
-								<a href="/packages/i18n/">I18n</a>
+								<a href="/packages/help/"><img src="/images/help.svg" width="18" height="18"> Help</a>
 							</li>
 						
 							<li class="nav-item top-level ">
-								<a href="/packages/screenshots/">Screenshots</a>
+								<a href="/packages/i18n/"><img src="/images/translate.svg" width="18" height="18"> I18n</a>
+							</li>
+						
+							<li class="nav-item top-level ">
+								<a href="/packages/screenshots/"><img src="/images/devices.svg" width="18" height="18"> Screenshots</a>
 							</li>
 						
 					</ul>
@@ -109,7 +123,8 @@
 
 				<section>
 					<div class="page-header">
-						<h3>Change Log</h3>
+						<h3> Change Log</h3>
+						
 					</div>
 					<article class="content">
 						<p>Subscribe with <a href="/feed.xml">RSS</a> to keep up with the latest changes.</p>
@@ -119,52 +134,25 @@
 <div class="changelog">
 	
 		<div class="changelog-item">
-			<h3>General fixes and improvements</h3>
-			<p><span class="date">February 05, 2016</span> <span class="badge minor">minor</span></p>
+			<h3>First Release</h3>
+			<p><span class="date">March 19, 2017</span> <span class="badge major">major</span></p>
 
-			<p>This release fixes a few minor issues reported by users. We’ve also made a few quality of life improvements.</p>
-
-<p><strong>Features:</strong></p>
-
-<ul>
-  <li>Streamlined access to contact details</li>
-  <li>Better sort order for archived messages</li>
-</ul>
-
-<p><strong>Fixes:</strong></p>
-
-<ul>
-  <li>Input sometimes getting stuck</li>
-  <li>One more memory leak obliterated</li>
-</ul>
-
-
-			<p class="editor-link"><a href="cloudcannon:collections/_posts/2016-02-05-general-fixes-and-improvements.md" class="btn"><strong>&#9998;</strong> Update Entry</a></p>
-		</div>
-	
-		<div class="changelog-item">
-			<h3>Media support</h3>
-			<p><span class="date">January 12, 2016</span> <span class="badge major">major</span></p>
-
-			<p>ChatApp introduces media support! Send images, videos and documents to your contacts.</p>
+			<p>First private release of the CloudCannon Suite</p>
 
 <p><strong>Features:</strong></p>
 
 <ul>
-  <li>Image support</li>
-  <li>Video support</li>
-  <li>Document support</li>
-</ul>
-
-<p><strong>Fixes:</strong></p>
-
-<ul>
-  <li>Edge case contact syncing issue</li>
-  <li>All memory leaks obliterated</li>
+  <li>Internationalisation</li>
+  <li>Better baseurl</li>
+  <li>Local development</li>
+  <li>Local documentation</li>
+  <li>Combined distribution folder</li>
+  <li>Easy commands</li>
+  <li>Well defined folder structure</li>
 </ul>
 
 
-			<p class="editor-link"><a href="cloudcannon:collections/_posts/2016-01-12-media-support.md" class="btn"><strong>&#9998;</strong> Update Entry</a></p>
+			<p class="editor-link"><a href="cloudcannon:collections/_posts/2017-03-19-initial-private-release.md" class="btn"><strong>&#9998;</strong> Update Entry</a></p>
 		</div>
 	
 </div>

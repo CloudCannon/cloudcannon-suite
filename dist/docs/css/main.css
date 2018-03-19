@@ -591,7 +591,7 @@ html {
 body {
   height: 100%;
   max-height: 100%;
-  font-family: "Merriweather", serif;
+  font-family: 'Nunito Sans', sans-serif;
   letter-spacing: 0.01rem;
   font-size: 1.8em;
   line-height: 1.75em;
@@ -616,7 +616,7 @@ table {
   -webkit-font-feature-settings: 'dlig' 1, 'liga' 1, 'lnum' 1, 'kern' 1;
   -moz-font-feature-settings: 'dlig' 1, 'liga' 1, 'lnum' 1, 'kern' 1;
   -o-font-feature-settings: 'dlig' 1, 'liga' 1, 'lnum' 1, 'kern' 1;
-  font-family: "Open Sans", sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   text-rendering: geometricPrecision; }
 
 h1,
@@ -792,6 +792,23 @@ kbd {
 
   h6 {
     font-size: 1.8rem; } }
+.config-label {
+  background: #404145;
+  border: 1px solid #222;
+  display: inline-block;
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-size: 13px;
+  line-height: 17px;
+  color: #fff;
+  vertical-align: middle; }
+
+.tagline {
+  font-size: 1.2em;
+  font-style: italic;
+  margin-top: 10px;
+  color: #777; }
+
 pre, code, tt {
   font-family: Inconsolata, Consolas, Courier, "Courier New", "Liberation Mono", monospace;
   font-size: 0.85em;
@@ -905,6 +922,8 @@ main {
   display: flex;
   align-items: center;
   justify-content: center; }
+  .intro-section h1 {
+    margin-top: 40px; }
   .intro-section .technologies {
     display: flex;
     justify-content: center;
@@ -929,7 +948,7 @@ main {
       position: relative;
       top: 5px; }
   .intro-section > div {
-    flex: 0 0 500px; }
+    flex: 0 0 550px; }
   .intro-section,
   .intro-section h1 {
     color: #fff; }
@@ -941,8 +960,29 @@ header {
     display: flex;
     justify-content: space-between;
     padding: 10px 0; }
-  header form {
-    flex: 0 1 250px; }
+  header .search-container {
+    flex: 0;
+    position: relative; }
+    header .search-container i {
+      position: absolute;
+      left: 10px;
+      top: 9px;
+      color: #3583d6;
+      pointer-events: none;
+      transition: opacity ease 200ms;
+      opacity: 0.5; }
+    header .search-container #search-input {
+      padding-left: 20px;
+      width: 20px;
+      box-sizing: border-box;
+      transition: width ease 300ms;
+      cursor: pointer; }
+      header .search-container #search-input:focus, header .search-container #search-input:valid {
+        padding-left: 40px;
+        width: 280px;
+        cursor: text; }
+        header .search-container #search-input:focus + i, header .search-container #search-input:valid + i {
+          opacity: 1; }
   header ul {
     padding: 0;
     margin: 0; }
@@ -997,7 +1037,7 @@ header {
 
 .content,
 .page-header {
-  max-width: 800px;
+  max-width: 900px;
   padding: 0 25px 20px;
   margin: 20px auto 0 auto; }
 
@@ -1013,19 +1053,26 @@ header {
   letter-spacing: 0; }
 .page-header h3 {
   font-size: 4rem;
-  margin-left: -4px; }
+  margin-left: -4px;
+  line-height: 1; }
+.page-header img {
+  width: 50px;
+  float: left;
+  margin-right: 10px;
+  position: relative;
+  top: 2px; }
 @media (min-width: 700px) {
   .page-header h2 {
     font-size: 2.65rem; }
   .page-header h3 {
     font-size: 5.4rem; } }
-@media (min-width: 1180px) {
+@media (min-width: 1280px) {
   .page-header {
     margin-top: 55px; } }
 
 .nav-item {
   display: block;
-  font-family: "Open Sans", sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   line-height: 1;
   margin: 0; }
   nav:not(.full-navigation) .nav-item > ul {
@@ -1038,6 +1085,11 @@ header {
     font-size: 1.4rem;
     padding: 10px 0 10px 40px;
     display: block; }
+  .nav-item img {
+    float: left;
+    width: 18px;
+    vertical-align: middle;
+    margin-right: 10px; }
   .nav-item.current > a,
   .nav-item > a:active,
   .nav-item > a:hover {
@@ -1152,7 +1204,7 @@ h4 svg {
   font-style: italic; }
 
 .badge {
-  font-family: "Open Sans", sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   padding: 2px 5px;
   text-transform: uppercase;
   font-size: 0.8rem;
@@ -1172,7 +1224,7 @@ blockquote {
   border-color: #3583d6; }
   blockquote p:last-child, blockquote .settings-panel-example:last-child {
     margin-bottom: 0; }
-  @media (max-width: 1180px) {
+  @media (max-width: 1280px) {
     blockquote {
       margin-left: 0;
       margin-right: 0; } }
@@ -1223,3 +1275,27 @@ img {
       margin-right: 10px;
       position: relative;
       top: 3px; }
+
+.large-boxes {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0;
+  margin: 20px -10px;
+  list-style: none; }
+  .large-boxes > li {
+    margin: 10px;
+    flex: 1 1 200px;
+    display: flex; }
+  .large-boxes a {
+    flex: 1;
+    padding: 20px;
+    display: block;
+    background: #eee;
+    border-radius: 5px;
+    text-decoration: none;
+    line-height: 1.5; }
+  .large-boxes strong {
+    display: block; }
+  .large-boxes small {
+    display: block;
+    margin-top: 10px; }
