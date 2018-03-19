@@ -50,7 +50,6 @@ module.exports = function (gulp, config) {
 		if (config.sites.hasOwnProperty(namespace)) {
 			var options = config.sites[namespace];
 
-			console.log(options);
 			gulp.task("screenshots:" + namespace + ":clean", function () {
 				return del(options.dest + "/" + namespace);
 			});
