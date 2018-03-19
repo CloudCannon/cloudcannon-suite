@@ -8,15 +8,15 @@ google_analytics_key:
 
 # Values for the jekyll-seo-tag gem (https://github.com/jekyll/jekyll-seo-tag)
 logo: /siteicon.png
-description: Product documentation template for Jekyll.
+description: An opinionated set of tools used to build and maintain static sites.
 author:
-  name:
-  email:
-  twitter: # twitter username without the @ symbol
+  name: CloudCannon Inc.
+  email: support@cloudcannon.com
+  twitter: CloudCannon
 social:
-  name: Edition Template
+  name: CloudCannon Suite
   links:
-    - https://github.com/CloudCannon/edition-jekyll-template
+    - https://github.com/CloudCannon/cloudcannon-suite
 
 # -----
 # Build
