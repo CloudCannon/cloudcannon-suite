@@ -146,7 +146,7 @@ module.exports = {
 
 		return handleHTMLFile({
 			skipFile: function (file) {
-				var baseFolder = pathWithoutBase.split(path.sep).shift(),
+				var baseFolder = file.sitePath.split(path.sep).shift(),
 					isLocaleString = false;
 
 				for (var i = 0; i < localeNames.length; i++) {
