@@ -3,6 +3,7 @@ var webshot = require("gulp-webshot"),
 	fs = require("fs"),
 	path = require("path"),
 	defaults = require("defaults"),
+	gutil = require("gulp-util"),
 	del = require("del"),
 	i18nCSS = fs.readFileSync(path.join(__dirname, "i18n-overlays.css"), "utf8");
 
@@ -11,17 +12,11 @@ module.exports = function (gulp, config) {
 	config = defaults(config, {
 		dest: "reports/screenshots",
 		sites: {
-			dev: {
-				"src": "dist/site"
-			},
-			i18n: {
-				"src": "dist/translated_site"
-			},
-			dist: {
-				"src": "dist/prod"
-			}
+			dev: {"src": "dist/site"},
+			i18n: {"src": "dist/translated_site"},
+			docs: {"src": "dist/docs"},
+			dist: {"src": "dist/prod"}
 		},
-
 		fast: true,
 		overlays: true
 	});
@@ -39,7 +34,31 @@ module.exports = function (gulp, config) {
 			options.customCSS = i18nCSS;
 		}
 
-		return gulp.src(src + "/**/*.html").pipe(webshot(options))
+
+		gutil.log("Generating Screenshots from: '" + gutil.colors.blue(src) + "'");
+		return gulp.src("./" + src + "/**/*.html").pipe(webshot(options))
+	}
+
+	function registerTasks(namespace, options) {
+		var options = config.sites[namespace];
+
+		gulp.task("screenshots:" + namespace + ":clean", function () {
+			return del(options.dest + "/" + namespace);
+		});
+
+		gulp.task("screenshots:" + namespace + "-render", ["screenshots:" + namespace + ":clean"], function () {
+			return renderScreenshots(options.src, namespace);
+		});
+
+		gulp.task("screenshots:" + namespace, ["screenshots:" + namespace + "-render"], function () {
+			if (config.fast) {
+				return;
+			}
+
+			return gulp.src(options.src + "/**/*").pipe(imagemin({
+				verbose: true
+			}));
+		});
 	}
 
 	gulp.task("screenshots:clean", function () {
@@ -48,25 +67,7 @@ module.exports = function (gulp, config) {
 
 	for (var namespace in config.sites) {
 		if (config.sites.hasOwnProperty(namespace)) {
-			var options = config.sites[namespace];
-
-			gulp.task("screenshots:" + namespace + ":clean", function () {
-				return del(options.dest + "/" + namespace);
-			});
-
-			gulp.task("screenshots:" + namespace + "-render", ["screenshots:" + namespace + ":clean"], function () {
-				return renderScreenshots(options.src, namespace);
-			});
-
-			gulp.task("screenshots:" + namespace, ["screenshots:" + namespace + "-render"], function () {
-				if (config.fast) {
-					return;
-				}
-
-				return gulp.src(options.src + "/**/*").pipe(imagemin({
-					verbose: true
-				}));
-			});
+			registerTasks(namespace, config.sites[namespace]);
 		}
 	}
 };
