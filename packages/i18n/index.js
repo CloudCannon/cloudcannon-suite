@@ -187,4 +187,6 @@ module.exports = function (gulp, config) {
 	// Default
 
 	gulp.task("i18n", gulpSequence("i18n:serve", "i18n:watch"));
+
+	gulp.task("i18n:kickoff", gulpSequence("dev:build", ["i18n:generate", "screenshots:dev"]));
 };
