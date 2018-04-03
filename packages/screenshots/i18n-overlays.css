@@ -1,6 +1,7 @@
 .list-profiles [data-i18n]:before,
 .hero [data-i18n]:before,
 .regions-container [data-i18n]:before,
+header [data-i18n]:before,
 nav [data-i18n]:after,
 .container [data-i18n]:after {
 	content: attr(data-i18n);
