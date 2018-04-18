@@ -22,7 +22,7 @@ var configDefaults = {
 
 		legacy_path: "_locales",
 
-		character_based_locales: ["ko", "ja", "zh_CN", "zh_TW"],
+		character_based_locales: ["ja"],
 		google_credentials_filename: null
 	},
 	serve: {
@@ -31,16 +31,6 @@ var configDefaults = {
 		path: "/"
 	}
 };
-
-function runBudou(string, done) {
-	var options = {
-	  mode: 'text',
-	  scriptPath: __dirname,
-	  args: [configDefaults.i18n.google_credentials_filename, string]
-	};
-
-	PythonShell.run('wordwrap-chars.py', options, done);
-}
 
 module.exports = function (gulp, config) {
 	config = config || {};
@@ -60,6 +50,16 @@ module.exports = function (gulp, config) {
 	config.i18n.locale_src = path.join(cwd, config.i18n.locale_src);
 	config.i18n.generated_locale_dest = path.join(cwd, config.i18n.generated_locale_dest);
 	config.i18n.legacy_path = path.join(cwd, config.i18n.legacy_path);
+
+	function runBudou(string, localeCode, done) {
+		var options = {
+		  mode: 'text',
+		  scriptPath: __dirname,
+		  args: [config.i18n.google_credentials_filename, string, localeCode]
+		};
+
+		PythonShell.run('wordwrap-chars.py', options, done);
+	}
 
 	// -------
 	// Legacy
@@ -142,6 +142,26 @@ module.exports = function (gulp, config) {
 		});
 	});
 
+	gulp.task("i18n:save-wordwrapped-locales", function (done) {
+		async.eachSeries(localeNames, function (targetLocale, next) {
+			if (config.i18n.character_based_locales.indexOf(targetLocale) < 0) {
+				return next();
+			}
+
+			var locale = locales[targetLocale],
+			 	contents = {};
+
+			for (var localeKey in locale) {
+				if (locale.hasOwnProperty(localeKey)) {
+					contents[localeKey] = locale[localeKey].translation;
+				}
+			}
+
+			var filePath = path.join(config.i18n.locale_src, targetLocale + "-prep.json");
+			fs.writeFile(filePath, JSON.stringify(contents, null, "\t"), next);
+		}, done);
+	});
+
 	gulp.task("i18n:clean", function () {
 		return del(config.i18n.dest);
 	});
@@ -151,22 +171,27 @@ module.exports = function (gulp, config) {
 			return done();
 		}
 
-		async.each(localeNames, function (targetLocale, next) {
-			if (!config.i18n.character_based_locales[targetLocale]) {
+		async.eachSeries(localeNames, function (targetLocale, next) {
+			if (config.i18n.character_based_locales.indexOf(targetLocale) < 0) {
 				return next();
 			}
 
-			console.log(locales[targetLocale]);
-			runBudou("Netflixでは各作品ごとに下記の画像一式が必要です:", function (err, translation) {
-			  if (err) {
-					console.error("ERRORED", err, translation);
-					return next(err);
-			    return;
-			  }
+			var locale = locales[targetLocale],
+				localeKeys = Object.keys(locale);
 
-			  console.log("DONE", translation);
-				return next();
-			});
+			async.eachSeries(localeKeys, function (localeKey, nextString) {
+				var localeString = locale[localeKey].translation;
+				runBudou(localeString, targetLocale, function (err, translation) {
+				  if (err) {
+						console.error(targetLocale + ": " + localeKey + " failed to wrap", err, translation);
+						return next(err);
+				  }
+
+					console.log(targetLocale + ": " + localeKey + " successful");
+					locale[localeKey].translation = translation;
+					return nextString();
+				});
+			}, next);
 		}, done);
 	});
 
@@ -200,9 +225,14 @@ module.exports = function (gulp, config) {
 	gulp.task("i18n:build", gulpSequence(
 		"i18n:clean",
 		["i18n:load-locales", "i18n:clone-assets"],
-		"i18n:add-character-based-wordwraps",
 		"i18n:translate-html-pages",
 		"i18n:clone-prelocalised-html-pages"
+	));
+
+	gulp.task("i18n:prep-wordwraps", gulpSequence(
+		"i18n:load-locales",
+		"i18n:add-character-based-wordwraps",
+		"i18n:save-wordwrapped-locales"
 	));
 
 	// -----
