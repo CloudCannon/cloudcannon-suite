@@ -8,7 +8,8 @@ var async = require("async"),
 	props2json = require("gulp-props2json"),
 	i18n = require("./plugins/i18n"),
 	rename = require("gulp-rename"),
-	gulpSequence = require("gulp-sequence");
+	gulpSequence = require("gulp-sequence"),
+	PythonShell = require("python-shell");
 
 var configDefaults = {
 	i18n: {
@@ -19,7 +20,10 @@ var configDefaults = {
 		locale_src: "i18n/locales",
 		generated_locale_dest: "i18n",
 
-		legacy_path: "_locales"
+		legacy_path: "_locales",
+
+		character_based_locales: ["ko", "ja", "zh_CN", "zh_TW"],
+		google_credentials_filename: null
 	},
 	serve: {
 		port: 8000,
@@ -27,6 +31,16 @@ var configDefaults = {
 		path: "/"
 	}
 };
+
+function runBudou(string, done) {
+	var options = {
+	  mode: 'text',
+	  scriptPath: __dirname,
+	  args: [configDefaults.i18n.google_credentials_filename, string]
+	};
+
+	PythonShell.run('wordwrap-chars.py', options, done);
+}
 
 module.exports = function (gulp, config) {
 	config = config || {};
@@ -132,6 +146,30 @@ module.exports = function (gulp, config) {
 		return del(config.i18n.dest);
 	});
 
+	gulp.task("i18n:add-character-based-wordwraps", function (done) {
+		if (!config.i18n.google_credentials_filename) {
+			return done();
+		}
+
+		async.each(localeNames, function (targetLocale, next) {
+			if (!config.i18n.character_based_locales[targetLocale]) {
+				return next();
+			}
+
+			console.log(locales[targetLocale]);
+			runBudou("Netflixでは各作品ごとに下記の画像一式が必要です:", function (err, translation) {
+			  if (err) {
+					console.error("ERRORED", err, translation);
+					return next(err);
+			    return;
+			  }
+
+			  console.log("DONE", translation);
+				return next();
+			});
+		}, done);
+	});
+
 	gulp.task("i18n:clone-assets",  function () {
 		return gulp.src([config.i18n.src + "/**/*", "!" + config.i18n.src + "/**/*.html"], { nodir: true })
 			.pipe(gulp.dest(config.i18n.dest));
@@ -162,6 +200,7 @@ module.exports = function (gulp, config) {
 	gulp.task("i18n:build", gulpSequence(
 		"i18n:clean",
 		["i18n:load-locales", "i18n:clone-assets"],
+		"i18n:add-character-based-wordwraps",
 		"i18n:translate-html-pages",
 		"i18n:clone-prelocalised-html-pages"
 	));
