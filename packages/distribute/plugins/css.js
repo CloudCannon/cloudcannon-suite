@@ -3,6 +3,10 @@ var gutil = require("gulp-util"),
 	URLRewriter = require("cssurl").URLRewriter,
 	path = require("path");
 
+function prepHref(href) {
+	return "'" + href.replace(/'/g, "\'") + "'";
+}
+
 var IGNORE_URL_REGEX = /^([a-z]+\:|\/\/|\#)/;
 module.exports = function (options) {
 	options = options || {};
@@ -22,10 +26,10 @@ module.exports = function (options) {
 
 		var rewriter = new URLRewriter(function(href) {
 			if (IGNORE_URL_REGEX.test(href)) {
-				return href;
+				return prepHref(href);
 			}
 
-			return "/" + path.join(options.baseurl, href);
+			return prepHref("/" + path.join(options.baseurl, href));
 		});
 
 		var rewritten = rewriter.rewrite(css);
