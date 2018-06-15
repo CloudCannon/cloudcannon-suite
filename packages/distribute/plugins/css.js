@@ -29,8 +29,8 @@ module.exports = function (options) {
 				return prepHref(href);
 			}
 
-			console.log(file.sitePath, href);
-			var absolutePath = path.resolve(file.sitePath, href);
+			console.log(path.dirname(file.sitePath), href);
+			var absolutePath = path.resolve(path.dirname(file.sitePath), href);
 					console.log(absolutePath);
 			return prepHref("/" + path.join(options.baseurl, absolutePath));
 		});
