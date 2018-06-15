@@ -1,6 +1,6 @@
 var gutil = require("gulp-util"),
 	through = require("through2").obj,
-	rewriteCssUrls = require("cssurl").URLRewriter,
+	URLRewriter = require("cssurl").URLRewriter,
 	path = require("path");
 
 var IGNORE_URL_REGEX = /^([a-z]+\:|\/\/|\#)/;
