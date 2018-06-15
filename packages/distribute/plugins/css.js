@@ -29,7 +29,8 @@ module.exports = function (options) {
 				return prepHref(href);
 			}
 
-			return prepHref("/" + path.join(options.baseurl, href));
+			var absolutePath = path.resolve(file.sitePath, href);
+			return prepHref("/" + path.join(options.baseurl, absolutePath));
 		});
 
 		var rewritten = rewriter.rewrite(css);
