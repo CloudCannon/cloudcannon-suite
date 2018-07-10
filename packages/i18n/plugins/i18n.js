@@ -38,7 +38,7 @@ function handleHTMLFile(options) {
 			return callback();
 		}
 
-		var $ = cheerio.load(file.contents.toString(encoding));
+		var $ = cheerio.load(file.contents.toString(encoding), { lowerCaseAttributeNames:false, decodeEntities: false });
 
 		$("[data-i18n]").each(function processElement() {
 			var $el = $(this),
