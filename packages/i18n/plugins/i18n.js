@@ -58,10 +58,10 @@ function handleHTMLFile(options) {
 		});
 
 		if (options.rewriteLinks) {
-			$("a, link").each(function processLink() {
+			$("a[href], link[href]").each(function processLink() {
 				var $el = $(this),
 					href = $el.attr("href"),
-					updated = options.rewriteLinks.apply(this, [file, href]);
+					updated = href && options.rewriteLinks.apply(this, [file, href]);
 
 				if (updated) {
 					$el.attr("href", updated);
