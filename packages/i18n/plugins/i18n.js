@@ -158,7 +158,7 @@ module.exports = {
 				return false;
 			},
 			rewriteLinks: function rewriteLinks(file, href) {
-				if (IGNORE_URL_REGEX.test(href)) {
+				if (!href || IGNORE_URL_REGEX.test(href)) {
 					return;
 				}
 
