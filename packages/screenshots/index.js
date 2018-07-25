@@ -1,6 +1,7 @@
 var webshot = require("gulp-webshot"),
 	imagemin = require("gulp-imagemin"),
 	fs = require("fs"),
+	ss = require('./cc-screenshotter.js'),
 	path = require("path"),
 	defaults = require("defaults"),
 	gutil = require("gulp-util"),
@@ -18,7 +19,7 @@ module.exports = function (gulp, config) {
 			dist: {"src": "dist/prod"}
 		},
 		fast: true,
-		overlays: true
+		count: 3
 	});
 
 
@@ -27,16 +28,12 @@ module.exports = function (gulp, config) {
 			dest: config.dest + "/" + namespace,
 			root: src,
 			screenSize: {width: 1920, height: 1080},
-			shotSize: {width: 1920, height: "all"}
+			fullPage: true,
+			count: config.count
 		};
 
-		if (config.overlays) {
-			options.customCSS = i18nCSS;
-		}
-
-
 		gutil.log("Generating Screenshots from: '" + gutil.colors.blue(src) + "'");
-		return gulp.src("./" + src + "/**/*.html").pipe(webshot(options))
+		return gulp.src("./" + src + "/**/*.html").pipe(ss.worker(options)).on('end', function() {ss.shutdown(options)});
 	}
 
 	function registerTasks(namespace, options) {
