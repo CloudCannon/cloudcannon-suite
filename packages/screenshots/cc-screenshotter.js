@@ -57,6 +57,7 @@ async function shotter(filePath, options) {
     tags.forEach(i18ntag => {
       tagmap[i18ntag.i18n] = tagmap[i18ntag.i18n] || {pages: [], content: []};
       let formatUrl = urlPath.replace(/index\.html/, '');
+      formatUrl = formatUrl.replace(/^\//, '');
       tagmap[i18ntag.i18n].pages.push({url: formatUrl, type: i18ntag.type});
       if (tagmap[i18ntag.i18n].content.indexOf(i18ntag.content) < 0) {
         tagmap[i18ntag.i18n].content.push(i18ntag.content);
