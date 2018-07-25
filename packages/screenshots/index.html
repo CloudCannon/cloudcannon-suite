@@ -306,12 +306,6 @@
                 });
                 lpanel.appendChild(awrap);
             }
-            if (keytag) {
-                setTimeout(function() {
-                    console.log("Loading tag in timeout");
-                    loadtag(keytag, currentUrl);
-                }, 1000);
-            }
         });
 
         function loadtag(tagname, url, index, scrolllist) {
@@ -397,7 +391,10 @@
                         console.log("Loading tag in JSON");
                         loadtag(opts.tagname, opts.url, opts.index, opts.scrolllist);
                     }
-                    loadtag(keytag, currentUrl);
+                    if (keytag) {
+                        loadtag(keytag, currentUrl);
+                        keytag = "";
+                    }
                 });
             }
         }
