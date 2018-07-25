@@ -302,14 +302,14 @@
                         return;
                     }
                     console.log("Loading tag in main wrap");
-                    loadtag(this.href.split("#")[1]);
+                    loadtag(this.href.split("#")[1], currentUrl);
                 });
                 lpanel.appendChild(awrap);
             }
             if (keytag) {
                 setTimeout(function() {
                     console.log("Loading tag in timeout");
-                    loadtag(keytag);
+                    loadtag(keytag, currentUrl);
                 }, 1000);
             }
         });
@@ -317,7 +317,7 @@
         function loadtag(tagname, url, index, scrolllist) {
             if (!tagmap[tagname])  return;
             index = index || 0;
-            url = url || currentUrl;
+            url = url || "";
             if (url != currentUrl) return initialise(url, {tagname:tagname, url:url, index:index, scrolllist:scrolllist});
             
             document.querySelectorAll('.main').forEach(function(element){
@@ -397,6 +397,7 @@
                         console.log("Loading tag in JSON");
                         loadtag(opts.tagname, opts.url, opts.index, opts.scrolllist);
                     }
+                    loadtag(keytag, currentUrl);
                 });
             }
         }
