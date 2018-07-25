@@ -5,6 +5,7 @@ var webshot = require("gulp-webshot"),
 	path = require("path"),
 	defaults = require("defaults"),
 	gutil = require("gulp-util"),
+	_ = require("underscore"),
 	del = require("del"),
 	i18nCSS = fs.readFileSync(path.join(__dirname, "i18n-overlays.css"), "utf8");
 
@@ -33,9 +34,9 @@ module.exports = function (gulp, config) {
 		};
 
 		gutil.log("Generating Screenshots from: '" + gutil.colors.blue(src) + "'");
-		return gulp.src("./" + src + "/**/*.html").pipe(ss.worker(options)).on('end', function() {
-			ss.shutdown(options, done)
-		});
+		return gulp.src("./" + src + "/**/*.html").pipe(ss.worker(options)).on('end', _.once(function() {
+			ss.shutdown(options, done);
+		}));
 	}
 
 	function registerTasks(namespace, options) {
