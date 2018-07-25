@@ -1,7 +1,7 @@
 var webshot = require("gulp-webshot"),
 	imagemin = require("gulp-imagemin"),
 	fs = require("fs"),
-	ss = require('./cc-screenshotter.js'),
+	Screenshotter = require('./screenshotter.js'),
 	path = require("path"),
 	defaults = require("defaults"),
 	gutil = require("gulp-util"),
@@ -23,20 +23,10 @@ module.exports = function (gulp, config) {
 		count: 3
 	});
 
-
-	function renderScreenshots(src, namespace, done) {
-		var options = {
-			dest: config.dest + "/" + namespace,
-			root: src,
-			screenSize: {width: 1920, height: 1080},
-			fullPage: true,
-			count: config.count
-		};
-
+	function renderScreenshots(src, screenshotter, namespace, done) {
 		gutil.log("Generating Screenshots from: '" + gutil.colors.blue(src) + "'");
-		return gulp.src("./" + src + "/**/*.html").pipe(ss.worker(options)).on('end', _.once(function() {
-			ss.shutdown(options, done);
-		}));
+		return gulp.src("./" + src + "/**/*.html")
+			.pipe(screenshotter.start());
 	}
 
 	function registerTasks(namespace, options) {
@@ -46,8 +36,20 @@ module.exports = function (gulp, config) {
 			return del(options.dest + "/" + namespace);
 		});
 
-		gulp.task("screenshots:" + namespace + "-render", ["screenshots:" + namespace + ":clean"], function (done) {
-			return renderScreenshots(options.src, namespace, done);
+		var screenshotter = new Screenshotter({
+			dest: config.dest + "/" + namespace,
+			root: options.src,
+			screenSize: {width: 1920, height: 1080},
+			fullPage: true,
+			count: config.count
+		})
+
+		gulp.task("screenshots:" + namespace + "-takescreens", ["screenshots:" + namespace + ":clean"], function () {
+			return renderScreenshots(options.src, screenshotter, namespace);
+		});
+
+		gulp.task("screenshots:" + namespace + "-render", ["screenshots:" + namespace + "-takescreens"], function (done) {
+			screenshotter.shutdown(done);
 		});
 
 		gulp.task("screenshots:" + namespace, ["screenshots:" + namespace + "-render"], function () {
