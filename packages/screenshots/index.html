@@ -223,7 +223,7 @@
         var filter = document.getElementById("filter");
         var urlBar = document.getElementById("urlBar");
         var hideTimer;
-        var currentUrl = "/";
+        var currentUrl = "";
         box.addEventListener("mousemove", function() {
             box.classList.add("showBorders");
             clearTimeout(hideTimer);
@@ -400,7 +400,7 @@
                 });
             }
         }
-        initialise("/");
+        initialise("");
 
         function CR(tag, text, classnames, id) {
             var node = document.createElement(tag);
