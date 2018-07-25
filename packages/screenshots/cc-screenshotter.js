@@ -81,13 +81,14 @@ async function puppetCheck() {
   return
 }
 
-async function shutdown(options) {
+async function shutdown(options, done) {
   console.log("Screenshots completed, closing up shop.");
   await fs.writeFile(path.join(options.dest, "map.json"), JSON.stringify(tagmap, null, 2));
   await fs.createReadStream(path.join(__dirname, 'index.html')).pipe(fs.createWriteStream(path.join(options.dest, "index.html")));
   setTimeout(function() {
     browser.close();
     serve.end();
+    done();
   }, 1000);
 }
 

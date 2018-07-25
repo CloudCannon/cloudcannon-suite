@@ -23,7 +23,7 @@ module.exports = function (gulp, config) {
 	});
 
 
-	function renderScreenshots(src, namespace) {
+	function renderScreenshots(src, namespace, done) {
 		var options = {
 			dest: config.dest + "/" + namespace,
 			root: src,
@@ -33,7 +33,9 @@ module.exports = function (gulp, config) {
 		};
 
 		gutil.log("Generating Screenshots from: '" + gutil.colors.blue(src) + "'");
-		return gulp.src("./" + src + "/**/*.html").pipe(ss.worker(options)).on('end', function() {ss.shutdown(options)});
+		return gulp.src("./" + src + "/**/*.html").pipe(ss.worker(options)).on('end', function() {
+			ss.shutdown(options, done)
+		});
 	}
 
 	function registerTasks(namespace, options) {
@@ -43,8 +45,8 @@ module.exports = function (gulp, config) {
 			return del(options.dest + "/" + namespace);
 		});
 
-		gulp.task("screenshots:" + namespace + "-render", ["screenshots:" + namespace + ":clean"], function () {
-			return renderScreenshots(options.src, namespace);
+		gulp.task("screenshots:" + namespace + "-render", ["screenshots:" + namespace + ":clean"], function (done) {
+			return renderScreenshots(options.src, namespace, done);
 		});
 
 		gulp.task("screenshots:" + namespace, ["screenshots:" + namespace + "-render"], function () {
