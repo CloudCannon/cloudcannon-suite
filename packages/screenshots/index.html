@@ -274,7 +274,7 @@
                 for (var j = 0; j < tagmap[sortedTagmap[i]].pages.length; j++) {
                     var nodelisting = tagmap[sortedTagmap[i]].pages[j];
                     nodeonpagecount[nodelisting.url] = nodeonpagecount[nodelisting.url] || 0;
-                    var listelementnode = CR("LI", nodelisting.url);
+                    var listelementnode = CR("LI", "/"+nodelisting.url);
                     var tagtypenode = CR("SPAN", nodelisting.type);
                     var innerawrap = CR("A");
                     innerawrap.href = "#"+sortedTagmap[i];
@@ -348,7 +348,7 @@
                 }, 400);
                 return;
             }
-            urlBar.innerText = url;
+            urlBar.innerText = "/"+url;
             var newimg = img.cloneNode(true);
             newimg.src = url+"index.png";
             newimg.addEventListener('load', initloaded);
