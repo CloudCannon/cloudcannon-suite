@@ -9,21 +9,46 @@
             font-family: sans-serif;
             background-color: #222;
         }
+        .menu-hide .sidebar {
+            left: -20vw;
+            transition: left 0.3s ease, overflow 0.3s ease 0.3s, width 0.3s ease 0.3s, flex 0.3s ease 0.3s;
+        }
         .sidebar {
+            max-width: 20vw;
             flex: 1;
             background-color: #eee;
-            height: 100vh;
+            height: calc(100vh - 50px);
+            margin-top: 50px;
+            position: relative;
+            left: 0;
+            transition: left 0.3s ease 0.3s, overflow 0.3s ease, width 0.3s ease, flex 0.3s ease;
+        }
+        #keylist {
+            width: 100%;
+            height: 100%;
+            padding: 0;
             overflow-y: scroll;
+            height: calc(100% - 50px);
+            margin-top: 50px;
+            box-sizing: border-box;
+        }
+        #keylist > a {
+            width: 100%;
         }
         .sidebar #filter {
             width: 100%;
-            padding: 0;
+            padding: 0 10px;
             font-size: 18px;
             height: 48px;
             line-height: 48px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            box-sizing: border-box;
         }
         .sidebar a {
             text-decoration: none;
+            color: #444;
         }
         .sidebar a.hide {
             display: none;
@@ -110,6 +135,9 @@
             font-size: 10px;
             letter-spacing: 0.5px;
         }
+        .menu-hide .sidebar:after {
+            left: calc(50% - 15px);
+        }
         .sidebar:after {
             content: "";
             display: block;
@@ -132,8 +160,13 @@
                 transform: rotateZ(360deg)
             }
         }
+        .menu-hide .rpanel {
+            left: 0;
+            min-width: 100vw;
+        }
         .rpanel {
-            position: relative;
+            position: absolute;
+            left: 20vw;
             flex: 4;
             height: calc(100vh - 50px);
             padding-top: 50px;
@@ -141,9 +174,70 @@
             scroll-behavior: smooth;
             transition: all 0.3s ease;
             background-color: #444;
+            min-width: 0;
         }
         .rpanel.fade {
             opacity: 0;
+        }
+        #invisibles {
+            display: flex;
+            flex-wrap: wrap;
+            background-color: #222;
+        }
+        #invisibles h2 {
+            color: white;
+            width: 100%;
+            text-transform: uppercase;
+            margin: 10px;
+            font-size: 16px;
+        }
+        #invisibles div {
+            flex: 0 0 250px;
+            color: white;
+            margin: 10px;
+            cursor: pointer;
+            border: solid 1px #555;
+            border-radius: 10px;
+            padding-top: 10px;
+            transition: all 0.3s ease;
+        }
+        #invisibles div:hover {
+            border: solid 1px #ccc;
+        }
+        #invisibles div.main {
+            color: #ff9d42;
+            border: solid 1px #ff9d42;
+        }
+        #invisibles div span {
+            display: inline-block;
+            padding-left: 10px;
+        }
+        #invisibles div span.tag {
+            display: inline-block;
+            background-color: #444;
+            padding: 0 7px;
+            margin: 0 0 0 5px;
+            min-width: 16px;
+            text-align: center;
+            white-space: nowrap;    
+            height: 20px;
+            line-height: 20px;
+            border-radius: 50px;
+            color: white;
+            font-weight: bold;
+            font-size: 10px;
+            letter-spacing: 0.5px;
+            vertical-align: bottom;
+        }
+        #invisibles div.main span.tag {
+            color: #444;
+            background-color: #ff9d42;
+        }
+        #invisibles div span.content {
+            display: block;
+            margin-top: 10px;
+            padding: 10px;
+            border-top: solid 1px #555;
         }
         .wrap {
             position: relative;
@@ -191,17 +285,13 @@
         #highlights div span {
             display:none;
         }
-        #highlights div.main:hover span {
-            left: -4px;
-            top: -4px;
-        }
-        #highlights div:hover span {
+        #highlights div.main span {
             display: block;
             color: #444;
             background-color: #ff800a;
             position: absolute;
-            left: -2px;
-            top: -2px;
+            left: -4px;
+            top: -20px;
             height: 20px;
             white-space: nowrap;
             padding: 0 10px;
@@ -209,13 +299,30 @@
             font-family: sans-serif;
             z-index: 5;
         }
-        #urlBar {    
+        #highlights div.main:hover span {
+            left: -4px;
+            top: -20px;
+        }
+        #highlights div:hover span {
+            display: block;
+            color: #444;
+            background-color: #ff800a;
+            position: absolute;
+            left: -2px;
+            top: -20px;
+            height: 20px;
+            white-space: nowrap;
+            padding: 0 10px;
+            line-height: 20px;
+            font-family: sans-serif;
+            z-index: 5;
+        }
+        #menubar {    
             position: fixed;
             top: 0;
-            left: 20%;
+            left: 0;
             width: 100%;
             height: 50px;
-            line-height: 50px;
             padding: 0 10px;
             color: white;
             margin: 0;
@@ -223,14 +330,66 @@
             background-color: #222;
             z-index: 10;
         }
+        #urlBar {
+            display: inline-block;
+            vertical-align: top;
+            height: 50px;
+            line-height: 50px;
+            margin: 0 20px;
+        }
+        #urlBar span {
+            color: #ff9d42;
+            display: inline-block;
+            margin: 0 5px;
+        }
+        #menuButton {
+            width: 32px;
+            height: 100%;
+            display: inline-block;
+        }
+        #menuButton div {
+            width: 24px;
+            height: 4px;
+            background-color: white;
+            margin-top: 23px;
+            margin-left: 4px;
+            position: relative;
+        }
+        #menuButton div:before {
+            content: "";
+            display: block;
+            width: 24px;
+            height: 4px;
+            background-color: white;
+            position: absolute;
+            top: -10px;
+            left: 4px;
+        }
+        #menuButton div:after {
+            content: "";
+            display: block;
+            width: 24px;
+            height: 4px;
+            background-color: white;
+            position: absolute;
+            bottom: -10px;
+            right: 4px;
+        }
     </style>
 </head>
-<body>
+<body id="body" class="menu-hide">
+    <div id="menubar">
+        <a id="menuButton" href="javascript:void(0)"><div></div></a>
+        <p id="urlBar">/</p>
+    </div>
     <div class="sidebar" id="lpanel">
         <input id="filter" placeholder="Filter"/>
+        <div id="keylist">
+
+        </div>
     </div>
     <div class="rpanel" id="rpanel">
-        <p id="urlBar">/</p>
+        <div id="invisibles"></div>
         <div class="wrap">
             <img id="img" src="index.png">
             <img id="fgimg" src="index.png">
@@ -238,13 +397,17 @@
         </div>
     </div>
     <script>
+        var body = document.getElementById("body");
         var img = document.getElementById("img");
         var fgimg = document.getElementById("fgimg");
         var box = document.getElementById("highlights");
         var lpanel = document.getElementById("lpanel");
+        var keylist = document.getElementById("keylist");
         var rpanel = document.getElementById("rpanel");
         var filter = document.getElementById("filter");
         var urlBar = document.getElementById("urlBar");
+        var menuButton = document.getElementById("menuButton");
+        var invisibles = document.getElementById("invisibles");
         var hideTimer;
         var currentUrl = "";
         box.addEventListener("mousemove", function() {
@@ -253,6 +416,13 @@
             hideTimer = setTimeout(function() {
                 box.classList.remove("showBorders");
             }, 2000);
+        });
+        menuButton.addEventListener("mouseup", function() {
+            if (body.classList.contains("menu-hide")) {
+                body.classList.remove("menu-hide");
+            } else {
+                body.classList.add("menu-hide");
+            }
         });
 
         filter.addEventListener("keyup", updateList);
@@ -327,7 +497,7 @@
                     console.log("Loading tag in main wrap");
                     loadtag(this.href.split("#")[1], currentUrl);
                 });
-                lpanel.appendChild(awrap);
+                keylist.appendChild(awrap);
             }
         });
 
@@ -337,24 +507,27 @@
             url = url || "";
             if (url != currentUrl) return initialise(url, {tagname:tagname, url:url, index:index, scrolllist:scrolllist});
             
+            urlBar.innerHTML = "Viewing <span>"+ tagname +"</span> on <span>/"+url+"</span>";
             document.querySelectorAll('.main').forEach(function(element){
                 element.classList.remove("main");
             });
             document.getElementById("to-"+tagname).classList.add("main");
-            var tag = document.querySelectorAll('[data-i18n="'+tagname+'"]')[index];
+            var tag = document.querySelectorAll('#rpanel [data-i18n="'+tagname+'"][data-index="'+index+'"]')[0];
             if (tag) tag.scrollIntoView({behavior: "smooth", block: "center"});
             if (scrolllist) {
                 document.getElementById("to-"+tagname).scrollIntoView({behavior: "smooth", block: "center"});
             }
-            var granulartag = document.querySelectorAll('[data-tag="'+tagname+'"][data-url="'+currentUrl+'"][data-index="'+index+'"]')[0];
+            var granulartag = document.querySelectorAll('#lpanel [data-tag="'+tagname+'"][data-url="'+currentUrl+'"][data-index="'+index+'"]')[0];
+            console.log(granulartag);
             if (granulartag) {
                 granulartag.classList.add("main");
             } else {
-                var nextpageurl = document.querySelectorAll('[data-tag="'+tagname+'"][data-index="'+index+'"]')[0].getAttribute("data-url");
+                var nextpageurl = document.querySelectorAll('#lpanel [data-tag="'+tagname+'"][data-index="'+index+'"]')[0].getAttribute("data-url");
                 return loadtag(tagname, nextpageurl, index, scrolllist);
             }
             if (tag) tag.classList.add("main");
             if (tag) fgimg.style.clipPath = "inset("+tag.getAttribute("data-top")+"% "+(100-tag.getAttribute("data-right"))+"% "+(100-tag.getAttribute("data-bottom"))+"% "+tag.getAttribute("data-left")+"%)"
+            if (tag.classList.contains("invisible")) fgimg.style.clipPath = "inset(0% 0% 0% 0%)";
         }
 
         function initialise(url, opts, internal) {
@@ -365,7 +538,6 @@
                 }, 400);
                 return;
             }
-            urlBar.innerText = "/"+url;
             var newimg = img.cloneNode(true);
             newimg.src = url+"index.png";
             newimg.addEventListener('load', initloaded);
@@ -376,6 +548,7 @@
                 rpanel.classList.remove("fade");
                 fetchJSONFile(url+"index.json", function(data){
                     box.innerHTML = "";
+                    invisibles.innerHTML = "<h2>Invisible Tags</h2>";
                     var width = img.offsetWidth;
                     var ratio = width / 1920;
                     var height = img.offsetHeight;
@@ -394,8 +567,6 @@
                         node.style.top = toppc+"%";
                         var iwidth = data[i].right - data[i].left;
                         var iheight = data[i].bottom - data[i].top;
-                        node.style.width = ((iwidth/1920)*100).toFixed(4)+"%";
-                        node.style.height = ((iheight/origHeight)*100).toFixed(4)+"%";
                         node.setAttribute('data-i18n', data[i].i18n);
                         node.setAttribute('data-index', nodeonpagecount[data[i].i18n]);
                         node.setAttribute('data-left', leftpc);
@@ -403,10 +574,26 @@
                         node.setAttribute('data-top', toppc);
                         node.setAttribute('data-bottom', botpc);
                         node.addEventListener("mouseup", function() {
-                            console.log("Loading tag in highlight");
+                            window.location.hash = this.getAttribute("data-i18n");
                             loadtag(this.getAttribute("data-i18n"), currentUrl, this.getAttribute("data-index"), true);
                         });
-                        box.appendChild(node);
+                        var nowidth = (((iwidth/1920)*100).toFixed(4) == 0 || ((iheight/origHeight)*100).toFixed(4) == 0);
+                        var toohigh = botpc < 0;
+                        var tooleft = rightpc < 0;
+                        var tooright = leftpc > 100;
+                        var toolow = toppc > 100;
+                        if (nowidth || toohigh || toolow || tooleft | tooright) {
+                            var tagnode = CR("SPAN", data[i].type, ["tag"]);
+                            node.appendChild(tagnode);
+                            var contentnode = CR("SPAN", '"'+data[i].content+'"', ["content"]);
+                            node.appendChild(contentnode);
+                            node.classList.add("invisible");
+                            invisibles.appendChild(node);
+                        } else {
+                            node.style.width = ((iwidth/1920)*100).toFixed(4)+"%";
+                            node.style.height = ((iheight/origHeight)*100).toFixed(4)+"%";
+                            box.appendChild(node);
+                        }
                         nodeonpagecount[data[i].i18n] = nodeonpagecount[data[i].i18n] + 1;
                     }
                     currentUrl = url;
@@ -415,8 +602,11 @@
                         loadtag(opts.tagname, opts.url, opts.index, opts.scrolllist);
                     }
                     if (keytag) {
-                        loadtag(keytag, currentUrl, null, true);
-                        keytag = "";
+                        loadtag(keytag, currentUrl);
+                        setTimeout(function() {
+                            document.getElementById("to-"+keytag).scrollIntoView({behavior: "smooth", block: "center"});
+                            keytag = "";    
+                        }, 1000);
                     }
                 });
             }
