@@ -188,7 +188,7 @@ module.exports = {
 				}
 
 				if (locale[key]) {
-					$el.html(locale[key].translation);
+					$el.html(locale[key].wrappedTranslation || locale[key].translation);
 					locale[key].count++;
 				} else if ($el.html()) {
 					gutil.log(gutil.colors.yellow("Missing translation") + " "

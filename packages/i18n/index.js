@@ -1,5 +1,5 @@
 var async = require("async"),
-	fs = require("fs"),
+	fs = require("fs-extra"),
 	del = require("del"),
 	gutil = require("gulp-util"),
 	path = require("path"),
@@ -8,7 +8,6 @@ var async = require("async"),
 	props2json = require("gulp-props2json"),
 	i18n = require("./plugins/i18n"),
 	rename = require("gulp-rename"),
-	gulpSequence = require("gulp-sequence"),
 	PythonShell = require("python-shell");
 
 var configDefaults = {
@@ -33,6 +32,8 @@ var configDefaults = {
 };
 
 module.exports = function (gulp, config) {
+	var gulpSequence = require('gulp-sequence').use(gulp)
+
 	config = config || {};
 
 	config.i18n = defaults(config.i18n, configDefaults.i18n);
@@ -53,12 +54,56 @@ module.exports = function (gulp, config) {
 
 	function runBudou(targetLocale, inputFilename, outputFilename, done) {
 		var options = {
-		  mode: 'text',
-		  scriptPath: __dirname,
-		  args: [config.i18n.google_credentials_filename, inputFilename, outputFilename, localeCode]
+			mode: 'text',
+			scriptPath: __dirname,
+			args: [config.i18n.google_credentials_filename, inputFilename, outputFilename, targetLocale]
 		};
 
 		PythonShell.run('wordwrap-json.py', options, done);
+	}
+
+	function readLocalesFromDir(dir, done) {
+		var returnedLocales = {};
+		fs.readdir(dir, function(err, files) {
+			if (err) {
+				gutil.log(gutil.colors.red("Unable to read locales") + " from "
+					+ gutil.colors.blue(dir) + ": " + e.message);
+				return done(err);
+			}
+
+			async.each(files, function (filename, next) {
+				if (!/\.json$/.test(filename)) {
+					return next();
+				}
+
+				fs.readFile(path.join(dir, filename), function read(err, data) {
+					if (err) {
+						console.log(err);
+						return next(err);
+					}
+
+					var key = filename.replace(/\.json$/, "");
+					try {
+						returnedLocales[key] = JSON.parse(data);
+					} catch (e) {
+						gutil.log(gutil.colors.red("Malformed JSON") + " from "
+							+ gutil.colors.blue(dir + "/" + filename) + ": " + e.message);
+					}
+
+					for (var localeKey in returnedLocales[key]) {
+						if (returnedLocales[key].hasOwnProperty(localeKey)) {
+							returnedLocales[key][localeKey] = {
+								translation: returnedLocales[key][localeKey],
+								count: 0
+							};
+						}
+					}
+					next();
+				});
+			}, function (err) {
+				done(err, returnedLocales);
+			});
+		});
 	}
 
 	// -------
@@ -75,6 +120,19 @@ module.exports = function (gulp, config) {
 		return gulp.src(config.i18n.legacy_path + "/*.properties")
 			.pipe(props2json({ minify: false }))
 			.pipe(gulp.dest(config.i18n.locale_src));
+	});
+
+	// Transfers json files from the new CloudCannon format
+	// to the old i18n folder structure
+	gulp.task("i18n:legacy-update",  function (done) {
+		gutil.log(gutil.colors.green("Transferring files") + " from "
+			+ gutil.colors.blue(config.i18n.locale_src + "/*.json")
+			+ " to "
+			+ gutil.colors.blue(config.i18n.legacy_path));
+
+		return gulp.src(config.i18n.locale_src + "/*.json")
+			.pipe(props2json({ minify: false }))
+			.pipe(gulp.dest(config.i18n.legacy_path));
 	});
 
 	// ---------------
@@ -98,98 +156,30 @@ module.exports = function (gulp, config) {
 	var locales, localeNames; // holds locales between stages
 
 	gulp.task("i18n:load-locales", function (done) {
-		fs.readdir(config.i18n.locale_src, function(err, files) {
-			if (err) {
-				console.log(err);
-				return done(err);
-			}
-
-			locales = {};
-			locales[config.i18n.default_language] = null;
-			async.each(files, function (filename, next) {
-				if (!/\.json$/.test(filename)) {
-					return next();
-				}
-
-				fs.readFile(path.join(config.i18n.locale_src, filename), function read(err, data) {
-					if (err) {
-						console.log(err);
-						return next(err);
-					}
-
-					var key = filename.replace(/\.json$/, "");
-					try {
-						locales[key] = JSON.parse(data);
-					} catch (e) {
-						gutil.log(gutil.colors.red("Malformed JSON") + " from "
-							+ gutil.colors.blue(config.i18n.locale_src + "/" + filename) + ": " + e.message);
-					}
-
-					for (var localeKey in locales[key]) {
-						if (locales[key].hasOwnProperty(localeKey)) {
-							locales[key][localeKey] = {
-								translation: locales[key][localeKey],
-								count: 0
-							};
-						}
-					}
-					next();
-				});
-			}, function (err) {
+		readLocalesFromDir(config.i18n.locale_src, function (err, returnedLocales) {
+			if (!err) {
+				locales = returnedLocales;
+				locales[config.i18n.default_language] = null;
 				localeNames = Object.keys(locales);
-				done(err);
-			});
+			}
+			done(err);
 		});
 	});
 
-	gulp.task("i18n:save-wordwrapped-locales", function (done) {
-		async.eachSeries(localeNames, function (targetLocale, next) {
-			if (config.i18n.character_based_locales.indexOf(targetLocale) < 0) {
-				return next();
-			}
-
-			var locale = locales[targetLocale],
-			 	contents = {};
-
-			for (var localeKey in locale) {
-				if (locale.hasOwnProperty(localeKey)) {
-					contents[localeKey] = locale[localeKey].translation;
+	gulp.task("i18n:load-wordwraps", function (done) {
+		var wrappedDir = path.join(config.i18n.locale_src, "../wrapped");
+		readLocalesFromDir(wrappedDir, function (err, returnedLocales) {
+			if (!err) {
+				for (var localeName in returnedLocales) {
+					if (returnedLocales.hasOwnProperty(localeName)) {
+						console.log(localeName + " loaded from wrapped");
+						locales[localeName] = returnedLocales[localeName];
+					}
 				}
 			}
 
-			var filePath = path.join(config.i18n.locale_src, targetLocale + "-prep.json");
-			fs.writeFile(filePath, JSON.stringify(contents, null, "\t"), next);
-		}, done);
-	});
-
-	gulp.task("i18n:clean", function () {
-		return del(config.i18n.dest);
-	});
-
-	gulp.task("i18n:add-character-based-wordwraps", function (done) {
-		if (!config.i18n.google_credentials_filename) {
-			return done();
-		}
-
-		console.log(localeNames);
-		async.eachSeries(localeNames, function (targetLocale, next) {
-			if (config.i18n.character_based_locales.indexOf(targetLocale) < 0) {
-				return next();
-			}
-
-			var inputFilename = path.join(config.i18n.locale_src, targetLocale + ".json"),
-				outputFilename = path.join(config.i18n.locale_src, targetLocale + ".wrapped.json");
-
-			runBudou(targetLocale, inputFilename, outputFilename, function (err) {
-				if (err) {
-					console.error(targetLocale + ": failed to wrap", err);
-					return next(err);
-				}
-
-				console.log(targetLocale + ": is absolutely wrapped!");
-				return next();
-			});
-		}, done);
+			done(err);
+		});
 	});
 
 	gulp.task("i18n:clone-assets",  function () {
@@ -219,17 +209,53 @@ module.exports = function (gulp, config) {
 		}, done);
 	});
 
+	// ---------
+	// Wordwraps
+
+	gulp.task("i18n:add-character-based-wordwraps", ["i18n:load-locales"], function (done) {
+		if (!config.i18n.google_credentials_filename) {
+			return done();
+		}
+
+		var wrappedDir = path.join(config.i18n.locale_src, "../wrapped");
+
+		fs.ensureDir(wrappedDir, function () {
+			async.eachSeries(localeNames, function (targetLocale, next) {
+				if (config.i18n.character_based_locales.indexOf(targetLocale) < 0) {
+					return next();
+				}
+
+				var inputFilename = path.join(config.i18n.locale_src, targetLocale + ".json"),
+					outputFilename = path.join(wrappedDir, targetLocale + ".json");
+
+				runBudou(targetLocale, inputFilename, outputFilename, function (err) {
+					if (err) {
+						console.error(targetLocale + ": failed to wrap", err);
+						return next(err);
+					}
+
+					console.log(targetLocale + ": is absolutely wrapped!");
+					return next();
+				});
+			}, done);
+		});
+	});
+
+	gulp.task("i18n:clean", function () {
+		return del(config.i18n.dest);
+	});
+
+	// -----
+	// Build
+
 	gulp.task("i18n:build", gulpSequence(
 		"i18n:clean",
-		["i18n:load-locales", "i18n:clone-assets"],
+		"i18n:load-locales",
+		"i18n:add-character-based-wordwraps",
+		"i18n:load-wordwraps",
+		"i18n:clone-assets",
 		"i18n:translate-html-pages",
 		"i18n:clone-prelocalised-html-pages"
-	));
-
-	gulp.task("i18n:prep-wordwraps", gulpSequence(
-		"i18n:load-locales",
-		"i18n:add-character-based-wordwraps"
-		// "i18n:save-wordwrapped-locales"
 	));
 
 	// -----

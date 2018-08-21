@@ -3,6 +3,10 @@
 
 import budou
 import sys
+import json
+
+reload(sys)
+sys.setdefaultencoding('utf8')
 
 if __name__ == "__main__":
     if len(sys.argv) < 4:
@@ -23,7 +27,7 @@ if __name__ == "__main__":
     print('Authenticating...')
     sys.stdout.flush()
 
-    parser = budou.authenticate('./credentials.json')
+    parser = budou.authenticate(credentials_filename)
     print('Done')
     sys.stdout.flush()
 
