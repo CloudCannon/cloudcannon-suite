@@ -22,7 +22,7 @@ var configDefaults = {
 
 		legacy_path: "_locales",
 
-		character_based_locales: ["ja"],
+		character_based_locales: ["ja", "ja_jp", "ja-jp"],
 		google_credentials_filename: null
 	},
 	serve: {
@@ -51,14 +51,14 @@ module.exports = function (gulp, config) {
 	config.i18n.generated_locale_dest = path.join(cwd, config.i18n.generated_locale_dest);
 	config.i18n.legacy_path = path.join(cwd, config.i18n.legacy_path);
 
-	function runBudou(string, localeCode, done) {
+	function runBudou(targetLocale, inputFilename, outputFilename, done) {
 		var options = {
 		  mode: 'text',
 		  scriptPath: __dirname,
-		  args: [config.i18n.google_credentials_filename, string, localeCode]
+		  args: [config.i18n.google_credentials_filename, inputFilename, outputFilename, localeCode]
 		};
 
-		PythonShell.run('wordwrap-chars.py', options, done);
+		PythonShell.run('wordwrap-json.py', options, done);
 	}
 
 	// -------
@@ -171,27 +171,24 @@ module.exports = function (gulp, config) {
 			return done();
 		}
 
+		console.log(localeNames);
 		async.eachSeries(localeNames, function (targetLocale, next) {
 			if (config.i18n.character_based_locales.indexOf(targetLocale) < 0) {
 				return next();
 			}
 
-			var locale = locales[targetLocale],
-				localeKeys = Object.keys(locale);
+			var inputFilename = path.join(config.i18n.locale_src, targetLocale + ".json"),
+				outputFilename = path.join(config.i18n.locale_src, targetLocale + ".wrapped.json");
 
-			async.eachSeries(localeKeys, function (localeKey, nextString) {
-				var localeString = locale[localeKey].translation;
-				runBudou(localeString, targetLocale, function (err, translation) {
-				  if (err) {
-						console.error(targetLocale + ": " + localeKey + " failed to wrap", err, translation);
-						return next(err);
-				  }
+			runBudou(targetLocale, inputFilename, outputFilename, function (err) {
+				if (err) {
+					console.error(targetLocale + ": failed to wrap", err);
+					return next(err);
+				}
 
-					console.log(targetLocale + ": " + localeKey + " successful");
-					locale[localeKey].translation = translation;
-					return nextString();
-				});
-			}, next);
+				console.log(targetLocale + ": is absolutely wrapped!");
+				return next();
+			});
 		}, done);
 	});
 
@@ -231,8 +228,8 @@ module.exports = function (gulp, config) {
 
 	gulp.task("i18n:prep-wordwraps", gulpSequence(
 		"i18n:load-locales",
-		"i18n:add-character-based-wordwraps",
-		"i18n:save-wordwrapped-locales"
+		"i18n:add-character-based-wordwraps"
+		// "i18n:save-wordwrapped-locales"
 	));
 
 	// -----
