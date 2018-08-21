@@ -167,6 +167,10 @@ module.exports = function (gulp, config) {
 	});
 
 	gulp.task("i18n:load-wordwraps", function (done) {
+		if (!config.i18n.google_credentials_filename) {
+			return done();
+		}
+
 		var wrappedDir = path.join(config.i18n.locale_src, "../wrapped");
 		readLocalesFromDir(wrappedDir, function (err, returnedLocales) {
 			if (!err) {
