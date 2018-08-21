@@ -67,7 +67,7 @@ module.exports = function (gulp, config) {
 		fs.readdir(dir, function(err, files) {
 			if (err) {
 				gutil.log(gutil.colors.red("Unable to read locales") + " from "
-					+ gutil.colors.blue(dir) + ": " + e.message);
+					+ gutil.colors.blue(dir) + ": " + err.message);
 				return done(err);
 			}
 
