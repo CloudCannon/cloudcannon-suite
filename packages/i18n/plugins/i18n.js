@@ -38,7 +38,7 @@ function handleHTMLFile(options) {
 			return callback();
 		}
 
-		var $ = cheerio.load(file.contents.toString(encoding));
+		var $ = cheerio.load(file.contents.toString(encoding), { lowerCaseAttributeNames:false, decodeEntities: false });
 
 		$("[data-i18n]").each(function processElement() {
 			var $el = $(this),
@@ -58,10 +58,10 @@ function handleHTMLFile(options) {
 		});
 
 		if (options.rewriteLinks) {
-			$("a, link").each(function processLink() {
+			$("a[href], link[href]").each(function processLink() {
 				var $el = $(this),
 					href = $el.attr("href"),
-					updated = options.rewriteLinks.apply(this, [file, href]);
+					updated = href && options.rewriteLinks.apply(this, [file, href]);
 
 				if (updated) {
 					$el.attr("href", updated);
@@ -158,7 +158,7 @@ module.exports = {
 				return false;
 			},
 			rewriteLinks: function rewriteLinks(file, href) {
-				if (IGNORE_URL_REGEX.test(href)) {
+				if (!href || IGNORE_URL_REGEX.test(href)) {
 					return;
 				}
 

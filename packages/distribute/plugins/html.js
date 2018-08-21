@@ -26,7 +26,7 @@ module.exports = function (options) {
 		file.sitePath = "/" + file.path.substring(file.base.length);
 		file.sitePath = file.sitePath.replace(/\/index.html?/i, "/");
 
-		var $ = cheerio.load(file.contents.toString(encoding));
+		var $ = cheerio.load(file.contents.toString(encoding), { lowerCaseAttributeNames:false, decodeEntities: false });
 
 		$("[href]").each(function () {
 			var $el = $(this),
