@@ -42,7 +42,7 @@ if __name__ == "__main__":
         # lines = f.readlines()
         for key, translation in parsed_json.items():
             # Check for HTML
-            if "</" in translation or "-title" in key or "meta:" in key:
+            if "</" in translation or "meta:" in key:
                 data[key] = translation
             elif translation:
                 result = parser.parse(unicode(translation), attributes={'class': 'wordwrap'})
