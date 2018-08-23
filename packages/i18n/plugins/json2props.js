@@ -1,4 +1,5 @@
-var through = require("through2").obj,
+var gutil = require("gulp-util"),
+	through = require("through2").obj,
 	prop = require("properties");
 
 module.exports = function (options) {
@@ -14,6 +15,7 @@ module.exports = function (options) {
 
 		var json = JSON.parse(file.contents.toString('utf8'));
 		file.contents = prop.stringify(json);
+		file.path = gutil.replaceExtension(file.path, '.properties');
 		this.push(file);
 		callback();
 	});
