@@ -5,7 +5,7 @@ var async = require("async"),
 	path = require("path"),
 	defaults = require("defaults"),
 	webserver = require("gulp-webserver"),
-	json2props = require("./plugins/json2props"),
+	prop = require("properties"),
 	props2json = require("gulp-props2json"),
 	i18n = require("./plugins/i18n"),
 	rename = require("gulp-rename"),
@@ -125,15 +125,29 @@ module.exports = function (gulp, config) {
 
 	// Transfers json files from the new CloudCannon format
 	// to the old i18n folder structure
-	gulp.task("i18n:legacy-update",  function (done) {
+	gulp.task("i18n:legacy-update", gulpSequence("i18n:load-locales", "i18n:add-character-based-wordwraps", "i18n:load-wordwraps"), function (done) {
 		gutil.log(gutil.colors.green("Transferring files") + " from "
 			+ gutil.colors.blue(config.i18n.locale_src + "/*.json")
 			+ " to "
 			+ gutil.colors.blue(config.i18n.legacy_path));
 
-		return gulp.src(config.i18n.locale_src + "/*.json")
-			.pipe(json2props())
-			.pipe(gulp.dest(config.i18n.legacy_path));
+		async.each(localeNames, function (localeName, next) {
+			if (localeName === config.i18n.default_language) {
+				return next();
+			}
+
+			var json = {};
+			for (var key in locales[localeName]) {
+				if (locales[localeName].hasOwnProperty(key)) {
+					json[key] = locales[localeName][key].translation;
+				}
+			}
+
+			fs.writeFile(
+				path.join(config.i18n.legacy_path, localeName + ".properties"),
+				prop.stringify(json),
+				next);
+		}, done);
 	});
 
 	// ---------------
