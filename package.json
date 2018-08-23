@@ -27,6 +27,7 @@
   "homepage": "https://github.com/CloudCannon/cloudcannon-suite#readme",
   "dependencies": {
     "async": "^2.6.1",
+    "bufferstreams": "^2.0.1",
     "cheerio": "^1.0.0-rc.2",
     "cssurl": "1.3.0",
     "defaults": "^1.0.3",

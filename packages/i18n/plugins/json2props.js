@@ -1,6 +1,15 @@
 var gutil = require("gulp-util"),
 	through = require("through2").obj,
-	prop = require("properties");
+	prop = require("properties"),
+	BufferStreams = require('bufferstreams');
+
+var PLUGIN_NAME = "cloudcannon-suite-i18n-json2props";
+
+function convertBuffer(buf) {
+	var json = JSON.parse(buf.toString('utf8'));
+	var output = prop.stringify(json);
+	return new Buffer(output);
+}
 
 module.exports = function (options) {
 	options = options || {};
@@ -10,11 +19,30 @@ module.exports = function (options) {
 		}
 
 		if (file.isStream()) {
-			return callback(new gutil.PluginError("cloudcannon-suite-i18n-json2props", "Streaming not supported"));
+				file.contents = file.contents.pipe(new BufferStreams(function(err, buf, cb) {
+					if (err) {
+						self.emit('error', new PluginError(PLUGIN_NAME, err.message));
+					} else {
+						try {
+							var outputBuffer = convertBuffer(buf);
+							cb(null, outputBuffer);
+							file.contents = outputBuffer;
+						} catch (error) {
+							self.emit('error', new PluginError(PLUGIN_NAME, error.message));
+							cb(error);
+						}
+					}
+				}));
+		} else if (file.isBuffer()) {
+				try {
+					var outputBuffer = convertBuffer(file.contents);
+					file.contents = outputBuffer;
+				} catch (error) {
+					this.emit('error', new PluginError(PLUGIN_NAME, error.message));
+					return callback();
+				}
 		}
 
-		var json = JSON.parse(file.contents.toString('utf8'));
-		file.contents = prop.stringify(json);
 		file.path = gutil.replaceExtension(file.path, '.properties');
 		this.push(file);
 		callback();
