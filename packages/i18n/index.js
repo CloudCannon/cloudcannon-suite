@@ -125,7 +125,9 @@ module.exports = function (gulp, config) {
 
 	// Transfers json files from the new CloudCannon format
 	// to the old i18n folder structure
-	gulp.task("i18n:legacy-update", gulpSequence("i18n:load-locales", "i18n:add-character-based-wordwraps", "i18n:load-wordwraps"), function (done) {
+	gulp.task("i18n:legacy-update", gulpSequence("i18n:load-locales", "i18n:add-character-based-wordwraps", "i18n:load-wordwraps", "i18n:legacy-save-to-properties-files"));
+
+	gulp.task("i18n:legacy-save-to-properties-files", function (done) {
 		gutil.log(gutil.colors.green("Transferring files") + " from "
 			+ gutil.colors.blue(config.i18n.locale_src + "/*.json")
 			+ " to "
