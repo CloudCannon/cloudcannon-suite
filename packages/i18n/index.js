@@ -5,6 +5,7 @@ var async = require("async"),
 	path = require("path"),
 	defaults = require("defaults"),
 	webserver = require("gulp-webserver"),
+	json2props = require("./plugins/json2props"),
 	props2json = require("gulp-props2json"),
 	i18n = require("./plugins/i18n"),
 	rename = require("gulp-rename"),
@@ -131,7 +132,7 @@ module.exports = function (gulp, config) {
 			+ gutil.colors.blue(config.i18n.legacy_path));
 
 		return gulp.src(config.i18n.locale_src + "/*.json")
-			.pipe(props2json({ minify: false }))
+			.pipe(json2props())
 			.pipe(gulp.dest(config.i18n.legacy_path));
 	});
 
