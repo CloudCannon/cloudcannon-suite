@@ -62,7 +62,7 @@ module.exports = function (gulp, config) {
 	});
 
 	gulp.task(nspc + ":install", function (done) {
-		return runBundleCommand(["install"], done);
+		return runBundleCommand(["install", "--path", "../.bundle"], done);
 	});
 
 	// ------------
@@ -80,7 +80,7 @@ module.exports = function (gulp, config) {
 	// Serve
 
 	gulp.task(nspc + ":watch", function () {
-		var jekyllWatchFiles = [config.jekyll._src + "/**/*"];
+		var jekyllWatchFiles = [config.jekyll._src + "/**/*", ".bundle/**/*"];
 		for (var taskName in config.tasks) {
 			if (config.tasks.hasOwnProperty(taskName)) {
 				gulp.watch(config.tasks[taskName].watch, [nspc + ":" + taskName]);
