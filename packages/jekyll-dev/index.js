@@ -143,7 +143,8 @@ module.exports = function (gulp, config) {
 
 					theme = yaml.theme;
 				} catch (e) {
-				  gutil.log(gutil.colors.yellow("! parsing config failed"));
+					gutil.log(gutil.colors.yellow("! parsing config failed"));
+					gutil.log(e);
 				}
 			}
 
