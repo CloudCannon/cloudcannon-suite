@@ -39,6 +39,47 @@ function parseBundleConfigPath(output) {
 	return null;
 }
 
+function fetchGitignores(gitignorePath, callback) {
+	fs.readFile(gitignorePath, function (err, ignoreContents) {
+		var ignores = {};
+		if (err) {
+			gutil.log(gutil.colors.yellow("! loading `" + gitignorePath + "` failed"));
+		} else {
+			var lines = ignoreContents.toString("utf8").split("\n");
+
+			for (var i = 0; i < lines.length; i++) {
+				var key = lines[i].trim();
+				if (key) {
+					ignores[key] = true;
+				}
+			}
+		}
+
+		callback(err, ignores);
+	});
+}
+
+function folderIsIgnored(basePath, item, ignores) {
+	if (ignores[item]) {
+		return true;
+	}
+
+	var itemPath = path.join(basePath, item);
+	for (var ignore in ignores) {
+		if (ignores.hasOwnProperty(ignore)) {
+			var ignorePath = path.join(basePath, ignore);
+			var relativePath = path.relative(ignorePath, itemPath).trim();
+			var isSubdir = !!relativePath && !relativePath.startsWith('..') && !path.isAbsolute(relativePath);
+
+			if (!relativePath || isSubdir) {
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
 module.exports = function (gulp, config) {
 	config = config || {};
 
@@ -126,9 +167,10 @@ module.exports = function (gulp, config) {
 			}
 		}
 
-		function completeWatch() {
-			gutil.log(gutil.colors.grey("watching " + jekyllWatchFiles.join(", ")));
+		function completeWatch(watches) {
+			gutil.log(gutil.colors.grey("👓 watching: " + jekyllWatchFiles.join("\n\t")));
 			gulp.watch(jekyllWatchFiles, [nspc + ":build"]);
+			gutil.log(gutil.colors.grey("✔ done"));
 			done();
 		}
 
@@ -167,15 +209,48 @@ module.exports = function (gulp, config) {
 				var themePath = parseBundleConfigPath(output);
 
 				if (themePath) {
-					gutil.log(gutil.colors.green("✔ found local theme at `" + themePath + "`, adding to watch dirs"));
-					jekyllWatchFiles.push(themePath + "/**/*");
+					gutil.log(gutil.colors.green("✔ found local theme at `" + themePath + "`, reading .gitignore"));
+					var baseThemeWatch = path.relative(cwd, themePath);
+
+					var gitignorePath = path.join(themePath, ".gitignore");
+					fetchGitignores(gitignorePath, function (err, ignores) {
+						if (err) {
+							gutil.log(gutil.colors.yellow("! loading `" + gitignorePath + "` failed. If the watch crashes, adding one will fix this."));
+							jekyllWatchFiles.push(baseThemeWatch + "/**/*");
+							return completeWatch();
+						}
+
+						jekyllWatchFiles.push(baseThemeWatch + "/*");
+						ignores[".git"] = true;
+						for (var subpath in ignores) {
+							if (ignores.hasOwnProperty(subpath)) {
+								jekyllWatchFiles.push("!" + path.relative(cwd, path.join(baseThemeWatch, subpath)));
+							}
+						}
+
+						fs.readdir(baseThemeWatch, function (err, files) {
+							files.forEach(async function (item) {
+								try {
+									var itemPath = path.join(baseThemeWatch, item);
+									var stat = fs.lstatSync(itemPath);
+									if(stat.isDirectory() && !folderIsIgnored(baseThemeWatch, item, ignores)) {
+										jekyllWatchFiles.push(path.relative(cwd, path.join(itemPath)) + "/**/*");
+									}
+								} catch(err) {
+									console.error(err);
+								}
+							});
+
+							return completeWatch();
+						})
+					});
 				} else {
 					// Inform user for install
 					gutil.log(gutil.colors.yellow("! no local theme installed. Consider running:"));
 					gutil.log(gutil.colors.blue("bundle config local." + theme + " ~/path/to/project"));
+					return completeWatch();
 				}
 
-				return completeWatch();
 			});
 
 		});
