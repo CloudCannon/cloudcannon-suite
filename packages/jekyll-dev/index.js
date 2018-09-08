@@ -131,7 +131,7 @@ module.exports = function (gulp, config) {
 		}
 
 		gutil.log("Checking for local theme watch; loading jekyll config...");
-		var configPath = path.join(config.jekyll.src, "/config.yml");
+		var configPath = path.join(config.jekyll.src, "/_config.yml");
 		fs.readFile(configPath, function (err, contents) {
 			var theme = null;
 
