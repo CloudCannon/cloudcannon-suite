@@ -1,6 +1,7 @@
 var gutil = require("gulp-util"),
 	path = require("path"),
 	fs = require("fs"),
+	yamlParser = require("js-yaml")
 	defaults = require("defaults"),
 	gulpSequence = require("gulp-sequence"),
 	webserver = require("gulp-webserver"),
@@ -137,18 +138,21 @@ module.exports = function (gulp, config) {
 
 			if (err) {
 				gutil.log(gutil.colors.yellow("! loading `" + configPath + "` failed"));
+				return completeWatch();
 			} else {
 				try {
-					var yaml = yaml.safeLoad(contents.toString('utf8'));
+					var yaml = yamlParser.safeLoad(contents.toString('utf8'));
 
 					theme = yaml.theme;
 				} catch (e) {
 					gutil.log(gutil.colors.yellow("! parsing config failed"));
 					gutil.log(e);
+					return completeWatch();
 				}
 			}
 
 			if (!theme) {
+				gutil.log(gutil.colors.grey("✔ no theme found, moving along"));
 				return completeWatch();
 			}
 
@@ -162,7 +166,7 @@ module.exports = function (gulp, config) {
 				var themePath = parseBundleConfigPath(output);
 
 				if (themePath) {
-					gutil.log(gutil.colors.green("Found local theme at `" + themePath + "`"));
+					gutil.log(gutil.colors.green("✔ found local theme at `" + themePath + "`, adding to watch dirs"));
 					jekyllWatchFiles.push(themePath);
 				} else {
 					// Inform user for install
