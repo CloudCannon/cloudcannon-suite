@@ -69,7 +69,7 @@ module.exports = function (gulp, config) {
 			if (trackOutput) {
 				output += data;
 			} else {
-				process.stdout.write(data.toString("utf8"));
+				process.stdout.write(gutil.colors.grey(data.toString("utf8")));
 			}
 		};
 
