@@ -127,6 +127,7 @@ module.exports = function (gulp, config) {
 		}
 
 		function completeWatch() {
+			gutil.log(gutil.colors.grey("watching " + jekyllWatchFiles.join(", ")));
 			gulp.watch(jekyllWatchFiles, [nspc + ":build"]);
 			done();
 		}
