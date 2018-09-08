@@ -167,7 +167,7 @@ module.exports = function (gulp, config) {
 
 				if (themePath) {
 					gutil.log(gutil.colors.green("✔ found local theme at `" + themePath + "`, adding to watch dirs"));
-					jekyllWatchFiles.push(themePath);
+					jekyllWatchFiles.push(themePath + "/**/*");
 				} else {
 					// Inform user for install
 					gutil.log(gutil.colors.yellow("! no local theme installed. Consider running:"));
