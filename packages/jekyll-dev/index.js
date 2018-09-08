@@ -161,7 +161,7 @@ module.exports = function (gulp, config) {
 				var themePath = parseBundleConfigPath(output);
 
 				if (themePath) {
-					gutil.log("Watching theme at `" + themePath + "`");
+					gutil.log(gutil.colors.green("Found local theme at `" + themePath + "`"));
 					jekyllWatchFiles.push(themePath);
 				} else {
 					// Inform user for install
