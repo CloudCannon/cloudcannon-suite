@@ -1,5 +1,6 @@
 var gutil = require("gulp-util"),
 	path = require("path"),
+	fs = require("fs"),
 	defaults = require("defaults"),
 	gulpSequence = require("gulp-sequence"),
 	webserver = require("gulp-webserver"),
@@ -18,6 +19,24 @@ var configDefaults = {
 		path: "/"
 	}
 };
+
+function parseBundleConfigPath(output) {
+	output = (output || "").trim();
+	if (!output) {
+		return null;
+	}
+
+	var lines = output.split("\n");
+	for (var i = 0; i < lines.length; i++) {
+		var parts = lines[i].split(": \"");
+
+		if (parts.length === 2) {
+			return parts[1].substring(0, parts[1].length - 1);
+		}
+	}
+
+	return null;
+}
 
 module.exports = function (gulp, config) {
 	config = config || {};
@@ -42,12 +61,27 @@ module.exports = function (gulp, config) {
 		"--destination": config.jekyll.dest
 	};
 
-	function runBundleCommand(commands, done) {
+	function runBundleCommand(commands, trackOutput, done) {
 		gutil.log(gutil.colors.blue("$") + " bundle " + commands.join(" "));
-		return childProcess.spawn("bundle", commands, {
-				cwd: config.jekyll.src,
-				stdio: "inherit"
-			}).on("close", done);
+		var output = "";
+		function readOutput(data) {
+			if (trackOutput) {
+				output += data;
+			} else {
+				process.stdout.write(data.toString("utf8"));
+			}
+		};
+
+		var child = childProcess.spawn("bundle", commands, {
+				cwd: config.jekyll.src
+			}).on("close", function () {
+				done(null, output);
+			});
+
+		child.stdout.on("data", readOutput);
+		child.stderr.on("data", readOutput);
+
+		return child;
 	}
 
 	gulp.task(nspc + ":build", function (done) {
@@ -58,11 +92,11 @@ module.exports = function (gulp, config) {
 			}
 		}
 
-		return runBundleCommand(commands, done);
+		return runBundleCommand(commands, false, done);
 	});
 
 	gulp.task(nspc + ":install", function (done) {
-		return runBundleCommand(["install", "--path", "../.bundle"], done);
+		return runBundleCommand(["install"], false, done);
 	});
 
 	// ------------
@@ -79,8 +113,8 @@ module.exports = function (gulp, config) {
 	// -----
 	// Serve
 
-	gulp.task(nspc + ":watch", function () {
-		var jekyllWatchFiles = [config.jekyll._src + "/**/*", ".bundle/**/*"];
+	gulp.task(nspc + ":watch", function (done) {
+		var jekyllWatchFiles = [config.jekyll._src + "/**/*"];
 		for (var taskName in config.tasks) {
 			if (config.tasks.hasOwnProperty(taskName)) {
 				gulp.watch(config.tasks[taskName].watch, [nspc + ":" + taskName]);
@@ -91,7 +125,54 @@ module.exports = function (gulp, config) {
 			}
 		}
 
-		gulp.watch(jekyllWatchFiles, [nspc + ":build"]);
+		function completeWatch() {
+			gulp.watch(jekyllWatchFiles, [nspc + ":build"]);
+			done();
+		}
+
+		gutil.log("Checking for local theme watch; loading jekyll config...");
+		var configPath = config.jekyll._src + "/config.yml";
+		fs.readFile(configPath, function (err, contents) {
+			var theme = null;
+
+			if (err) {
+				gutil.log(gutil.colors.yellow("! loading `" + configPath + "` failed"));
+			} else {
+				try {
+					var yaml = yaml.safeLoad(contents.toString('utf8'));
+
+					theme = yaml.theme;
+				} catch (e) {
+				  gutil.log(gutil.colors.yellow("! parsing config failed"));
+				}
+			}
+
+			if (!theme) {
+				return completeWatch();
+			}
+
+			gutil.log("Checking for local theme repo...");
+			runBundleCommand(["config", "local." + theme], true, function(err, output) {
+				if (err) {
+					gutil.log(gutil.colors.yellow("! running `bundle config` failed"));
+					return completeWatch();
+				}
+
+				var themePath = parseBundleConfigPath(output);
+
+				if (themePath) {
+					gutil.log("Watching theme at `" + themePath + "`");
+					jekyllWatchFiles.push(themePath);
+				} else {
+					// Inform user for install
+					gutil.log(gutil.colors.yellow("! no local theme installed. Consider running:"));
+					gutil.log(gutil.colors.blue("bundle config local." + theme + " ~/path/to/project"));
+				}
+
+				return completeWatch();
+			});
+
+		});
 	});
 
 	gulp.task(nspc + ":serve", function() {

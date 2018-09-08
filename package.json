@@ -42,6 +42,7 @@
     "gulp-util": "^3.0.8",
     "gulp-webserver": "^0.9.1",
     "gulp-webshot": "^0.2.3",
+    "js-yaml": "^3.12.0",
     "properties": "^1.2.1",
     "puppeteer": "^1.6.0",
     "python-shell": "^0.5.0",
