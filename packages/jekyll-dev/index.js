@@ -138,7 +138,7 @@ module.exports = function (gulp, config) {
 	});
 
 	gulp.task(nspc + ":install", function (done) {
-		return runBundleCommand(["install"], false, done);
+		return runBundleCommand(["install", "--path", "../vendor/bundle"], false, done);
 	});
 
 	// ------------
