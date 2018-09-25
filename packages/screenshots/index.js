@@ -55,7 +55,7 @@ module.exports = function (gulp, config) {
 
 		gulp.task("screenshots:" + namespace + "-tool", ["screenshots:" + namespace + "-takescreens"], function (done) {
 			screenshotter.shutdown(done);
-			return gulp.src(config.dest + "/" + namespace)
+			gulp.src(config.dest + "/" + namespace)
 			.pipe(webserver({open: true}));
 		});
 
