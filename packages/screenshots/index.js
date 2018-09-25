@@ -7,6 +7,7 @@ var webshot = require("gulp-webshot"),
 	gutil = require("gulp-util"),
 	_ = require("underscore"),
 	del = require("del"),
+	webserver = require("gulp-webserver"),
 	i18nCSS = fs.readFileSync(path.join(__dirname, "i18n-overlays.css"), "utf8");
 
 module.exports = function (gulp, config) {
@@ -51,6 +52,13 @@ module.exports = function (gulp, config) {
 		gulp.task("screenshots:" + namespace + "-render", ["screenshots:" + namespace + "-takescreens"], function (done) {
 			screenshotter.shutdown(done);
 		});
+
+		gulp.task("screenshots:" + namespace + "-tool", ["screenshots:" + namespace + "-takescreens"], function (done) {
+			screenshotter.shutdown(done);
+			return gulp.src(config.dest + "/" + namespace)
+			.pipe(webserver({open: true}));
+		});
+
 
 		gulp.task("screenshots:" + namespace, ["screenshots:" + namespace + "-render"], function () {
 			if (config.fast) {
