@@ -46,6 +46,7 @@
     "properties": "^1.2.1",
     "puppeteer": "^1.6.0",
     "python-shell": "^0.5.0",
+    "screenshot-util": "^1.0.0",
     "sort-object-keys": "^1.1.2",
     "srcset": "^1.0.0",
     "through2": "^2.0.3",
