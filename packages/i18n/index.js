@@ -146,7 +146,7 @@ module.exports = function (gulp, config) {
 			}
 
 			fs.writeFile(
-				path.join(config.i18n.legacy_path, localeName + ".properties"),
+				path.join(config.i18n.legacy_path, localeName.relace(/\-/g, "_") + ".properties"),
 				prop.stringify(json),
 				next);
 		}, done);
