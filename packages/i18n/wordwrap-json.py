@@ -45,7 +45,7 @@ if __name__ == "__main__":
             if "</" in translation or "meta:" in key:
                 data[key] = translation
             elif translation:
-                result = parser.parse(unicode(translation), attributes={'class': 'wordwrap'})
+                result = parser.parse(unicode(translation), language="ja", attributes={'class': 'wordwrap'})
                 html = result['html_code']
                 data[key] = html[6:-7].replace('\n', ' ').replace('\r', '')
 
