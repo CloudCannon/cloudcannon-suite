@@ -145,8 +145,12 @@ module.exports = function (gulp, config) {
 				}
 			}
 
+			if (localeName === "th") {
+				localeName = "th_TH";
+			}
+
 			fs.writeFile(
-				path.join(config.i18n.legacy_path, localeName.relace(/\-/g, "_") + ".properties"),
+				path.join(config.i18n.legacy_path, localeName.replace(/\-/g, "_") + ".properties"),
 				prop.stringify(json),
 				next);
 		}, done);
