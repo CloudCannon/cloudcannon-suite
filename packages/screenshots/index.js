@@ -146,10 +146,6 @@ const screenshotStream = function (screenshotter) {
 			await fs.ensureDir(path.dirname(shotDir))
 			await fs.writeFile(shotDir.replace(/html$/, 'png'), img, (error) => {if(error)console.log(error)});
 			await fs.writeFile(shotDir.replace(/html$/, 'json'), JSON.stringify([...tags], null, 2));
-		} else {
-			console.log("Failed ✖");
-			process.exit(1);
-			return;
 		}
 
 		this.push(file);
