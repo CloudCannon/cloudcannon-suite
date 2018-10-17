@@ -128,7 +128,7 @@ const screenshotStream = function (screenshotter) {
 				i18n: i18ntag.getAttribute('data-i18n'),
 				type: i18ntag.tagName.toLowerCase()
 			}))
-		});
+		}).catch(e => e);
 		tags.forEach(i18ntag => {
 			tagmap[i18ntag.i18n] = tagmap[i18ntag.i18n] || {pages: [], content: []};
 			let formatUrl = urlPath.replace(/index\.html/, '');
@@ -139,7 +139,7 @@ const screenshotStream = function (screenshotter) {
 			}
 		});
 
-		let img = await screenshotter.takeScreenshot(page);
+		let img = await screenshotter.takeScreenshot(page).catch(e => e);
 		
 		if (img) {
 			let shotDir = path.join(screenshotter.options.dest, urlPath);
