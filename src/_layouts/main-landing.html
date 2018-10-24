@@ -12,7 +12,7 @@ layout: default
 	<div class="wrapper wrapper-large">
 		<nav class="docs-nav">
 			<ul>
-				{% assign sorted = site.html_pages | sort: 'weight' %}
+				{% assign sorted = site.suite | sort: 'weight' %}
 				{% for page in sorted %}
 					{% if page.show_in_suite_nav %}
 						<li class="nav-item top-level {% if page.url == page.url %}current{% endif %}">
