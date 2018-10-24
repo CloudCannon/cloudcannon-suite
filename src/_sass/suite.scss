@@ -1,0 +1,46 @@
+.landing {
+	min-height: 100vh;
+}
+
+.hero-wrapper {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: stretch;
+	align-content: center;
+	margin-top: -85px;
+	height: 100vh;
+}
+
+.hero {
+	flex: 1 auto;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: stretch;
+	align-content: center;
+	
+}
+
+
+
+.hero .headings {
+	padding: 25px;
+	padding-bottom: 15px;
+}
+
+.technologies {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	line-height: 0;
+
+	> div {
+		flex: 1;
+		max-width: 183px;
+	}
+
+	img {
+		max-height: 100px;
+	}
+}
