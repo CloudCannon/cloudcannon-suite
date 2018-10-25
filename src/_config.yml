@@ -26,12 +26,13 @@ defaults:
       path: ""
     values:
       header_class: "short"
+      layout: suite
   -
     scope:
       path: ""
       type: "packages"
     values:
-      layout: default
+      layout: packages
       seo:
         type: Article
       _comments:

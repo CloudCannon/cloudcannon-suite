@@ -1,0 +1,35 @@
+<nav class="docs-nav">
+	<ul>
+		{% assign sorted = site.pages | sort: 'weight' %}
+		{% for page in sorted %}
+			{% if page.show_in_suite_nav %}
+				<li class="nav-item top-level {% if page.url == page.url %}current{% endif %}">
+					<a href="{{ page.url }}">{{ page.title }}</a>
+				</li>
+			{% endif %}
+		{% endfor %}
+	</ul>
+	
+	<ul>
+		{% assign grouped = site.packages | group_by: 'title' | sort_by_array: 'title', site.data.docs_order %}
+
+		{% for group in grouped %}
+			<li class="nav-item top-level {% if group.name == page.category %}current{% endif %}">
+				{% assign items = group.items | sort: 'order' %}
+				<a href="{{ site.baseurl }}{{ items.first.url }}">{{ group.name }}</a>
+				<ul>
+					{% for item in items %}
+						<li class="nav-item {% if item.url == page.url %}current{% endif %}"><a href="{{ site.baseurl }}{{ item.url }}">{{ item.title }}</a></li>
+					{% endfor %}
+				</ul>
+			</li>
+		{% endfor %}
+	</ul>
+
+	<ul>
+		<li class="nav-item top-level {% if page.url == '/changelog/' %}current{% endif %}">
+			<a href="/changelog/">Change Log</a>
+		</li>
+	</ul>
+
+</nav>
