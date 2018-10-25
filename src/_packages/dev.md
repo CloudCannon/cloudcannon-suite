@@ -69,3 +69,5 @@ config:
 dev_path: packages/jekyll-dev
 order: 1
 ---
+
+const gulp = require("gulp"); const suite = require("cloudcannon-suite"); suite.jekyllDev(gulp);
