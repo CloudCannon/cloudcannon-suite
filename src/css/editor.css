@@ -1,3 +1,11 @@
 img.screenshot {
     border: 3px grey solid;
 }
+
+span.yellow-highlight {
+	color: khaki;
+}
+
+span.green-highlight {
+	color: #98fb98;
+}

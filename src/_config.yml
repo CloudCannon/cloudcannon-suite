@@ -42,6 +42,8 @@ defaults:
         content:
           width: 800
           height: 2000
+          code: true
+          styles: "css/editor.css"
           
 plugins:
   - jekyll-feed
