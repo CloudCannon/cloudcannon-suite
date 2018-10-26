@@ -40,7 +40,7 @@ defaults:
           numberedlist: true
           bulletedlist: true
           code: true
-          styles: "/css/editor.css"
+          styles: "/src/css/editor.css"
   -
     scope:
       path: ""
