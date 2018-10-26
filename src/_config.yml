@@ -76,7 +76,7 @@ social:
     - https://plus.google.com/+CloudCannon
     - https://www.youtube.com/c/CloudCannon
     - https://github.com/CloudCannon
-
+ 
 exclude:
   - Gemfile
   - Gemfile.lock
