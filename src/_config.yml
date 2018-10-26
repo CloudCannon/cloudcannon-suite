@@ -27,17 +27,6 @@ defaults:
     values:
       header_class: "short"
       layout: suite
-  -
-    scope:
-      path: ""
-      type: "packages"
-    values:
-      layout: packages
-      seo:
-        type: Article
-      _comments:
-        category: Group navigation links with this field
-        order: Used to sort links in the navigation
       _options:
         content:
           width: 800
@@ -51,7 +40,18 @@ defaults:
           numberedlist: true
           bulletedlist: true
           code: true
-          styles: "css/editor.css"
+          styles: "/css/editor.css"
+  -
+    scope:
+      path: ""
+      type: "packages"
+    values:
+      layout: packages
+      seo:
+        type: Article
+      _comments:
+        category: Group navigation links with this field
+        order: Used to sort links in the navigation
           
 plugins:
   - jekyll-feed
@@ -81,16 +81,3 @@ exclude:
   - Gemfile
   - Gemfile.lock
   - package.json
-  
-_options:
-  content:
-    format: p h2 h3 h4 h5 h6 yellow-highlight green-highlight
-    link: true
-    removeformat: true
-    bold: true
-    italic: true
-    image: true
-    numberedlist: true
-    bulletedlist: true
-    code: true
-    styles: "css/editor.css"
