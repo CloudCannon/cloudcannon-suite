@@ -71,8 +71,8 @@ order: 1
 ---
 
 ```
-const gulp = require("gulp");
-const suite = require("cloudcannon-suite");
+<span class="yellow-highlight">const</span> gulp = require("gulp");
+<span class="yellow-highlight">const</span> suite = require("cloudcannon-suite");
 
 suite.jekyllDev(gulp);
 ```
