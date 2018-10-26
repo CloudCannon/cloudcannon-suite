@@ -84,7 +84,7 @@ exclude:
   
 _options:
   content:
-    format: p h2 h3 h4 h5 h6
+    format: p h2 h3 h4 h5 h6 yellow-highlight green-highlight
     link: true
     removeformat: true
     bold: true
