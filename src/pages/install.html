@@ -4,6 +4,28 @@ description: Install CloudCannon Suite to your site
 weight: 1
 show_in_suite_nav: true
 ---
-<div class="editable">
 
-</div>
+<div class="editable">
+					<p>Welcome to the install guide. If you have your development machine setup, this guide will go through updating your site structure and adding basic packages.</p>
+					<h3>Prepare source</h3>
+					<p>A custom source directory keeps the root directory clean and free for configuration. Move all jekyll source including Gemfile and Gemfile.lock to the `src` folder. To do this with bash use the following command:<br />$ mkdir src<br />$ mv `ls -A | grep -v src` ./src</p>
+					<p>If you don't want to use the command line, this can be done in finder/explorer.</p>
+					<p>### Create a package.json in your project directory<br />If you don't have a package.json, create one. If you need help, run an `npm init` which will walk you through giving it a name, version, description, etc.</p>
+					<p>```sh<br />$ npm init<br />```</p>
+					<p>### Install your dependencies</p>
+					<p>Run this command in your project directory:</p>
+					<p>```sh<br />$ npm install --save-dev gulp@next cloudcannon-suite<br />```</p>
+					<p>### Create a gulpfile.js</p>
+					<p>In your project directory, create a file named `gulpfile.js` in your project root with these contents:</p>
+					<p>```js<br />const gulp = require("gulp");<br />const suite = require("cloudcannon-suite");</p>
+					<p>suite.jekyllDev(gulp);<br />```</p>
+					<p>### Test your suite</p>
+					<p>Run the gulp command in your project directory:</p>
+					<p>```sh<br />$ gulp dev<br />```</p>
+					<p>If you run into any issues, check your folder structure matches the [suite structure](/structure/).</p>
+					<p>### Result</p>
+					<p>Voila! This will build your site to `dist/site` and serve it on localhost:4000. Any changes made in `src` will trigger another build.</p>
+					<p>```sh<br />$ gulp dev<br />[19:14:48] Using gulpfile ~/Work/cloudcannon/suite/gulpfile.js<br />[19:14:48] Starting 'dev'...<br />[19:14:48] Starting 'dev:build'...<br />[19:14:48] $ bundle exec jekyll build --destination dist/site<br />Configuration file: src/_config.yml<br />&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Source: src<br />&nbsp; &nbsp; &nbsp;&nbsp; Destination: dist/src<br />&nbsp;Incremental build: disabled. Enable with --incremental<br />&nbsp; &nbsp; &nbsp; Generating...<br />&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; done in 0.73 seconds.<br />&nbsp;Auto-regeneration: disabled. Use --watch to enable.<br />[19:14:50] Finished 'dev:build' after 1.58 s<br />[19:14:50] Starting 'dev:watch'...<br />[19:14:50] Finished 'dev:watch' after 45 ms<br />[19:14:50] Starting 'dev:serve'...<br />[19:14:50] Webserver started at http://localhost:4000<br />[19:14:50] Finished 'dev:serve' after 40 ms<br />[19:14:50] Finished 'dev' after 1.67 s<br />```</p>
+					<p>### Next</p>
+					<p>You are ready to start developing more efficiently. If you need more features, choose a package and follow the install steps.</p>
+				</div>
