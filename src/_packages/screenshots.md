@@ -40,3 +40,50 @@ config:
 dev_path: packages/reports
 order: 4
 ---
+
+Now that you have `cloudcannon-suite` and `gulp` installed, we have to configure our gulpfile. For a basic setup you can add:
+
+```
+const gulp = require("gulp");
+const suite = require("cloudcannon-suite");
+
+suite.screenshots(gulp);
+```
+
+### Subtasks
+
+```
+$ gulp screenshots:
+```
+
+### Default Configuration
+
+Below is the default configuration for the Screenshots package:
+
+### <code>{<br />&nbsp; &nbsp; jekyll: {<br />&nbsp; &nbsp; &nbsp; &nbsp; src: "docs",<br />&nbsp; &nbsp; &nbsp; &nbsp; dest: "dist/docs"<br />&nbsp; &nbsp; },<br />&nbsp; &nbsp; tasks: [],<br />&nbsp; &nbsp; &nbsp; &nbsp; serve: {<br />&nbsp; &nbsp; &nbsp; &nbsp; port: 4000,<br />&nbsp; &nbsp; &nbsp; &nbsp; open: true<br />&nbsp; &nbsp; }<br />}</code>
+
+### Configuration
+
+If you have a more complex set up you can use any of the following options with the Screenshots package.
+
+### jekyll.src
+
+Sets the input folder for jekyll
+
+### jekyll.dest
+
+Sets the output folder for docs build
+
+### tasks
+
+Adds additional tasks to be run before the jekyll build. This is useful for reducing build time in jekyll.
+
+### serve.port
+
+Specifies the port to serve the built site from.
+
+### serve.open
+
+Should the docs:serve task automatically open a tab in a browser
+
+&nbsp;
