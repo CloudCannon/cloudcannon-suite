@@ -144,27 +144,27 @@ open: true
 
 If you have a more complex set up you can use any of the following options with the Dev package.
 
-### namespace
+#### namespace
 
 Sets the namespace of the gulp commands (i.e. gulp namespace:command)
 
-### jekyll.src
+#### jekyll.src
 
 Sets the input folder for jekyll
 
-### jekyll.dest
+#### jekyll.dest
 
 Sets the output folder for dev build
 
-### tasks
+#### tasks
 
 Adds additional tasks to be run before the jekyll build. This is useful for reducing build time in jekyll.
 
-### serve.port
+#### serve.port
 
 Specifies the port to serve the built site from.
 
-### serve.open
+#### serve.open
 
 Should the dev:serve task automatically open a tab in a browser
 
