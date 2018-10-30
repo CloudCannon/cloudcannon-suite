@@ -120,11 +120,7 @@ Runs `bundle exec jekyll serve` on the `src` folder
 
 Runs a local webserver on the `dest` folder
 
-`$ gulp jekyllDocs:serve`<br>&nbsp;
-
-&nbsp;
-
-&nbsp;
+`$ gulp jekyllDocs:serve`
 
 #### watch
 
