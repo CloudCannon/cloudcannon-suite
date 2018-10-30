@@ -60,7 +60,19 @@ $ gulp screenshots:
 
 Below is the default configuration for the Screenshots package:
 
-### <code>{<br />&nbsp; &nbsp; jekyll: {<br />&nbsp; &nbsp; &nbsp; &nbsp; src: "docs",<br />&nbsp; &nbsp; &nbsp; &nbsp; dest: "dist/docs"<br />&nbsp; &nbsp; },<br />&nbsp; &nbsp; tasks: [],<br />&nbsp; &nbsp; &nbsp; &nbsp; serve: {<br />&nbsp; &nbsp; &nbsp; &nbsp; port: 4000,<br />&nbsp; &nbsp; &nbsp; &nbsp; open: true<br />&nbsp; &nbsp; }<br />}</code>
+```
+{
+    jekyll: {
+        src: "docs",
+        dest: "dist/docs"
+    },
+    tasks: [],
+        serve: {
+        port: 4000,
+        open: true
+    }
+}
+```
 
 ### Configuration
 
