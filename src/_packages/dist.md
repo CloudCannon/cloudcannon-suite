@@ -73,7 +73,7 @@ const suite = require("cloudcannon-suite");
 suite.dist(gulp, {"dist":{"baseurl":"p"}});
 ```
 
-Usage
+### Usage
 
 Running `gulp dist` adds a baseurl to the entire site at `src`. HTML and CSS files are rewritten to fix references to the new folder structure. All files are cloned into the `dist` folder with the baseurl prepended. Once completed a local webserver will be started on port 9000. Any changes to the `src` folder will trigger a rebuild of the contents.
 
