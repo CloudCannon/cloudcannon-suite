@@ -4,9 +4,17 @@ icons: true
 header_class: short
 ---
 
-<header class="short">
-	{% include navigation/top.html %}
-</header>
+{% if page.header_class == "landing" %}
+  <header class="{{ page.header_class }}">
+	  {% include navigation/top.html %}
+	  
+	  {% include components/hero/main.html image="" heading="CloudCannon Suite" subtitle="An opinionated set of tools used to build and maintain static sites." %}
+  </header>
+{% else %}
+  <header class="short">
+  	  {% include navigation/top.html %}
+  </header>
+{% endif %}
 
 <div class="dark-content docs-container">
 	<div class="wrapper wrapper-large">
@@ -14,21 +22,21 @@ header_class: short
 		<section class="docs-main">
 			<article class="content">
 				<div class="page-header">
-				{% if page.heading %}
-					<h1>{{ page.heading }}</h1>
-				{% elsif page.title %}
-					<h1>{{ page.title }}</h1>
-				{% elsif page.name %}
-					<h1>{{ page.name }}</h1>
-				{% endif %}
+					{% if page.heading %}
+						<h1>{{ page.heading }}</h1>
+					{% elsif page.title %}
+						<h1>{{ page.title }}</h1>
+					{% elsif page.name %}
+						<h1>{{ page.name }}</h1>
+					{% endif %}
 
-				{% if page.subtitle %}
-					<p class="subtitle">{{ page.subtitle }}</p>
-				{% elsif page.description %}
-					<p class="subtitle">{{ page.description }}</p>
-				{% endif %}
-			</div>
-				<p>Now that you have <code>cloudcannon-suite</code> and <code>gulp</code> installed, we have to configure our gulpfile. For a basic setup you can add:</p>
+					{% if page.subtitle %}
+						<p class="subtitle">{{ page.subtitle }}</p>
+					{% elsif page.description %}
+						<p class="subtitle">{{ page.description }}</p>
+					{% endif %}
+				</div>
+
 				{{ content }}
 			</article>
 		</section>

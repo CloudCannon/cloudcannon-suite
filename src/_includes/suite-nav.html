@@ -1,27 +1,23 @@
 <nav class="docs-nav">
 	<ul>
+		<li class="nav-item top-level {% if page.url == "/" %}current{% endif %}">
+			<a href="/">CloudCannon Suite</a>
+		</li>
 		{% assign sorted = site.pages | sort: 'weight' %}
-		{% for page in sorted %}
-			{% if page.show_in_suite_nav %}
-				<li class="nav-item top-level {% if page.url == page.url %}current{% endif %}">
-					<a href="{{ page.url }}">{{ page.title }}</a>
+		{% for item in sorted %}
+			{% if item.show_in_suite_nav %}
+				<li class="nav-item top-level {% if item.url == page.url %}current{% endif %}">
+					<a href="{{ item.url }}">{{ item.title }}</a>
 				</li>
 			{% endif %}
 		{% endfor %}
 	</ul>
 	
 	<ul>
-		{% assign grouped = site.packages | group_by: 'title' | sort_by_array: 'title', site.data.docs_order %}
-
-		{% for group in grouped %}
-			<li class="nav-item top-level {% if group.name == page.category %}current{% endif %}">
-				{% assign items = group.items | sort: 'order' %}
-				<a href="{{ site.baseurl }}{{ items.first.url }}">{{ group.name }}</a>
-				<ul>
-					{% for item in items %}
-						<li class="nav-item {% if item.url == page.url %}current{% endif %}"><a href="{{ site.baseurl }}{{ item.url }}">{{ item.title }}</a></li>
-					{% endfor %}
-				</ul>
+		{% assign packages = site.packages | sort: 'weight' %}
+		{% for item in packages %}
+			<li class="nav-item top-level {% if item.url == page.url %}current{% endif %}">
+				<a href="{{ item.url }}">{{ item.title }}</a>
 			</li>
 		{% endfor %}
 	</ul>

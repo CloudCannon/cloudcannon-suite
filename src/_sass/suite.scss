@@ -1,7 +1,3 @@
-.landing {
-	min-height: 100vh;
-}
-
 .hero-wrapper {
 	display: flex;
 	flex-direction: column;
@@ -10,58 +6,121 @@
 	align-content: center;
 	margin-top: -85px;
 	height: 100vh;
-}
 
-.hero {
-	flex: 1 auto;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: stretch;
-	align-content: center;
-	
-}
+	.hero {
+		flex: 1 auto;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: stretch;
+		align-content: center;
 
+		.headings {
+			padding: 25px;
+			padding-bottom: 15px;
+			.subtitle {
+				max-width: none;
+				color: #ffffff;
+			}
+		}
 
+		.technologies {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			line-height: 0;
 
-.hero .headings {
-	padding: 25px;
-	padding-bottom: 15px;
-}
+			> div {
+				flex: 1;
+				max-width: 183px;
+			}
 
-.page-header {
-	margin-bottom: 50px;
-}
-
-.page-header h1 {
-	margin: 0;
-	font-size: 3rem;
-}
-
-.subtitle {
-	font-size: 1.2em;
-	font-style: italic;
-	margin-top: 10px;
-	color: #777;
-}
-
-
-
-
-
-
-.technologies {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	line-height: 0;
-
-	> div {
-		flex: 1;
-		max-width: 183px;
-	}
-
-	img {
-		max-height: 100px;
+			img {
+				max-height: 100px;
+			}
+		}
 	}
 }
+
+.content {
+	.page-header {
+		margin-bottom: 50px;
+			h1 {
+			margin: 0;
+			font-size: 3rem;
+		}
+	}
+
+	.subtitle {
+		font-size: 1.2em;
+		font-style: italic;
+		margin-top: 10px;
+		color: #777;
+	}
+
+	.file-structure {
+		list-style: none;
+		margin: 0;
+	}
+
+	.date {
+		color: #888;
+		font-style: italic;
+	}
+
+	.badge {
+		font-family: 'Nunito Sans',sans-serif;
+		padding: 2px 5px;
+		text-transform: uppercase;
+		font-size: .8rem;
+		border-radius: 2px;
+		background: #eee;
+		font-weight: 700;
+	}
+
+	.major {
+		background: #3583d6;
+		color: #fff;
+	}
+
+	.large-boxes {
+		display: flex;
+		flex-wrap: wrap;
+		padding: 0;
+		margin: 20px -10px;
+		list-style: none;
+
+		li {
+			margin: 10px;
+			flex: 1 1 200px;
+			display: flex;
+
+			a {
+				flex: 1;
+				padding: 20px;
+				display: block;
+				background: #eee;
+				border-radius: 5px;
+				text-decoration: none;
+				line-height: 1.5;
+				color: #4A4A4A;
+
+				strong {
+					display: block;
+				}
+
+				small {
+					font-size: 80%;
+				}
+			}
+
+			a:hover {
+				color: #111111
+			}
+		}
+	}
+}
+
+
+
+

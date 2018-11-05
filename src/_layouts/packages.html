@@ -29,6 +29,10 @@ header_class: short
 					{% endif %}
 				</div>
 
+				{% if page._is_package %}
+					<p>Now that you have <code>cloudcannon-suite</code> and <code>gulp</code> installed, we have to configure our gulpfile. For a basic setup you can add:</p>
+				{% endif %}
+
 				{{ content }}
 			</article>
 		</section>

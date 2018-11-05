@@ -1,16 +1,9 @@
 ---
 title:
 namespace:
-commands:
-  - task:
-    description_markdown:
-output_markdown:
-output_code:
-default_json_code:
-config:
-  - key:
-    description_markdown:
-    required:
+tagline:
+image:
 dev_path:
 order:
+_is_package: true
 ---
