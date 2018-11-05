@@ -17,10 +17,6 @@ collections:
     title: Packages
     permalink: /packages/:title/
     output: true
-  suite:
-    title: Suite
-    permalink: /:path/
-    output: true
 defaults:
   - scope:
       path: ""
