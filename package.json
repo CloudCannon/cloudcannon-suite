@@ -1,6 +1,6 @@
 {
   "name": "cloudcannon-suite",
-  "version": "1.0.12",
+  "version": "1.0.14",
   "description": "A suite of gulp tools to manage static sites",
   "main": "index.js",
   "directories": {
@@ -26,6 +26,7 @@
   },
   "homepage": "https://github.com/CloudCannon/cloudcannon-suite#readme",
   "dependencies": {
+    "@cloudcannon/screenshot-util": "^1.0.2",
     "async": "^2.6.1",
     "bufferstreams": "^2.0.1",
     "cheerio": "^1.0.0-rc.2",
@@ -36,20 +37,18 @@
     "gulp": "^3.9.1",
     "gulp-imagemin": "^4.1.0",
     "gulp-props2json": "^2.0.0",
-    "gulp-rename": "^1.3.0",
+    "gulp-rename": "^1.4.0",
     "gulp-sequence": "^1.0.0",
-    "gulp-task-listing": "^1.0.1",
+    "gulp-task-listing": "^1.1.0",
     "gulp-util": "^3.0.8",
     "gulp-webserver": "^0.9.1",
-    "gulp-webshot": "^0.2.3",
     "js-yaml": "^3.12.0",
     "properties": "^1.2.1",
-    "puppeteer": "^1.6.0",
+    "puppeteer": "^1.10.0",
     "python-shell": "^0.5.0",
-    "screenshot-util": "^1.0.0",
     "sort-object-keys": "^1.1.2",
     "srcset": "^1.0.0",
-    "through2": "^2.0.3",
+    "through2": "^2.0.5",
     "through2-concurrent": "^1.1.1",
     "underscore": "^1.9.1"
   }

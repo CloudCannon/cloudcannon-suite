@@ -1,7 +1,6 @@
-var webshot = require("gulp-webshot"),
-	imagemin = require("gulp-imagemin"),
+var imagemin = require("gulp-imagemin"),
 	fs = require('fs-extra'),
-	Screenshotter = require('screenshot-util'),
+	Screenshotter = require('@cloudcannon/screenshot-util'),
 	through = require('through2');
 	through2Concurrent = require('through2-concurrent');
 	path = require("path"),
@@ -49,7 +48,7 @@ module.exports = async function (gulp, config) {
 			screenSize: {width: 1920, height: 1080},
 			fullPage: true,
 			count: config.count,
-			docker: false,
+			docker: process.env.DOCKER_SCREENSHOTS || false,
 			delay: 1000,
 			portInc: options.portInc
 		})
@@ -141,7 +140,7 @@ const screenshotStream = function (screenshotter) {
 		});
 
 		let img = await screenshotter.takeScreenshot(page).catch(e => e);
-		
+
 		if (img) {
 			let shotDir = path.join(screenshotter.options.dest, urlPath);
 			await fs.ensureDir(path.dirname(shotDir))
