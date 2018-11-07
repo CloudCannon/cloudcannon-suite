@@ -84,7 +84,11 @@
 	}
 
 	.file-structure li.indent-2 {
-    margin-left: 30px;
+    	margin-left: 30px;
+
+    .editor-link {
+    	margin-bottom: 25px;
+    }
 }
 
 .file-structure strong i {
