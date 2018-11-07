@@ -15,7 +15,7 @@ staging:
   - name: Documentation
     link: https://staging-docs.cloudcannon.com/
   - name: Suite
-    link: https://magenta-lime.cloudvent.net
+    link: https://staging-suite.cloudcannon.com/
 production:
   - name: Home
     link: https://cloudcannon.com
@@ -24,4 +24,4 @@ production:
   - name: Documentation
     link: https://docs.cloudcannon.com/
   - name: Suite
-    link: https://magenta-lime.cloudvent.net
+    link: https://suite.cloudcannon.com/
