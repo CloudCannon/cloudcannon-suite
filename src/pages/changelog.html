@@ -6,7 +6,7 @@ layout: suite
 
 <p>Subscribe with <a href="{{ site.baseurl }}/feed.xml">RSS</a> to keep up with the latest changes.</p>
 
-<p class="editor-link"><a href="cloudcannon:collections/_posts" class="btn"><strong>&#9998;</strong> Update Change Log</a></p>
+<a href="cloudcannon:collections/_posts" class="editor-link"><strong>&#9998;</strong> Update Change Log</a>
 
 <div class="changelog">
 	{% for change in site.posts %}
@@ -16,7 +16,7 @@ layout: suite
 
 			{{ change.content }}
 
-			<p class="editor-link"><a href="cloudcannon:collections/{{ change.path }}" class="btn"><strong>&#9998;</strong> Update Entry</a></p>
+			<a href="cloudcannon:collections/{{ change.path }}" class="editor-link"><strong>&#9998;</strong> Update Entry</a>
 		</div>
 	{% endfor %}
 </div>
