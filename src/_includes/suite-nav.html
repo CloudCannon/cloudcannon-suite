@@ -3,7 +3,7 @@
 		<li class="nav-item top-level {% if page.url == "/" %}current{% endif %}">
 			<a href="/">CloudCannon Suite</a>
 		</li>
-		{% assign sorted = site.pages | sort: 'weight' %}
+		{% assign sorted = site.pages | sort: 'weight_number' %}
 		{% for item in sorted %}
 			{% if item.show_in_suite_nav %}
 				<li class="nav-item top-level {% if item.url == page.url %}current{% endif %}">
@@ -14,7 +14,7 @@
 	</ul>
 	
 	<ul>
-		{% assign packages = site.packages | sort: 'weight' %}
+		{% assign packages = site.packages | sort: 'weight_number' %}
 		{% for item in packages %}
 			<li class="nav-item top-level {% if item.url == page.url %}current{% endif %}">
 				<a href="{{ item.url }}">{{ item.title }}</a>

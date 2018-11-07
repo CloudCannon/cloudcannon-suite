@@ -4,7 +4,6 @@ namespace: dist
 tagline: Baseurl configured in one spot not everywhere
 image: /images/shipping.svg
 dev_path: packages/distribute
-order: '3'
 _is_package: true
 ---
 

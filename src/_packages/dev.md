@@ -4,7 +4,6 @@ namespace: jekyllDev
 tagline: Develop your Jekyll site
 image: /images/build.svg
 dev_path: packages/jekyll-dev
-order: '1'
 _is_package: true
 ---
 

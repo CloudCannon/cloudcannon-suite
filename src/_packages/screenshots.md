@@ -4,7 +4,6 @@ namespace: screenshots
 tagline: Generate screenshots of your site using phantomJS
 image: /images/devices.svg
 dev_path: packages/reports
-order: 4
 _is_package: true
 ---
 

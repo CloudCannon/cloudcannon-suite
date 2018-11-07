@@ -4,7 +4,6 @@ namespace: help
 tagline: List the available tasks
 image: /images/help.svg
 dev_path: packages/help
-order: 5
 _is_package: true
 ---
 

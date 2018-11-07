@@ -5,7 +5,6 @@ tagline: Document your site using the same tools
 image: /images/docs.svg
 _is_package: true
 dev_path: packages/jekyll-docs
-order: '2'
 ---
 
 Now that you have `cloudcannon-suite` and `gulp` installed, we have to configure our gulpfile. For a basic setup you can add:
