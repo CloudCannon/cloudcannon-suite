@@ -8,11 +8,10 @@ var imagemin = require("gulp-imagemin"),
 	gutil = require("gulp-util"),
 	_ = require("underscore"),
 	del = require("del"),
-	webserver = require("gulp-webserver"),
-	i18nCSS = fs.readFileSync(path.join(__dirname, "i18n-overlays.css"), "utf8");
+	webserver = require("gulp-webserver");
 
 require('events').EventEmitter.prototype._maxListeners = 100;
-const tagmap = {};	
+const tagmap = {};
 const timeout = ms => new Promise(res => setTimeout(res, ms));
 
 module.exports = async function (gulp, config) {
@@ -129,15 +128,18 @@ const screenshotStream = function (screenshotter) {
 				type: i18ntag.tagName.toLowerCase()
 			}))
 		}).catch(e => e);
-		tags.forEach(i18ntag => {
-			tagmap[i18ntag.i18n] = tagmap[i18ntag.i18n] || {pages: [], content: []};
-			let formatUrl = urlPath.replace(/index\.html/, '');
-			formatUrl = formatUrl.replace(/^\//, '');
-			tagmap[i18ntag.i18n].pages.push({url: formatUrl, type: i18ntag.type});
-			if (tagmap[i18ntag.i18n].content.indexOf(i18ntag.content) < 0) {
-				tagmap[i18ntag.i18n].content.push(i18ntag.content);
-			}
-		});
+
+		if (tags) {
+			tags.forEach(i18ntag => {
+				tagmap[i18ntag.i18n] = tagmap[i18ntag.i18n] || {pages: [], content: []};
+				let formatUrl = urlPath.replace(/index\.html/, '');
+				formatUrl = formatUrl.replace(/^\//, '');
+				tagmap[i18ntag.i18n].pages.push({url: formatUrl, type: i18ntag.type});
+				if (tagmap[i18ntag.i18n].content.indexOf(i18ntag.content) < 0) {
+					tagmap[i18ntag.i18n].content.push(i18ntag.content);
+				}
+			});
+		}
 
 		let img = await screenshotter.takeScreenshot(page).catch(e => e);
 
