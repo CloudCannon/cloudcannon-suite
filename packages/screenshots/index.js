@@ -12,6 +12,7 @@ var webshot = require("gulp-webshot"),
 	webserver = require("gulp-webserver"),
 	i18nCSS = fs.readFileSync(path.join(__dirname, "i18n-overlays.css"), "utf8");
 
+require('events').EventEmitter.prototype._maxListeners = 100;
 const tagmap = {};	
 const timeout = ms => new Promise(res => setTimeout(res, ms));
 
