@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@cloudcannon/screenshot-util@^1.0.0":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@cloudcannon/screenshot-util/-/screenshot-util-1.0.1.tgz#fbefd7879c37085bbc19cdc986e5a013a825edb6"
-  integrity sha512-x27O0C13vbrCelNuv7318BgsVkTJHVtfRHDVviWElf4xFWUcEYAH8S0yH1OhIOcg92RuqEM74s+/k3RtaOCgiw==
+"@cloudcannon/screenshot-util@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@cloudcannon/screenshot-util/-/screenshot-util-1.0.2.tgz#ec1c3a9ec81cd279bd1c64dd54145ef2df66d00a"
+  integrity sha512-4OkHDetl+tGP+5YAB7LPvcV9Ro0qgwpbZxpfd4cmo6f1iUrSknime4NWtdnt7jew5xZerjNWnKFuYyzqVjyTuQ==
   dependencies:
     ansi-colors "^3.0.5"
     express "^4.16.3"
@@ -1827,10 +1827,15 @@ gulp-props2json@^2.0.0:
     properties-parser "~0.2.3"
     through2 "~2.0.0"
 
-gulp-rename@^1.2.0, gulp-rename@^1.3.0:
+gulp-rename@^1.2.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/gulp-rename/-/gulp-rename-1.3.0.tgz#2e789d8f563ab0c924eeb62967576f37ff4cb826"
   integrity sha512-nEuZB7/9i0IZ8AXORTizl2QLP9tcC9uWc/s329zElBLJw1CfOhmMXBxwVlCRKjDyrWuhVP0uBKl61KeQ32TiCg==
+
+gulp-rename@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/gulp-rename/-/gulp-rename-1.4.0.tgz#de1c718e7c4095ae861f7296ef4f3248648240bd"
+  integrity sha512-swzbIGb/arEoFK89tPY58vg3Ok1bw+d35PfUNwWqdo7KM4jkmuGA78JiDNqR+JeZFaeeHnRg9N7aihX3YPmsyg==
 
 gulp-sequence@^1.0.0:
   version "1.0.0"
@@ -1850,10 +1855,10 @@ gulp-sourcemaps@1.6.0:
     through2 "^2.0.0"
     vinyl "^1.0.0"
 
-gulp-task-listing@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/gulp-task-listing/-/gulp-task-listing-1.0.1.tgz#8d3d88a93381715d80d66d08d9c55587d889f2ba"
-  integrity sha1-jT2IqTOBcV2A1m0I2cVVh9iJ8ro=
+gulp-task-listing@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/gulp-task-listing/-/gulp-task-listing-1.1.0.tgz#a8cbc2c21364e4c5085c79988886db1c680952fa"
+  integrity sha512-CP2SeHu/GQnuLS0UFWwRW/LX6XIZU4mzNZGNXcAP4z3kgMpvBg0B1tm2OIKI7n+vM5XrP+s99Ms+TCZONWEQyQ==
   dependencies:
     chalk "*"
 
@@ -3620,7 +3625,21 @@ pseudomap@^1.0.2:
   resolved "https://registry.yarnpkg.com/pseudomap/-/pseudomap-1.0.2.tgz#f052a28da70e618917ef0a8ac34c1ae5a68286b3"
   integrity sha1-8FKijacOYYkX7wqKw0wa5aaChrM=
 
-puppeteer@^1.6.0, puppeteer@^1.7.0:
+puppeteer@^1.10.0:
+  version "1.10.0"
+  resolved "https://registry.yarnpkg.com/puppeteer/-/puppeteer-1.10.0.tgz#e3005f1251c2feae0e10c0f7a35afbcd56589ceb"
+  integrity sha512-3i28X/ucX8t3eL4TZA60FLMOQNKqudFSOGDHr0cT7T4dE027CrcS885aAqjdxNybhMPliM5yImNsKJ6SQrPzhw==
+  dependencies:
+    debug "^3.1.0"
+    extract-zip "^1.6.6"
+    https-proxy-agent "^2.2.1"
+    mime "^2.0.3"
+    progress "^2.0.0"
+    proxy-from-env "^1.0.0"
+    rimraf "^2.6.1"
+    ws "^5.1.1"
+
+puppeteer@^1.7.0:
   version "1.9.0"
   resolved "https://registry.yarnpkg.com/puppeteer/-/puppeteer-1.9.0.tgz#56dba79e7ea4faac807877bee3b23d63291fc59e"
   integrity sha512-GH4PmhJf9wBRAPvtJkEJLAvdNNOofZortmBZSj8cGWYni98GUFqsf66blOEfJbo5B8l0KG5HR2d/W2MejnUrzg==
@@ -3736,7 +3755,7 @@ read-pkg@^1.0.0:
     isarray "0.0.1"
     string_decoder "~0.10.x"
 
-readable-stream@^2.0.0, readable-stream@^2.0.1, readable-stream@^2.0.2, readable-stream@^2.0.4, readable-stream@^2.0.5, readable-stream@^2.1.5, readable-stream@^2.2.2, readable-stream@^2.3.0, readable-stream@^2.3.5, readable-stream@^2.3.6:
+readable-stream@^2.0.0, readable-stream@^2.0.1, readable-stream@^2.0.2, readable-stream@^2.0.4, readable-stream@^2.0.5, readable-stream@^2.1.5, readable-stream@^2.2.2, readable-stream@^2.3.0, readable-stream@^2.3.5, readable-stream@^2.3.6, readable-stream@~2.3.6:
   version "2.3.6"
   resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-2.3.6.tgz#b11c27d88b8ff1fbe070643cf94b0c79ae1b0aaf"
   integrity sha512-tQtKA9WIAhBF3+VLAseyMqZeBjW0AHJoxOtYqSUZNJxauErmLbVm2FW1y+J/YA9dUrAC39ITejlZWhVIwawkKw==
@@ -4369,12 +4388,20 @@ through2@^0.6.0, through2@^0.6.1:
     readable-stream ">=1.0.33-1 <1.1.0-0"
     xtend ">=4.0.0 <4.1.0-0"
 
-through2@^2.0.0, through2@^2.0.3, through2@~2.0.0:
+through2@^2.0.0, through2@~2.0.0:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/through2/-/through2-2.0.3.tgz#0004569b37c7c74ba39c43f3ced78d1ad94140be"
   integrity sha1-AARWmzfHx0ujnEPzzteNGtlBQL4=
   dependencies:
     readable-stream "^2.1.5"
+    xtend "~4.0.1"
+
+through2@^2.0.5:
+  version "2.0.5"
+  resolved "https://registry.yarnpkg.com/through2/-/through2-2.0.5.tgz#01c1e39eb31d07cb7d03a96a70823260b23132cd"
+  integrity sha512-/mrRod8xqpA+IHSLyGCQ2s8SPHiCDEeQJSep1jqLYeEUClOFG2Qsh+4FU6G9VeqpZnGW/Su8LQGc4YKni5rYSQ==
+  dependencies:
+    readable-stream "~2.3.6"
     xtend "~4.0.1"
 
 thunks@^4.9.0:
