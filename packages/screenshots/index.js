@@ -47,7 +47,7 @@ module.exports = async function (gulp, config) {
 			screenSize: {width: 1920, height: 1080},
 			fullPage: true,
 			count: config.count,
-			docker: false,
+			docker: process.env.DOCKER_SCREENSHOTS || false,
 			delay: 1000,
 			portInc: options.portInc
 		})
