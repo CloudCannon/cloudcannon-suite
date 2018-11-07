@@ -1,7 +1,6 @@
-var webshot = require("gulp-webshot"),
-	imagemin = require("gulp-imagemin"),
+var imagemin = require("gulp-imagemin"),
 	fs = require('fs-extra'),
-	Screenshotter = require('screenshot-util'),
+	Screenshotter = require('@cloudcannon/screenshot-util'),
 	through = require('through2');
 	through2Concurrent = require('through2-concurrent');
 	path = require("path"),
@@ -12,7 +11,7 @@ var webshot = require("gulp-webshot"),
 	webserver = require("gulp-webserver"),
 	i18nCSS = fs.readFileSync(path.join(__dirname, "i18n-overlays.css"), "utf8");
 
-const tagmap = {};	
+const tagmap = {};
 const timeout = ms => new Promise(res => setTimeout(res, ms));
 
 module.exports = async function (gulp, config) {
@@ -140,7 +139,7 @@ const screenshotStream = function (screenshotter) {
 		});
 
 		let img = await screenshotter.takeScreenshot(page).catch(e => e);
-		
+
 		if (img) {
 			let shotDir = path.join(screenshotter.options.dest, urlPath);
 			await fs.ensureDir(path.dirname(shotDir))
