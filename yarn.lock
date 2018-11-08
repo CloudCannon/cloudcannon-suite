@@ -2458,10 +2458,10 @@ puppeteer@^1.10.0, puppeteer@^1.7.0:
     rimraf "^2.6.1"
     ws "^5.1.1"
 
-python-shell@^1.0.4:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/python-shell/-/python-shell-1.0.6.tgz#5b366491b65fbbc88c12ff5ca5946a87478ff892"
-  integrity sha512-SVjW0Kr13LUj9Tc7Yx7w6kO2bL3gq521Ky5hW0lv8hdJwa1oP2anQlUQWm8ZSKtmHqDNl5F7TqCH2pk5zo9/5g==
+python-shell@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/python-shell/-/python-shell-0.5.0.tgz#461983bafd092010bc2760c365b13e7d50aab231"
+  integrity sha512-+jgmFZvwk1yMBBDisDlkXXMYv1eEJKbGCtwHLppGIyEV83cKeX9hjOjfR2yONWK3yQFhum0M2r7UE0U//hiK9w==
 
 qs@2.2.4:
   version "2.2.4"
