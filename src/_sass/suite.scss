@@ -6,6 +6,8 @@
 	align-content: center;
 	margin-top: -85px;
 	height: 100vh;
+	min-height: 600px;
+	width: 100%;
 
 	.hero {
 		flex: 1 auto;
@@ -84,30 +86,34 @@
 		color: #fff;
 	}
 
+	.editor-link {
+		display: none;
+	}
+
 	.file-structure li.indent-2 {
     	margin-left: 30px;
+	}
 
-}
+	.editor-link.button {
+	    margin-bottom: 25px;
+	}
 
-.editor-link.button {
-    margin-bottom: 25px;
-}
+	.file-structure strong i {
+	    float: left;
+	    margin-right: 10px;
+	    position: relative;
+	    top: 3px;
+	}
 
-.file-structure strong i {
-    float: left;
-    margin-right: 10px;
-    position: relative;
-    top: 3px;
-}
-.file-structure strong {
-   	color: #222;
-    line-height: 24px;
-    text-decoration: none;
-}
+	.file-structure strong {
+	   	color: #222;
+	    line-height: 24px;
+	    text-decoration: none;
+	}
 
-.material-icons {
-	line-height: 1.8rem
-}
+	.material-icons {
+		line-height: 1.8rem
+	}
 
 	.large-boxes {
 		display: flex;
@@ -146,6 +152,18 @@
 		}
 	}
 }
+
+.nav-item {
+	img {
+		float: left;
+		width: 18px;
+		vertical-align: middle;
+		margin-right: 10px;
+		margin-top: 3px;
+	}
+}
+
+
 
 
 
