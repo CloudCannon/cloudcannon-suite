@@ -1,5 +1,5 @@
 var del = require("del"),
-	gutil = require("gulp-util"),
+	c = require("ansi-colors"),
 	path = require("path"),
 	defaults = require("defaults"),
 	webserver = require("gulp-webserver"),
@@ -28,7 +28,7 @@ module.exports = function (gulp, config) {
 	config.serve = defaults(config.serve, configDefaults.serve);
 
 	if (!config.dist.baseurl) {
-		gutil.log(gutil.colors.yellow("Warning:") + " Missing dist baseurl");
+		console.log(c.yellow("Warning:") + " Missing dist baseurl");
 		return;
 	}
 

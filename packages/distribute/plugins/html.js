@@ -1,4 +1,4 @@
-var gutil = require("gulp-util"),
+var PluginError = require("plugin-error"),
 	through = require("through2").obj,
 	cheerio = require("cheerio"),
 	srcsetParser = require("srcset"),
@@ -20,7 +20,7 @@ module.exports = function (options) {
 			return callback(null, file);
 		}
 		if (file.isStream()) {
-			return callback(new gutil.PluginError("cloudcannon-suite-dist-html", "Streaming not supported"));
+			return callback(new PluginError("cloudcannon-suite-dist-html", "Streaming not supported"));
 		}
 
 		file.sitePath = "/" + file.path.substring(file.base.length);

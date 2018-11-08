@@ -1,8 +1,7 @@
-var imagemin = require("gulp-imagemin"),
-	fs = require('fs-extra'),
+var fs = require('fs-extra'),
 	path = require("path"),
 	defaults = require("defaults"),
-	gutil = require("gulp-util"),
+	c = require("ansi-colors"),
 	_ = require("underscore"),
 	del = require("del"),
 	screenshotStream = require("./plugins/screenshotStream"),
@@ -11,7 +10,7 @@ var imagemin = require("gulp-imagemin"),
 
 require('events').EventEmitter.prototype._maxListeners = 100;
 
-const tagmap = {};	
+const tagmap = {};
 
 module.exports = async function (gulp, config) {
 	config = config || {};
@@ -28,7 +27,7 @@ module.exports = async function (gulp, config) {
 	});
 
 	function renderScreenshots(src, screenshotter, namespace, done) {
-		gutil.log("Generating Screenshots from: '" + gutil.colors.blue(src) + "'");
+		console.log("Generating Screenshots from: '" + c.blue(src) + "'");
 		return gulp.src("./" + src + "/**/*.html")
 			.pipe(screenshotStream(screenshotter,tagmap));
 	}

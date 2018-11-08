@@ -1,7 +1,7 @@
 var async = require("async"),
 	fs = require("fs-extra"),
 	del = require("del"),
-	gutil = require("gulp-util"),
+	c = require("ansi-colors"),
 	path = require("path"),
 	defaults = require("defaults"),
 	webserver = require("gulp-webserver"),
@@ -67,8 +67,8 @@ module.exports = function (gulp, config) {
 		var returnedLocales = {};
 		fs.readdir(dir, function(err, files) {
 			if (err) {
-				gutil.log(gutil.colors.red("Unable to read locales") + " from "
-					+ gutil.colors.blue(dir) + ": " + err.message);
+				console.log(c.red("Unable to read locales") + " from "
+					+ c.blue(dir) + ": " + err.message);
 				return done(err);
 			}
 
@@ -87,8 +87,8 @@ module.exports = function (gulp, config) {
 					try {
 						returnedLocales[key] = JSON.parse(data);
 					} catch (e) {
-						gutil.log(gutil.colors.red("Malformed JSON") + " from "
-							+ gutil.colors.blue(dir + "/" + filename) + ": " + e.message);
+						console.log(c.red("Malformed JSON") + " from "
+							+ c.blue(dir + "/" + filename) + ": " + e.message);
 					}
 
 					for (var localeKey in returnedLocales[key]) {
@@ -113,10 +113,10 @@ module.exports = function (gulp, config) {
 	// Transfers properties files from the old CloudCannon format
 	// to the new i18n folder structure
 	gulp.task("i18n:legacy-transfer",  function (done) {
-		gutil.log(gutil.colors.green("Transferring files") + " from "
-			+ gutil.colors.blue(config.i18n.legacy_path + "/*.properties")
+		console.log(c.green("Transferring files") + " from "
+			+ c.blue(config.i18n.legacy_path + "/*.properties")
 			+ " to "
-			+ gutil.colors.blue(config.i18n.locale_src));
+			+ c.blue(config.i18n.locale_src));
 
 		return gulp.src(config.i18n.legacy_path + "/*.properties")
 			.pipe(props2json({ minify: false }))
@@ -128,10 +128,10 @@ module.exports = function (gulp, config) {
 	gulp.task("i18n:legacy-update", gulpSequence("i18n:load-locales", "i18n:add-character-based-wordwraps", "i18n:load-wordwraps", "i18n:legacy-save-to-properties-files"));
 
 	gulp.task("i18n:legacy-save-to-properties-files", function (done) {
-		gutil.log(gutil.colors.green("Transferring files") + " from "
-			+ gutil.colors.blue(config.i18n.locale_src + "/*.json")
+		console.log(c.green("Transferring files") + " from "
+			+ c.blue(config.i18n.locale_src + "/*.json")
 			+ " to "
-			+ gutil.colors.blue(config.i18n.legacy_path));
+			+ c.blue(config.i18n.legacy_path));
 
 		async.each(localeNames, function (localeName, next) {
 			if (localeName === config.i18n.default_language) {
@@ -160,10 +160,10 @@ module.exports = function (gulp, config) {
 	// Generate Source
 
 	gulp.task("i18n:generate",  function (done) {
-		gutil.log(gutil.colors.green("Generating source locale") + " from "
-			+ gutil.colors.blue(config.i18n._src)
+		console.log(c.green("Generating source locale") + " from "
+			+ c.blue(config.i18n._src)
 			+ " to "
-			+ gutil.colors.blue(config.i18n._generated_locale_dest));
+			+ c.blue(config.i18n._generated_locale_dest));
 
 		return gulp.src(config.i18n._src + "/**/*.html")
 			.pipe(i18n.generate({}))

@@ -1,4 +1,4 @@
-var gutil = require("gulp-util"),
+var c = require("ansi-colors"),
 	path = require("path"),
 	fs = require("fs"),
 	yamlParser = require("js-yaml")
@@ -43,7 +43,7 @@ function fetchGitignores(gitignorePath, callback) {
 	fs.readFile(gitignorePath, function (err, ignoreContents) {
 		var ignores = {};
 		if (err) {
-			gutil.log(gutil.colors.yellow("! loading `" + gitignorePath + "` failed"));
+			console.log(c.yellow("! loading `" + gitignorePath + "` failed"));
 		} else {
 			var lines = ignoreContents.toString("utf8").split("\n");
 
@@ -104,13 +104,13 @@ module.exports = function (gulp, config) {
 	};
 
 	function runBundleCommand(commands, trackOutput, done) {
-		gutil.log(gutil.colors.blue("$") + " bundle " + commands.join(" "));
+		console.log(c.blue("$") + " bundle " + commands.join(" "));
 		var output = "";
 		function readOutput(data) {
 			if (trackOutput) {
 				output += data;
 			} else {
-				process.stdout.write(gutil.colors.grey(data.toString("utf8")));
+				process.stdout.write(c.grey(data.toString("utf8")));
 			}
 		};
 
@@ -168,19 +168,19 @@ module.exports = function (gulp, config) {
 		}
 
 		function completeWatch(watches) {
-			gutil.log(gutil.colors.grey("👓 watching: " + jekyllWatchFiles.join("\n\t")));
+			console.log(c.grey("👓 watching: " + jekyllWatchFiles.join("\n\t")));
 			gulp.watch(jekyllWatchFiles, [nspc + ":build"]);
-			gutil.log(gutil.colors.grey("✔ done"));
+			console.log(c.grey("✔ done"));
 			done();
 		}
 
-		gutil.log("Checking for local theme watch; loading jekyll config...");
+		console.log("Checking for local theme watch; loading jekyll config...");
 		var configPath = path.join(config.jekyll.src, "/_config.yml");
 		fs.readFile(configPath, function (err, contents) {
 			var theme = null;
 
 			if (err) {
-				gutil.log(gutil.colors.yellow("! loading `" + configPath + "` failed"));
+				console.log(c.yellow("! loading `" + configPath + "` failed"));
 				return completeWatch();
 			} else {
 				try {
@@ -188,34 +188,34 @@ module.exports = function (gulp, config) {
 
 					theme = yaml.theme;
 				} catch (e) {
-					gutil.log(gutil.colors.yellow("! parsing config failed"));
-					gutil.log(e);
+					console.log(c.yellow("! parsing config failed"));
+					console.log(e);
 					return completeWatch();
 				}
 			}
 
 			if (!theme) {
-				gutil.log(gutil.colors.grey("✔ no theme found, moving along"));
+				console.log(c.grey("✔ no theme found, moving along"));
 				return completeWatch();
 			}
 
-			gutil.log("Checking for local theme repo...");
+			console.log("Checking for local theme repo...");
 			runBundleCommand(["config", "local." + theme], true, function(err, output) {
 				if (err) {
-					gutil.log(gutil.colors.yellow("! running `bundle config` failed"));
+					console.log(c.yellow("! running `bundle config` failed"));
 					return completeWatch();
 				}
 
 				var themePath = parseBundleConfigPath(output);
 
 				if (themePath) {
-					gutil.log(gutil.colors.green("✔ found local theme at `" + themePath + "`, reading .gitignore"));
+					console.log(c.green("✔ found local theme at `" + themePath + "`, reading .gitignore"));
 					var baseThemeWatch = path.relative(cwd, themePath);
 
 					var gitignorePath = path.join(themePath, ".gitignore");
 					fetchGitignores(gitignorePath, function (err, ignores) {
 						if (err) {
-							gutil.log(gutil.colors.yellow("! loading `" + gitignorePath + "` failed. If the watch crashes, adding one will fix this."));
+							console.log(c.yellow("! loading `" + gitignorePath + "` failed. If the watch crashes, adding one will fix this."));
 							jekyllWatchFiles.push(baseThemeWatch + "/**/*");
 							return completeWatch();
 						}
@@ -246,8 +246,8 @@ module.exports = function (gulp, config) {
 					});
 				} else {
 					// Inform user for install
-					gutil.log(gutil.colors.yellow("! no local theme installed. Consider running:"));
-					gutil.log(gutil.colors.blue("bundle config local." + theme + " ~/path/to/project"));
+					console.log(c.yellow("! no local theme installed. Consider running:"));
+					console.log(c.blue("bundle config local." + theme + " ~/path/to/project"));
 					return completeWatch();
 				}
 

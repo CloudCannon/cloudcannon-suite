@@ -1,4 +1,4 @@
-var gutil = require("gulp-util"),
+var PluginError = require("plugin-error"),
 	through = require("through2").obj,
 	URLRewriter = require("cssurl").URLRewriter,
 	path = require("path");
@@ -16,7 +16,7 @@ module.exports = function (options) {
 		}
 
 		if (file.isStream()) {
-			return callback(new gutil.PluginError("cloudcannon-suite-dist-css", "Streaming not supported"));
+			return callback(new PluginError("cloudcannon-suite-dist-css", "Streaming not supported"));
 		}
 
 		file.sitePath = "/" + file.path.substring(file.base.length);

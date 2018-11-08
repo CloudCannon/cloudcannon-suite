@@ -1,4 +1,6 @@
-var gutil = require("gulp-util"),
+var Vinyl = require("vinyl"),
+	PluginError = require("plugin-error"),
+	c = require("ansi-colors"),
 	through = require("through2").obj,
 	sortObject = require("sort-object-keys"),
 	cheerio = require("cheerio"),
@@ -27,7 +29,7 @@ function handleHTMLFile(options) {
 			return callback(null, file);
 		}
 		if (file.isStream()) {
-			return callback(new gutil.PluginError("local-ejs", "Streaming not supported"));
+			return callback(new PluginError("local-ejs", "Streaming not supported"));
 		}
 
 		file.sitePath = "/" + file.path.substring(file.base.length);
@@ -112,8 +114,8 @@ module.exports = {
 				for (var newKey in additions) {
 					if (additions.hasOwnProperty(newKey)) {
 						if (locale[newKey] && locale[newKey] !== additions[newKey]) {
-							gutil.log(gutil.colors.yellow("Duplicate data-i18n") + " "
-								+ gutil.colors.blue(newKey));
+							console.log(c.yellow("Duplicate data-i18n") + " "
+								+ c.blue(newKey));
 						} else {
 							locale[newKey] = additions[newKey];
 						}
@@ -124,13 +126,13 @@ module.exports = {
 				var sorted = sortObject(locale);
 				cleanObj(sorted);
 
-				this.push(new gutil.File({
+				this.push(new Vinyl = require('vinyl');({
 					path: "source.json",
 					contents: new Buffer(JSON.stringify(sorted, null, "\t"))
 				}));
 
-				gutil.log(gutil.colors.green("Generation complete") + " "
-					+ gutil.colors.blue("i18n/source.json")
+				console.log(c.green("Generation complete") + " "
+					+ c.blue("i18n/source.json")
 					+ " available with " + Object.keys(sorted).length + " keys");
 
 				callback();
@@ -191,8 +193,8 @@ module.exports = {
 					$el.html(locale[key].wrappedTranslation || locale[key].translation);
 					locale[key].count++;
 				} else if ($el.html()) {
-					gutil.log(gutil.colors.yellow("Missing translation") + " "
-						+ gutil.colors.blue(targetLocale + file.sitePath) +
+					console.log(c.yellow("Missing translation") + " "
+						+ c.blue(targetLocale + file.sitePath) +
 						" [data-i18n=" + key + "]");
 				}
 
@@ -201,8 +203,8 @@ module.exports = {
 						$el.attr(attr, locale[key + "." + attr].translation);
 						locale[key + "." + attr].count++;
 					} else if ($el.attr(attr)) {
-						gutil.log(gutil.colors.yellow("Missing translation") + " "
-							+ gutil.colors.blue(targetLocale + file.sitePath) +
+						console.log(c.yellow("Missing translation") + " "
+							+ c.blue(targetLocale + file.sitePath) +
 							" [data-i18n=" + key + "][" + attr + "]");
 					}
 				});
