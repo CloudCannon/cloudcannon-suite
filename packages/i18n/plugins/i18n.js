@@ -126,7 +126,7 @@ module.exports = {
 				var sorted = sortObject(locale);
 				cleanObj(sorted);
 
-				this.push(new Vinyl = require('vinyl');({
+				this.push(Vinyl({
 					path: "source.json",
 					contents: new Buffer(JSON.stringify(sorted, null, "\t"))
 				}));
