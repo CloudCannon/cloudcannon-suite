@@ -126,9 +126,9 @@ module.exports = {
 				var sorted = sortObject(locale);
 				cleanObj(sorted);
 
-				this.push(Vinyl({
+				this.push(new Vinyl({
 					path: "source.json",
-					contents: new Buffer(JSON.stringify(sorted, null, "\t"))
+					contents: Buffer.from(JSON.stringify(sorted, null, "\t"))
 				}));
 
 				console.log(c.green("Generation complete") + " "
