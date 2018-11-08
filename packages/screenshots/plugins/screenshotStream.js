@@ -1,5 +1,5 @@
 const 	through2Concurrent = require('through2-concurrent'),
-		exec = require('await-exec'),
+		//exec = require('await-exec'),
 		fs = require('fs-extra'),
 		path = require("path");
 
