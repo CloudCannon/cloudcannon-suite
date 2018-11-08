@@ -1,6 +1,7 @@
 var c = require("ansi-colors"),
 	path = require("path"),
 	fs = require("fs"),
+	log = require("fancy-log"),
 	yamlParser = require("js-yaml")
 	defaults = require("defaults"),
 	gulpSequence = require("gulp-sequence"),
@@ -43,7 +44,7 @@ function fetchGitignores(gitignorePath, callback) {
 	fs.readFile(gitignorePath, function (err, ignoreContents) {
 		var ignores = {};
 		if (err) {
-			console.log(c.yellow("! loading `" + gitignorePath + "` failed"));
+			log(c.yellow("! loading `" + gitignorePath + "` failed"));
 		} else {
 			var lines = ignoreContents.toString("utf8").split("\n");
 
@@ -104,7 +105,7 @@ module.exports = function (gulp, config) {
 	};
 
 	function runBundleCommand(commands, trackOutput, done) {
-		console.log(c.blue("$") + " bundle " + commands.join(" "));
+		log(c.blue("$") + " bundle " + commands.join(" "));
 		var output = "";
 		function readOutput(data) {
 			if (trackOutput) {
@@ -168,19 +169,19 @@ module.exports = function (gulp, config) {
 		}
 
 		function completeWatch(watches) {
-			console.log(c.grey("👓 watching: " + jekyllWatchFiles.join("\n\t")));
+			log(c.grey("👓 watching: " + jekyllWatchFiles.join("\n\t")));
 			gulp.watch(jekyllWatchFiles, [nspc + ":build"]);
-			console.log(c.grey("✔ done"));
+			log(c.grey("✔ done"));
 			done();
 		}
 
-		console.log("Checking for local theme watch; loading jekyll config...");
+		log("Checking for local theme watch; loading jekyll config...");
 		var configPath = path.join(config.jekyll.src, "/_config.yml");
 		fs.readFile(configPath, function (err, contents) {
 			var theme = null;
 
 			if (err) {
-				console.log(c.yellow("! loading `" + configPath + "` failed"));
+				log(c.yellow("! loading `" + configPath + "` failed"));
 				return completeWatch();
 			} else {
 				try {
@@ -188,34 +189,34 @@ module.exports = function (gulp, config) {
 
 					theme = yaml.theme;
 				} catch (e) {
-					console.log(c.yellow("! parsing config failed"));
-					console.log(e);
+					log(c.yellow("! parsing config failed"));
+					log(e);
 					return completeWatch();
 				}
 			}
 
 			if (!theme) {
-				console.log(c.grey("✔ no theme found, moving along"));
+				log(c.grey("✔ no theme found, moving along"));
 				return completeWatch();
 			}
 
-			console.log("Checking for local theme repo...");
+			log("Checking for local theme repo...");
 			runBundleCommand(["config", "local." + theme], true, function(err, output) {
 				if (err) {
-					console.log(c.yellow("! running `bundle config` failed"));
+					log(c.yellow("! running `bundle config` failed"));
 					return completeWatch();
 				}
 
 				var themePath = parseBundleConfigPath(output);
 
 				if (themePath) {
-					console.log(c.green("✔ found local theme at `" + themePath + "`, reading .gitignore"));
+					log(c.green("✔ found local theme at `" + themePath + "`, reading .gitignore"));
 					var baseThemeWatch = path.relative(cwd, themePath);
 
 					var gitignorePath = path.join(themePath, ".gitignore");
 					fetchGitignores(gitignorePath, function (err, ignores) {
 						if (err) {
-							console.log(c.yellow("! loading `" + gitignorePath + "` failed. If the watch crashes, adding one will fix this."));
+							log(c.yellow("! loading `" + gitignorePath + "` failed. If the watch crashes, adding one will fix this."));
 							jekyllWatchFiles.push(baseThemeWatch + "/**/*");
 							return completeWatch();
 						}
@@ -246,8 +247,8 @@ module.exports = function (gulp, config) {
 					});
 				} else {
 					// Inform user for install
-					console.log(c.yellow("! no local theme installed. Consider running:"));
-					console.log(c.blue("bundle config local." + theme + " ~/path/to/project"));
+					log(c.yellow("! no local theme installed. Consider running:"));
+					log(c.blue("bundle config local." + theme + " ~/path/to/project"));
 					return completeWatch();
 				}
 

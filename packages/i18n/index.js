@@ -2,6 +2,7 @@ var async = require("async"),
 	fs = require("fs-extra"),
 	del = require("del"),
 	c = require("ansi-colors"),
+	log = require("fancy-log"),
 	path = require("path"),
 	defaults = require("defaults"),
 	webserver = require("gulp-webserver"),
@@ -67,7 +68,7 @@ module.exports = function (gulp, config) {
 		var returnedLocales = {};
 		fs.readdir(dir, function(err, files) {
 			if (err) {
-				console.log(c.red("Unable to read locales") + " from "
+				log(c.red("Unable to read locales") + " from "
 					+ c.blue(dir) + ": " + err.message);
 				return done(err);
 			}
@@ -79,7 +80,7 @@ module.exports = function (gulp, config) {
 
 				fs.readFile(path.join(dir, filename), function read(err, data) {
 					if (err) {
-						console.log(err);
+						log(err);
 						return next(err);
 					}
 
@@ -87,7 +88,7 @@ module.exports = function (gulp, config) {
 					try {
 						returnedLocales[key] = JSON.parse(data);
 					} catch (e) {
-						console.log(c.red("Malformed JSON") + " from "
+						log(c.red("Malformed JSON") + " from "
 							+ c.blue(dir + "/" + filename) + ": " + e.message);
 					}
 
@@ -113,7 +114,7 @@ module.exports = function (gulp, config) {
 	// Transfers properties files from the old CloudCannon format
 	// to the new i18n folder structure
 	gulp.task("i18n:legacy-transfer",  function (done) {
-		console.log(c.green("Transferring files") + " from "
+		log(c.green("Transferring files") + " from "
 			+ c.blue(config.i18n.legacy_path + "/*.properties")
 			+ " to "
 			+ c.blue(config.i18n.locale_src));
@@ -128,7 +129,7 @@ module.exports = function (gulp, config) {
 	gulp.task("i18n:legacy-update", gulpSequence("i18n:load-locales", "i18n:add-character-based-wordwraps", "i18n:load-wordwraps", "i18n:legacy-save-to-properties-files"));
 
 	gulp.task("i18n:legacy-save-to-properties-files", function (done) {
-		console.log(c.green("Transferring files") + " from "
+		log(c.green("Transferring files") + " from "
 			+ c.blue(config.i18n.locale_src + "/*.json")
 			+ " to "
 			+ c.blue(config.i18n.legacy_path));
@@ -160,7 +161,7 @@ module.exports = function (gulp, config) {
 	// Generate Source
 
 	gulp.task("i18n:generate",  function (done) {
-		console.log(c.green("Generating source locale") + " from "
+		log(c.green("Generating source locale") + " from "
 			+ c.blue(config.i18n._src)
 			+ " to "
 			+ c.blue(config.i18n._generated_locale_dest));
@@ -197,7 +198,7 @@ module.exports = function (gulp, config) {
 			if (!err) {
 				for (var localeName in returnedLocales) {
 					if (returnedLocales.hasOwnProperty(localeName)) {
-						console.log(localeName + " loaded from wrapped");
+						log(localeName + " loaded from wrapped");
 						locales[localeName] = returnedLocales[localeName];
 					}
 				}
@@ -259,7 +260,7 @@ module.exports = function (gulp, config) {
 						return next(err);
 					}
 
-					console.log(targetLocale + ": is absolutely wrapped!");
+					log(targetLocale + ": is absolutely wrapped!");
 					return next();
 				});
 			}, done);

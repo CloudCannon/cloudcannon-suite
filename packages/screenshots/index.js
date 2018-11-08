@@ -4,6 +4,7 @@ var fs = require('fs-extra'),
 	c = require("ansi-colors"),
 	_ = require("underscore"),
 	del = require("del"),
+	log = require("fancy-log"),
 	screenshotStream = require("./plugins/screenshotStream"),
 	webserver = require("gulp-webserver"),
 	Screenshotter = require('@cloudcannon/screenshot-util');
@@ -27,7 +28,7 @@ module.exports = async function (gulp, config) {
 	});
 
 	function renderScreenshots(src, screenshotter, namespace, done) {
-		console.log("Generating Screenshots from: '" + c.blue(src) + "'");
+		log("Generating Screenshots from: '" + c.blue(src) + "'");
 		return gulp.src("./" + src + "/**/*.html")
 			.pipe(screenshotStream(screenshotter,tagmap));
 	}
@@ -55,7 +56,7 @@ module.exports = async function (gulp, config) {
 		});
 
 		gulp.task("screenshots:" + namespace + "-render", ["screenshots:" + namespace + "-takescreens"], async function (done) {
-			console.log("Writing app index & tag map...");
+			log("Writing app index & tag map...");
 			await fs.createReadStream(path.join(__dirname, 'index.html')).pipe(fs.createWriteStream(path.join(screenshotter.options.dest, "index.html")));
 			await fs.writeFile(path.join(screenshotter.options.dest, "map.json"), JSON.stringify(tagmap, null, 2));
 			await screenshotter.shutdownServer();
@@ -63,7 +64,7 @@ module.exports = async function (gulp, config) {
 		});
 
 		gulp.task("screenshots:" + namespace + "-tool", ["screenshots:" + namespace + "-takescreens"], async function (done) {
-			console.log("Writing app index & tag map...");
+			log("Writing app index & tag map...");
 			await fs.createReadStream(path.join(__dirname, 'index.html')).pipe(fs.createWriteStream(path.join(screenshotter.options.dest, "index.html")));
 			await fs.writeFile(path.join(screenshotter.options.dest, "map.json"), JSON.stringify(tagmap, null, 2));
 			await screenshotter.shutdownServer();

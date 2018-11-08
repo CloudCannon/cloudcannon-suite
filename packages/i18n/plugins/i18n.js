@@ -3,6 +3,7 @@ var Vinyl = require("vinyl"),
 	c = require("ansi-colors"),
 	through = require("through2").obj,
 	sortObject = require("sort-object-keys"),
+	log = require("fancy-log"),
 	cheerio = require("cheerio"),
 	crypto = require("crypto"),
 	path = require("path");
@@ -36,7 +37,7 @@ function handleHTMLFile(options) {
 		file.sitePath = file.sitePath.replace(/\/index.html?/i, "/");
 
 		if (options.skipFile && options.skipFile(file)) {
-			console.log("Skipping " + file.sitePath);
+			log("Skipping " + file.sitePath);
 			return callback();
 		}
 
@@ -114,7 +115,7 @@ module.exports = {
 				for (var newKey in additions) {
 					if (additions.hasOwnProperty(newKey)) {
 						if (locale[newKey] && locale[newKey] !== additions[newKey]) {
-							console.log(c.yellow("Duplicate data-i18n") + " "
+							log(c.yellow("Duplicate data-i18n") + " "
 								+ c.blue(newKey));
 						} else {
 							locale[newKey] = additions[newKey];
@@ -131,7 +132,7 @@ module.exports = {
 					contents: Buffer.from(JSON.stringify(sorted, null, "\t"))
 				}));
 
-				console.log(c.green("Generation complete") + " "
+				log(c.green("Generation complete") + " "
 					+ c.blue("i18n/source.json")
 					+ " available with " + Object.keys(sorted).length + " keys");
 
@@ -193,7 +194,7 @@ module.exports = {
 					$el.html(locale[key].wrappedTranslation || locale[key].translation);
 					locale[key].count++;
 				} else if ($el.html()) {
-					console.log(c.yellow("Missing translation") + " "
+					log(c.yellow("Missing translation") + " "
 						+ c.blue(targetLocale + file.sitePath) +
 						" [data-i18n=" + key + "]");
 				}
@@ -203,7 +204,7 @@ module.exports = {
 						$el.attr(attr, locale[key + "." + attr].translation);
 						locale[key + "." + attr].count++;
 					} else if ($el.attr(attr)) {
-						console.log(c.yellow("Missing translation") + " "
+						log(c.yellow("Missing translation") + " "
 							+ c.blue(targetLocale + file.sitePath) +
 							" [data-i18n=" + key + "][" + attr + "]");
 					}

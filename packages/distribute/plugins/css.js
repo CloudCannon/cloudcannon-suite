@@ -1,5 +1,6 @@
 var PluginError = require("plugin-error"),
 	through = require("through2").obj,
+	log = require("fancy-log"),
 	URLRewriter = require("cssurl").URLRewriter,
 	path = require("path");
 
@@ -29,9 +30,9 @@ module.exports = function (options) {
 				return prepHref(href);
 			}
 
-			console.log(path.dirname(file.sitePath), href);
+			log(path.dirname(file.sitePath), href);
 			var absolutePath = path.resolve(path.dirname(file.sitePath), href);
-					console.log(absolutePath);
+			log(absolutePath);
 			return prepHref("/" + path.join(options.baseurl, absolutePath));
 		});
 

@@ -5,6 +5,7 @@ var del = require("del"),
 	webserver = require("gulp-webserver"),
 	htmlRewrite = require("./plugins/html"),
 	cssRewrite = require("./plugins/css"),
+	log = require("fancy-log"),
 	rename = require("gulp-rename"),
 	gulpSequence = require("gulp-sequence");
 
@@ -28,7 +29,7 @@ module.exports = function (gulp, config) {
 	config.serve = defaults(config.serve, configDefaults.serve);
 
 	if (!config.dist.baseurl) {
-		console.log(c.yellow("Warning:") + " Missing dist baseurl");
+		log(c.yellow("Warning:") + " Missing dist baseurl");
 		return;
 	}
 
