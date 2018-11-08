@@ -4,9 +4,10 @@ title: CloudCannon Suite
 permalink: /
 sitemap:
   changefreq: daily
-  priority: 0.8
-header_class: "landing"
+  priority: '0.8'
+header_class: short
 ---
+
 <h1 class="editable">Welcome</h1>
 <p class="editable">Welcome to a new life of maintainable static sites using Jekyll and Gulp. </p>
 
@@ -31,7 +32,7 @@ header_class: "landing"
 	{% for package in site.packages %}
 		<li>
 			<a href="{{ package.url }}">
-				<img src="{{ package.image }}">
+				<img src="{{ package.image }}" />
 				<strong>{{ package.title }}</strong>
 				<small>{{ package.tagline }}</small>
 			</a>
