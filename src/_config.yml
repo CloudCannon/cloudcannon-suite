@@ -104,3 +104,7 @@ _options:
     bulletedlist: true
     code: true
     styles: "/src/css/editor.css"
+
+header_classes:
+  - "landing"
+  - "short"
