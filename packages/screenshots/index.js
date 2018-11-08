@@ -1,19 +1,16 @@
 var imagemin = require("gulp-imagemin"),
 	fs = require('fs-extra'),
-	Screenshotter = require('@cloudcannon/screenshot-util'),
-	through = require('through2');
-	through2Concurrent = require('through2-concurrent');
 	path = require("path"),
 	defaults = require("defaults"),
 	gutil = require("gulp-util"),
 	_ = require("underscore"),
 	del = require("del"),
-	webserver = require("gulp-webserver"),
-	i18nCSS = fs.readFileSync(path.join(__dirname, "i18n-overlays.css"), "utf8");
+	screenshotStream = require("./plugins/screenshotStream"),
+	webserver = require("gulp-webserver");
 
 require('events').EventEmitter.prototype._maxListeners = 100;
+
 const tagmap = {};	
-const timeout = ms => new Promise(res => setTimeout(res, ms));
 
 module.exports = async function (gulp, config) {
 	config = config || {};
@@ -96,61 +93,4 @@ module.exports = async function (gulp, config) {
 			registerTasks(namespace, config.sites[namespace]);
 		}
 	}
-};
-
-const screenshotStream = function (screenshotter) {
-	screenshotter.launch();
-	screenshotter.serve();
-
-	const stream = through2Concurrent.obj({maxConcurrency: 10}, async function(file, enc, cb) {
-		await screenshotter.puppetCheck();
-		let serverUrl = await screenshotter.serve();
-		let srcPath = path.join(process.cwd(), screenshotter.options.path);
-		let urlPath = path.relative(srcPath, file.path);
-		let page = await screenshotter.loadPage(serverUrl, urlPath, {
-			name: "desktop",
-			width: 1920,
-			height: 1080
-		});
-
-		if (!page) {
-			return cb();
-		}
-
-		const tags = await page.evaluate(() => {
-			const i18ntags = Array.from(document.querySelectorAll('[data-i18n]'))
-			return i18ntags.map(i18ntag => ({
-				content: i18ntag.innerHTML,
-				left: i18ntag.getBoundingClientRect().left,
-				top: i18ntag.getBoundingClientRect().top,
-				right: i18ntag.getBoundingClientRect().right,
-				bottom: i18ntag.getBoundingClientRect().bottom,
-				i18n: i18ntag.getAttribute('data-i18n'),
-				type: i18ntag.tagName.toLowerCase()
-			}))
-		}).catch(e => e);
-		tags.forEach(i18ntag => {
-			tagmap[i18ntag.i18n] = tagmap[i18ntag.i18n] || {pages: [], content: []};
-			let formatUrl = urlPath.replace(/index\.html/, '');
-			formatUrl = formatUrl.replace(/^\//, '');
-			tagmap[i18ntag.i18n].pages.push({url: formatUrl, type: i18ntag.type});
-			if (tagmap[i18ntag.i18n].content.indexOf(i18ntag.content) < 0) {
-				tagmap[i18ntag.i18n].content.push(i18ntag.content);
-			}
-		});
-
-		let img = await screenshotter.takeScreenshot(page).catch(e => e);
-
-		if (img) {
-			let shotDir = path.join(screenshotter.options.dest, urlPath);
-			await fs.ensureDir(path.dirname(shotDir))
-			await fs.writeFile(shotDir.replace(/html$/, 'png'), img, (error) => {if(error)console.log(error)});
-			await fs.writeFile(shotDir.replace(/html$/, 'json'), JSON.stringify([...tags], null, 2));
-		}
-
-		this.push(file);
-		cb();
-	});
-
-	return stream;
 };
