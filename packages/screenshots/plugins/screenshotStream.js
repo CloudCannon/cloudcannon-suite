@@ -1,13 +1,13 @@
-const 	through2Concurrent = require('through2-concurrent'),
-		//exec = require('await-exec'),
-		fs = require('fs-extra'),
-		path = require("path");
+const through = require("through2").obj,
+	//exec = require('await-exec'),
+	fs = require('fs-extra'),
+	path = require("path");
 
 module.exports = function (screenshotter, tagmap) {
 	screenshotter.launch();
 	screenshotter.serve();
 
-	const stream = through2Concurrent.obj({maxConcurrency: 1}, async function(file, enc, cb) {
+	return through(async function(file, enc, cb) {
 		await screenshotter.puppetCheck();
 		let serverUrl = await screenshotter.serve();
 		let srcPath = path.join(process.cwd(), screenshotter.options.path);
@@ -56,7 +56,7 @@ module.exports = function (screenshotter, tagmap) {
 		});
 
 		let img = await screenshotter.takeScreenshot(page).catch(e => e);
-		
+
 		let shotDir = path.join(screenshotter.options.dest, urlPath);
 		await fs.ensureDir(path.dirname(shotDir))
 
@@ -67,10 +67,8 @@ module.exports = function (screenshotter, tagmap) {
 		}
 
 		await fs.writeFile(shotDir.replace(/html$/, 'json'), JSON.stringify([...tags], null, 2));
-		
+
 		this.push(file);
 		cb();
 	});
-
-	return stream;
 };

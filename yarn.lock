@@ -2956,13 +2956,6 @@ supports-color@^5.3.0:
   dependencies:
     has-flag "^3.0.0"
 
-through2-concurrent@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/through2-concurrent/-/through2-concurrent-2.0.0.tgz#c9dd2c146504ec9962dbc86a5168b63d662669fa"
-  integrity sha512-R5/jLkfMvdmDD+seLwN7vB+mhbqzWop5fAjx5IX8/yQq7VhBhzDmhXgaHAOnhnWkCpRMM7gToYHycB0CS/pd+A==
-  dependencies:
-    through2 "^2.0.0"
-
 through2@^0.5.0, through2@^0.5.1:
   version "0.5.1"
   resolved "https://registry.yarnpkg.com/through2/-/through2-0.5.1.tgz#dfdd012eb9c700e2323fd334f38ac622ab372da7"

@@ -50,7 +50,6 @@
     "sort-object-keys": "^1.1.2",
     "srcset": "^1.0.0",
     "through2": "^3.0.0",
-    "through2-concurrent": "^2.0.0",
     "underscore": "^1.9.1",
     "vinyl": "^2.2.0"
   }
