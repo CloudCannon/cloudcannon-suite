@@ -1,7 +1,7 @@
 ---
 title: Distribute
 namespace: dist
-tagline: Baseurl configured in one spot not everywhere
+description: Baseurl configured in one spot not everywhere
 image: /images/shipping.svg
 dev_path: packages/distribute
 _is_package: true

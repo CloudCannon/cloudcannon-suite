@@ -1,7 +1,7 @@
 ---
 title: Help
 namespace: help
-tagline: List the available tasks
+description: List the available tasks
 image: /images/help.svg
 dev_path: packages/help
 _is_package: true

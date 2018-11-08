@@ -1,7 +1,7 @@
 ---
 title: Dev
 namespace: jekyllDev
-tagline: Develop your Jekyll site
+description: Develop your Jekyll site
 image: /images/build.svg
 dev_path: packages/jekyll-dev
 _is_package: true

@@ -1,7 +1,7 @@
 ---
 title: Docs
 namespace: jekyllDocs
-tagline: Document your site using the same tools
+description: Document your site using the same tools
 image: /images/docs.svg
 _is_package: true
 dev_path: packages/jekyll-docs

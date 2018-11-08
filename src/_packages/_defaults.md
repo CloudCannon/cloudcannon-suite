@@ -1,7 +1,7 @@
 ---
 title:
 namespace:
-tagline:
+description:
 image:
 dev_path:
 _is_package: true
