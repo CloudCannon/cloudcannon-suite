@@ -7,7 +7,7 @@
 		{% for item in sorted %}
 			{% if item.show_in_suite_nav %}
 				<li class="nav-item top-level {% if item.url == page.url %}current{% endif %}">
-					<a href="{{ item.url }}">{{ item.title }}</a>
+					<a href="{{ item.url }}"><img src="{{ item.image }}" width="18" height="18" />{{ item.title }}</a>
 				</li>
 			{% endif %}
 		{% endfor %}
