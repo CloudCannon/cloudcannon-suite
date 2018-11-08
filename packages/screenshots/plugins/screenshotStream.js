@@ -1,12 +1,13 @@
-const Screenshotter = require('@cloudcannon/screenshot-util');
-const through2Concurrent = require('through2-concurrent');
-const exec = require('await-exec');
+const 	through2Concurrent = require('through2-concurrent'),
+		exec = require('await-exec'),
+		fs = require('fs-extra'),
+		path = require("path");
 
-module.exports = function (screenshotter) {
+module.exports = function (screenshotter, tagmap) {
 	screenshotter.launch();
 	screenshotter.serve();
 
-	const stream = through2Concurrent.obj({maxConcurrency: 10}, async function(file, enc, cb) {
+	const stream = through2Concurrent.obj({maxConcurrency: 1}, async function(file, enc, cb) {
 		await screenshotter.puppetCheck();
 		let serverUrl = await screenshotter.serve();
 		let srcPath = path.join(process.cwd(), screenshotter.options.path);
@@ -54,14 +55,15 @@ module.exports = function (screenshotter) {
 			}
 		});
 
-		let img = false;//await screenshotter.takeScreenshot(page).catch(e => e);
+		let img = await screenshotter.takeScreenshot(page).catch(e => e);
 		
 		let shotDir = path.join(screenshotter.options.dest, urlPath);
 		await fs.ensureDir(path.dirname(shotDir))
 
 		if (img) {
 			await fs.writeFile(shotDir.replace(/html$/, 'png'), img, (error) => {if(error)console.log(error)});
-			await exec(`convert ${shotDir.replace(/html$/, 'png')} -crop 240x240 ${shotDir.replace(/html$/, 'tiles')}/tile%d.png`);
+			//await fs.ensureDir(shotDir.replace(/html$/, 'tiles/'));
+			//await exec(`convert ${shotDir.replace(/html$/, 'png')} -crop 240x240 ${shotDir.replace(/html$/, 'tiles')}/tile%d.png`);
 		}
 
 		await fs.writeFile(shotDir.replace(/html$/, 'json'), JSON.stringify([...tags], null, 2));

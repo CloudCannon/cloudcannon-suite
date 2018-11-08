@@ -6,7 +6,8 @@ var imagemin = require("gulp-imagemin"),
 	_ = require("underscore"),
 	del = require("del"),
 	screenshotStream = require("./plugins/screenshotStream"),
-	webserver = require("gulp-webserver");
+	webserver = require("gulp-webserver"),
+	Screenshotter = require('@cloudcannon/screenshot-util');
 
 require('events').EventEmitter.prototype._maxListeners = 100;
 
@@ -29,7 +30,7 @@ module.exports = async function (gulp, config) {
 	function renderScreenshots(src, screenshotter, namespace, done) {
 		gutil.log("Generating Screenshots from: '" + gutil.colors.blue(src) + "'");
 		return gulp.src("./" + src + "/**/*.html")
-			.pipe(screenshotStream(screenshotter));
+			.pipe(screenshotStream(screenshotter,tagmap));
 	}
 
 	function registerTasks(namespace, options) {
