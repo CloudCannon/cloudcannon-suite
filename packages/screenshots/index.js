@@ -59,7 +59,6 @@ module.exports = async function (gulp, config) {
 			log("Writing app index & tag map...");
 			await fs.createReadStream(path.join(__dirname, 'index.html')).pipe(fs.createWriteStream(path.join(screenshotter.options.dest, "index.html")));
 			await fs.writeFile(path.join(screenshotter.options.dest, "map.json"), JSON.stringify(tagmap, null, 2));
-			await screenshotter.shutdownServer();
 		});
 
 		gulp.task("screenshots:" + namespace + "-tool", ["screenshots:" + namespace + "-render"], async function (done) {

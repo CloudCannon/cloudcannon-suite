@@ -5,14 +5,12 @@ const through = require("through2").obj,
 	path = require("path");
 
 module.exports = function (screenshotter, tagmap) {
-	screenshotter.serve();
-
 	return through(async function(file, enc, cb) {
 		log(`Launching browser`)
 		await screenshotter.launchBrowser();
 
 		log(`Launching server`)
-		let serverUrl = await screenshotter.serve();
+		let serverUrl = await screenshotter.launchServer();
 		let srcPath = path.join(process.cwd(), screenshotter.options.path);
 		let urlPath = path.relative(srcPath, file.path);
 
@@ -24,7 +22,8 @@ module.exports = function (screenshotter, tagmap) {
 		});
 
 		if (!page) {
-			log(`No page, shutting down browser`)
+			log(`No page, shutting down browser and server`);
+			await screenshotter.shutdownServer();
 			await screenshotter.shutdownBrowser();
 			return cb();
 		}
@@ -68,7 +67,8 @@ module.exports = function (screenshotter, tagmap) {
 		log(`Taking screenshot`)
 		let img = await screenshotter.takeScreenshot(page);
 
-		log(`Shutting down browser`)
+		log(`Shutting down browser and server`);
+		await screenshotter.shutdownServer();
 		await screenshotter.shutdownBrowser();
 
 		log(`Ensuring directory`)

@@ -2,15 +2,16 @@
 # yarn lockfile v1
 
 
-"@cloudcannon/screenshot-util@^1.0.28":
-  version "1.0.28"
-  resolved "https://registry.yarnpkg.com/@cloudcannon/screenshot-util/-/screenshot-util-1.0.28.tgz#443de4b74e33cecd3e3f7f55916da645c0f1b5fa"
-  integrity sha512-PwEvbodQDK7VdEZHV/sosWGQbeC5Xy3BWG4pTR366mt+wtpIFlD+mdJ0+Zc5jSIvQv5cfiSrGbGx8JX4Cf5NsQ==
+"@cloudcannon/screenshot-util@^1.1.1":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@cloudcannon/screenshot-util/-/screenshot-util-1.1.1.tgz#7a26a4dc4924a5b831d522a27d4fa7ef1a279728"
+  integrity sha512-ZXhcdSIr14JiFMeBvcEhLNpzGJb7Tq6gBaKmnTsSoqJJZc7lSG7+NJbA3+L5FoqKTLlxqmbZk+hAqRZkKlZH6g==
   dependencies:
     ansi-colors "^3.0.5"
     express "^4.16.3"
     fancy-log "^1.3.2"
     find-free-port "^2.0.0"
+    morgan "^1.9.1"
     puppeteer "^1.10.0"
 
 "@types/node@*":
@@ -197,6 +198,13 @@ base@^0.11.1:
     isobject "^3.0.1"
     mixin-deep "^1.2.0"
     pascalcase "^0.1.1"
+
+basic-auth@~2.0.0:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/basic-auth/-/basic-auth-2.0.1.tgz#b998279bf47ce38344b4f3cf916d4679bbf51e3a"
+  integrity sha512-NF+epuEdnUYVlGuhaxbbq+dvJttwLnGY+YixlXlME5KpQ5W3CnXA5cVTneY3SPbPDRkcjMbifrwmFYcClgOZeg==
+  dependencies:
+    safe-buffer "5.1.2"
 
 batch@0.6.1:
   version "0.6.1"
@@ -2087,6 +2095,17 @@ mkdirp@0.5.1, mkdirp@^0.5.0:
   dependencies:
     minimist "0.0.8"
 
+morgan@^1.9.1:
+  version "1.9.1"
+  resolved "https://registry.yarnpkg.com/morgan/-/morgan-1.9.1.tgz#0a8d16734a1d9afbc824b99df87e738e58e2da59"
+  integrity sha512-HQStPIV4y3afTiCYVxirakhlCfGkI161c76kKFca7Fk1JusM//Qeo1ej2XaMniiNeaZklMVrh3vTtIzpzwbpmA==
+  dependencies:
+    basic-auth "~2.0.0"
+    debug "2.6.9"
+    depd "~1.1.2"
+    on-finished "~2.3.0"
+    on-headers "~1.0.1"
+
 ms@2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.0.0.tgz#5608aeadfc00be6c2901df5f9861788de0d597c8"
@@ -2225,6 +2244,11 @@ on-finished@~2.3.0:
   integrity sha1-IPEzZIGwg811M3mSoWlxqi2QaUc=
   dependencies:
     ee-first "1.1.1"
+
+on-headers@~1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/on-headers/-/on-headers-1.0.1.tgz#928f5d0f470d49342651ea6794b0857c100693f7"
+  integrity sha1-ko9dD0cNSTQmUepnlLCFfBAGk/c=
 
 once@^1.3.0:
   version "1.4.0"
