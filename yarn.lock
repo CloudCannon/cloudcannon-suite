@@ -3,9 +3,9 @@
 
 
 "@cloudcannon/screenshot-util@^1.0.14":
-  version "1.0.14"
-  resolved "https://registry.yarnpkg.com/@cloudcannon/screenshot-util/-/screenshot-util-1.0.14.tgz#03eb92bcd97c6a5c945f807d8bfc6cce606ebc51"
-  integrity sha512-jvUOBQzwJKHsploPQZFD1+EXNJR7FbaRX4Sq8e71CJtSntoG6YTf+UpeDz+lQzLwxPPXv6vW8h/3N8eRSPD5Mg==
+  version "1.0.15"
+  resolved "https://registry.yarnpkg.com/@cloudcannon/screenshot-util/-/screenshot-util-1.0.15.tgz#4175ca65c5362f0a34206db9406f6bcb804aa6d2"
+  integrity sha512-DymRYYZbNBvPevqkB5qHQVmLvaqSZgn5zOqxHPq9Mwfe+7OV+qlQWlJSuv4eOkNmoXr39opa2rKC8iZEdcWBBg==
   dependencies:
     ansi-colors "^3.0.5"
     express "^4.16.3"
