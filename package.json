@@ -1,6 +1,6 @@
 {
   "name": "@cloudcannon/suite",
-  "version": "1.0.28",
+  "version": "1.0.29",
   "description": "A suite of gulp tools to manage static sites on CloudCannon",
   "main": "index.js",
   "directories": {
