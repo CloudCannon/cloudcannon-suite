@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@cloudcannon/screenshot-util@^1.0.26":
-  version "1.0.26"
-  resolved "https://registry.yarnpkg.com/@cloudcannon/screenshot-util/-/screenshot-util-1.0.26.tgz#646600e222153a91513a1365e53c14d7a088979a"
-  integrity sha512-8F+KLFaWOpC1+3r8cqj1IqMWam5BYTsCiKIKhR2gayZPxihpl09Gd/BCZBc5VhIlOmR4oVPwr+v5DNHoeURPAA==
+"@cloudcannon/screenshot-util@^1.0.28":
+  version "1.0.28"
+  resolved "https://registry.yarnpkg.com/@cloudcannon/screenshot-util/-/screenshot-util-1.0.28.tgz#443de4b74e33cecd3e3f7f55916da645c0f1b5fa"
+  integrity sha512-PwEvbodQDK7VdEZHV/sosWGQbeC5Xy3BWG4pTR366mt+wtpIFlD+mdJ0+Zc5jSIvQv5cfiSrGbGx8JX4Cf5NsQ==
   dependencies:
     ansi-colors "^3.0.5"
     express "^4.16.3"
