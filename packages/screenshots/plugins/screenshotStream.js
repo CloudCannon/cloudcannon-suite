@@ -22,6 +22,7 @@ module.exports = function (screenshotter, tagmap) {
 			return cb();
 		}
 
+		log(`Finding data-i18n tags`)
 		const tags = await page.evaluate(() => {
 			const i18ntags = Array.from(document.querySelectorAll('[data-i18n]'))
 			return i18ntags.map(i18ntag => {
@@ -45,6 +46,8 @@ module.exports = function (screenshotter, tagmap) {
 				return tagObj;
 			});
 		}).catch(e => console.error(e));
+
+		log(`Formatting data-i18n tags`)
 		tags.forEach(i18ntag => {
 			tagmap[i18ntag.i18n] = tagmap[i18ntag.i18n] || {pages: [], content: []};
 			let formatUrl = urlPath.replace(/index\.html/, '');
@@ -55,17 +58,21 @@ module.exports = function (screenshotter, tagmap) {
 			}
 		});
 
-		let img = await screenshotter.takeScreenshot(page).catch(e => e);
+		let img = await screenshotter.takeScreenshot(page);
 
 		let shotDir = path.join(screenshotter.options.dest, urlPath);
+
+		log(`Ensuring directory`)
 		await fs.ensureDir(path.dirname(shotDir))
 
 		if (img) {
+			log(`Outputting image`)
 			await fs.writeFile(shotDir.replace(/html$/, 'png'), img, (error) => {if(error)console.log(error)});
 			//await fs.ensureDir(shotDir.replace(/html$/, 'tiles/'));
 			//await exec(`convert ${shotDir.replace(/html$/, 'png')} -crop 240x240 ${shotDir.replace(/html$/, 'tiles')}/tile%d.png`);
 		}
 
+		log(`Outputting json`)
 		await fs.writeFile(shotDir.replace(/html$/, 'json'), JSON.stringify([...tags], null, 2));
 
 		this.push(file);
