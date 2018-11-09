@@ -1,5 +1,6 @@
 const through = require("through2").obj,
 	//exec = require('await-exec'),
+	log = require("fancy-log"),
 	fs = require('fs-extra'),
 	path = require("path");
 
