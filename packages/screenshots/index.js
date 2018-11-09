@@ -60,19 +60,12 @@ module.exports = async function (gulp, config) {
 			await fs.createReadStream(path.join(__dirname, 'index.html')).pipe(fs.createWriteStream(path.join(screenshotter.options.dest, "index.html")));
 			await fs.writeFile(path.join(screenshotter.options.dest, "map.json"), JSON.stringify(tagmap, null, 2));
 			await screenshotter.shutdownServer();
-			await screenshotter.shutdownBrowser();
 		});
 
-		gulp.task("screenshots:" + namespace + "-tool", ["screenshots:" + namespace + "-takescreens"], async function (done) {
-			log("Writing app index & tag map...");
-			await fs.createReadStream(path.join(__dirname, 'index.html')).pipe(fs.createWriteStream(path.join(screenshotter.options.dest, "index.html")));
-			await fs.writeFile(path.join(screenshotter.options.dest, "map.json"), JSON.stringify(tagmap, null, 2));
-			await screenshotter.shutdownServer();
-			await screenshotter.shutdownBrowser();
+		gulp.task("screenshots:" + namespace + "-tool", ["screenshots:" + namespace + "-render"], async function (done) {
 			gulp.src(config.dest + "/" + namespace)
-			.pipe(webserver({open: true}));
+				.pipe(webserver({open: true}));
 		});
-
 
 		gulp.task("screenshots:" + namespace, ["screenshots:" + namespace + "-render"], function () {
 			if (config.fast) {

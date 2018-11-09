@@ -5,14 +5,18 @@ const through = require("through2").obj,
 	path = require("path");
 
 module.exports = function (screenshotter, tagmap) {
-	screenshotter.launch();
 	screenshotter.serve();
 
 	return through(async function(file, enc, cb) {
-		await screenshotter.puppetCheck();
+		log(`Launching browser`)
+		await screenshotter.launchBrowser();
+
+		log(`Launching server`)
 		let serverUrl = await screenshotter.serve();
 		let srcPath = path.join(process.cwd(), screenshotter.options.path);
 		let urlPath = path.relative(srcPath, file.path);
+
+		log(`Launching page`)
 		let page = await screenshotter.loadPage(serverUrl, urlPath, {
 			name: "desktop",
 			width: 1920,
@@ -20,6 +24,8 @@ module.exports = function (screenshotter, tagmap) {
 		});
 
 		if (!page) {
+			log(`No page, shutting down browser`)
+			await screenshotter.shutdownBrowser();
 			return cb();
 		}
 
@@ -59,11 +65,14 @@ module.exports = function (screenshotter, tagmap) {
 			}
 		});
 
+		log(`Taking screenshot`)
 		let img = await screenshotter.takeScreenshot(page);
 
-		let shotDir = path.join(screenshotter.options.dest, urlPath);
+		log(`Shutting down browser`)
+		await screenshotter.shutdownBrowser();
 
 		log(`Ensuring directory`)
+		let shotDir = path.join(screenshotter.options.dest, urlPath);
 		await fs.ensureDir(path.dirname(shotDir))
 
 		if (img) {
