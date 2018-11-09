@@ -23,7 +23,7 @@ module.exports = async function (gulp, config) {
 			docs: {"src": "dist/docs", "portInc": 3},
 			dist: {"src": "dist/prod", "portInc": 4}
 		},
-		fast: true,
+		requestFilters: ['cdn.walkme.com', 'www.googletagmanager.com', 'www.google-analytics.com', 'www.youtube.com'],
 		count: 3
 	});
 
@@ -47,6 +47,7 @@ module.exports = async function (gulp, config) {
 			fullPage: true,
 			count: config.count,
 			docker: process.env.DOCKER_SCREENSHOTS || false,
+			requestFilters: config.requestFilters,
 			delay: 1000,
 			portInc: options.portInc
 		})
@@ -55,25 +56,15 @@ module.exports = async function (gulp, config) {
 			return renderScreenshots(options.src, screenshotter, namespace);
 		});
 
-		gulp.task("screenshots:" + namespace + "-render", ["screenshots:" + namespace + "-takescreens"], async function (done) {
+		gulp.task("screenshots:" + namespace, ["screenshots:" + namespace + "-takescreens"], async function (done) {
 			log("Writing app index & tag map...");
 			await fs.createReadStream(path.join(__dirname, 'index.html')).pipe(fs.createWriteStream(path.join(screenshotter.options.dest, "index.html")));
 			await fs.writeFile(path.join(screenshotter.options.dest, "map.json"), JSON.stringify(tagmap, null, 2));
 		});
 
-		gulp.task("screenshots:" + namespace + "-tool", ["screenshots:" + namespace + "-render"], async function (done) {
+		gulp.task("screenshots:" + namespace + "-tool", ["screenshots:" + namespace], async function (done) {
 			gulp.src(config.dest + "/" + namespace)
 				.pipe(webserver({open: true}));
-		});
-
-		gulp.task("screenshots:" + namespace, ["screenshots:" + namespace + "-render"], function () {
-			if (config.fast) {
-				return;
-			}
-
-			return gulp.src(options.src + "/**/*").pipe(imagemin({
-				verbose: true
-			}));
 		});
 	}
 
