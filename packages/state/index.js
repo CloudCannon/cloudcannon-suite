@@ -34,23 +34,23 @@ module.exports = function (gulp, config) {
 
 	var fullDest = path.join(config.state.dest, config.state.baseurl);
 
-	gulp.task("dist:clean", function () {
+	gulp.task("state:clean", function () {
 		return del(config.state.dest);
 	});
 
-	gulp.task("dist:html-dependencies", function () {
+	gulp.task("state:html-dependencies", function () {
 		return gulp.src(config.state.src + "/**/*.html")
 			.pipe(htmlDependencies())
 			.pipe(gulp.dest(fullDest));
 	});
 
-	gulp.task("dist:css-dependencies", function () {
+	gulp.task("state:css-dependencies", function () {
 		return gulp.src(config.state.src + "/**/*.css")
 			.pipe(cssDependencies())
 			.pipe(gulp.dest(fullDest));
 	});
 
-	gulp.task("dist:clone-assets", function () {
+	gulp.task("state:clone-assets", function () {
 		return gulp.src([
 				config.state.src + "/**/*",
 				"!" + config.state.src + "/**/*.html",
@@ -59,16 +59,16 @@ module.exports = function (gulp, config) {
 			.pipe(gulp.dest(fullDest));
 	});
 
-	gulp.task("dist:build", gulpSequence("dist:clean", ["dist:html-dependencies", "dist:css-dependencies", "dist:clone-assets"]));
+	gulp.task("state:build", gulpSequence("state:clean", ["state:html-dependencies", "state:css-dependencies", "state:clone-assets"]));
 
 	// -----
 	// Serve
 
-	gulp.task("dist:watch", function () {
-		gulp.watch(config.state._src + "/**/*", ["dist:build"]);
+	gulp.task("state:watch", function () {
+		gulp.watch(config.state._src + "/**/*", ["state:build"]);
 	});
 
-	gulp.task("dist:serve", ["dist:build"], function() {
+	gulp.task("state:serve", ["state:build"], function() {
 		return gulp.src(config.state.dest)
 			.pipe(webserver({
 				open: path.join(config.state.baseurl, config.serve.path),
@@ -80,5 +80,5 @@ module.exports = function (gulp, config) {
 	// -------
 	// Default
 
-	gulp.task("dist", gulpSequence("dist:serve", "dist:watch"));
+	gulp.task("state", gulpSequence("state:serve", "state:watch"));
 };
