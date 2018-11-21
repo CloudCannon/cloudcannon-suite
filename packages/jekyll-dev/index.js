@@ -5,7 +5,7 @@ var c = require("ansi-colors"),
 	yamlParser = require("js-yaml")
 	defaults = require("defaults"),
 	gulpSequence = require("gulp-sequence"),
-	webserver = require("gulp-webserver"),
+	webserver = require("gulp-server-livereload"),
 	childProcess = require("child_process");
 
 var configDefaults = {
@@ -259,7 +259,12 @@ module.exports = function (gulp, config) {
 
 	gulp.task(nspc + ":serve", function() {
 		var options = {
-			port: config.serve.port
+			port: config.serve.port,
+			livereload: {
+				enable: true,
+				clientConsole: true,
+			}
+
 		};
 
 		if (config.serve.open) {

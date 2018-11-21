@@ -53,5 +53,8 @@
     "through2": "^3.0.0",
     "underscore": "^1.9.1",
     "vinyl": "^2.2.0"
+  },
+  "devDependencies": {
+    "gulp-server-livereload": "^1.9.2"
   }
 }
