@@ -55,6 +55,7 @@
     "vinyl": "^2.2.0"
   },
   "devDependencies": {
+    "browser-sync": "^2.26.3",
     "gulp-server-livereload": "^1.9.2"
   }
 }
