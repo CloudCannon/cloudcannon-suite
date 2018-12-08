@@ -1,0 +1,6 @@
+{ 
+  "lowerCaseAttributeNames": false, 
+  "decodeEntities": false,
+  "withStartIndices": true, 
+  "xmlMode": true
+}

@@ -4,5 +4,6 @@ module.exports = {
 	screenshots: require("./packages/screenshots"),
 	i18n: require("./packages/i18n"),
 	dist: require("./packages/distribute"),
-	help: require("./packages/help")
+	help: require("./packages/help"),
+	proofer: require("./packages/proofer")
 };
