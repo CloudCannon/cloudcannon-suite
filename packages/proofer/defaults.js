@@ -21,6 +21,7 @@ module.exports = {
 	log_level: ":info",
 	only_4xx: false,
 	src: "dist/site",
+	output: "dist/reports/proofer.json",
 	url_ignore: [],
 	url_swap: {},
 	verbose: false,

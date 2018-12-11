@@ -1,10 +1,10 @@
 const PluginError = require("plugin-error");
-const async = require('async');
 const Promise = require("bluebird");
 const through = require("through2").obj;
 const parser = require("./parser");
 const checker = require("./checker");
 const reporter = require("./reporter");
+const cache = require('./cache');
 const concurrency = 5;
 
 module.exports = {
@@ -12,6 +12,7 @@ module.exports = {
 		options = options || {};
 		
 		var files = [];
+		cache.init(options);
 
 		return through((file, encoding, callback) => {
 			this.processFile(file, encoding, files, callback);
@@ -45,10 +46,16 @@ module.exports = {
 				return checker.check(file, options); 
 			}, 
 			{ concurrency: concurrency });
-		}).then((files) => {
-			return checker.finalize();
 		}).then(() => {
-			reporter.output(options);
+			return checker.finalize();
+		})
+		.then(() => {
+			return reporter.output(options)
+		})
+		.then(() => {
+			return cache.persist()
+		})
+		.then(() => {
 			callback();
 		}).catch((error) => {
 			callback(error);

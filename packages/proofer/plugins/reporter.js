@@ -1,4 +1,6 @@
 const log = require("fancy-log");
+const Promise = require("bluebird");
+const fs = require("fs-extra");
 
 var reporter = function reporter(){
 
@@ -11,6 +13,8 @@ var reporter = function reporter(){
 			message: message,
 			startIndex: this.getStartIndex($el)
 		};
+
+		log(this.outputError(l));
 		
 		this.logs.push(l);
 
@@ -41,10 +45,27 @@ var reporter = function reporter(){
 	}
 
 	this.output = function (options) {
+
 		log(this.logs.length + " errors found");
-		for (var l in this.logs) {
-			log(this.logs[l]);
+		
+		if ('output' in options && options.output !== '') {
+			var json = JSON.stringify(this.logs);
+			return fs.ensureFile(options.output)
+			.then(() => {
+				return fs.writeJson(options.output, this.logs)
+			})
+			.then(() => {
+				log("Output logs to " + options.output);
+			}).catch((err) => {
+				console.log(err);
+			});
 		}
+
+		return true;
+	}
+
+	this.outputError = function (log) {
+		return log.message + " (line " + log.lineNumber + ")";
 	}
 }
 

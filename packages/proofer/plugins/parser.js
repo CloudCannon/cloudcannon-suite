@@ -23,7 +23,7 @@ module.exports = {
 			file.$ = this.filterIgnoredElements($); 
 		}
 		
-		cache.add(file.path, file.$, false, 3600);
+		cache.add(file.path, file.$, false);
 
 		return file;
 	},

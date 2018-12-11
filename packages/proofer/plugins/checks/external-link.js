@@ -104,7 +104,6 @@ var externalLink = function externalLink() {
 	},
 
 	this.checkExternalHash = function (links) {
-
 		if (!('check_external_hash' in links[0].options 
 				&& links[0].options['check_external_hash'] === true)) {
 			return false;
@@ -131,9 +130,10 @@ var externalLink = function externalLink() {
 		return this.headUrl(url)
 		.then((statusCode) => {
 			result = { status: statusCode, body: null };
-			cache.add(url, result, true, 3600);
+			cache.add(url, result, true);
 			return statusCode;
 		}).catch((err) => {
+			console.log(err);
 			return false;
 		});
 	},
@@ -150,7 +150,7 @@ var externalLink = function externalLink() {
 		} else {
 			return request(url).then((response) => {
 				result = { status: response.statusCode, body: response.body };
-				cache.add(url, result, true, 3600);
+				cache.add(url, result, true);
 				return response.body;
 			}).catch((err) => {
 				throw err;

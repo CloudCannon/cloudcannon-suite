@@ -104,7 +104,7 @@ var internalLink = function internalLink() {
 						return this.getFile(path);
 					} else {
 						return new Promise((resolve, reject) => { 
-							cache.add(path, {}, false, 3600);
+							cache.add(path, {}, false);
 							reject(1);
 						});
 					}
@@ -153,7 +153,7 @@ var internalLink = function internalLink() {
 		} else {
 			return fs.readFileAsync(path, 'utf8').then((content) => {
 				var $ = cheerio.load(content, { lowerCaseAttributeNames:false, decodeEntities: false, withStartIndices: true, xmlMode: true});
-				cache.add(path, $, false, 3600);
+				cache.add(path, $, false);
 				return $;
 			}).catch((e) => {
 				console.log(e);
