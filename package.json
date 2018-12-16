@@ -51,11 +51,9 @@
     "sort-object-keys": "^1.1.2",
     "srcset": "^1.0.0",
     "through2": "^3.0.0",
+    "browser-sync": "^2.26.3",
+    "gulp-server-livereload": "^1.9.2",
     "underscore": "^1.9.1",
     "vinyl": "^2.2.0"
-  },
-  "devDependencies": {
-    "browser-sync": "^2.26.3",
-    "gulp-server-livereload": "^1.9.2"
   }
 }
