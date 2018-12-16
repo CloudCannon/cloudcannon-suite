@@ -23,7 +23,7 @@ module.exports = async function (gulp, config) {
 			docs: {"src": "dist/docs", "portInc": 3},
 			dist: {"src": "dist/prod", "portInc": 4}
 		},
-		requestFilters: ['cdn.walkme.com', 'www.googletagmanager.com', 'www.google-analytics.com', 'www.youtube.com'],
+		requestFilters: ['cdn.walkme.com', 'www.googletagmanager.com', 'www.google-analytics.com', 'www.youtube.com', 'f.vimeocdn.com'],
 		count: 3
 	});
 
