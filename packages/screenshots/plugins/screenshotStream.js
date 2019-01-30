@@ -10,7 +10,7 @@ module.exports = function (screenshotter, tagmap) {
 		await screenshotter.launchBrowser();
 
 		log(`Launching server`)
-		let serverUrl = await screenshotter.serve();
+		let serverUrl = await screenshotter.launchServer();
 		let srcPath = path.join(process.cwd(), screenshotter.options.path);
 		let urlPath = path.relative(srcPath, file.path);
 
