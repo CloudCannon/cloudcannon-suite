@@ -10,7 +10,7 @@ module.exports = function (screenshotter, tagmap) {
 		await screenshotter.launchBrowser();
 
 		log(`Launching server`)
-		let serverUrl = await screenshotter.launchServer();
+		let serverUrl = await screenshotter.serve();
 		let srcPath = path.join(process.cwd(), screenshotter.options.path);
 		let urlPath = path.relative(srcPath, file.path);
 
@@ -73,7 +73,7 @@ module.exports = function (screenshotter, tagmap) {
 
 		log(`Ensuring directory`)
 		let shotDir = path.join(screenshotter.options.dest, urlPath);
-		await fs.ensureDir(path.dirname(shotDir))
+		await fs.ensureDir(path.dirname(shotDir));
 
 		if (img) {
 			log(`Outputting image`)
