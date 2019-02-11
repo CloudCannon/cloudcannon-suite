@@ -61,7 +61,7 @@ function handleHTMLFile(options) {
 		});
 
 		if (options.rewriteLinks) {
-			$("a[href], link[href]").each(function processLink() {
+			$("a[href]:not([preserve-link]), link[href]:not([preserve-link])").each(function processLink() {
 				var $el = $(this),
 					href = $el.attr("href"),
 					updated = href && options.rewriteLinks.apply(this, [file, href]);
