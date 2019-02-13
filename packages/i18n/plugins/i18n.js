@@ -9,7 +9,7 @@ var Vinyl = require("vinyl"),
 	crypto = require("crypto"),
 	path = require("path");
 
-const REDIRECT_HTML = fs.readFileSync("./redirect-page.html");
+const REDIRECT_HTML = fs.readFileSync(__dirname + "/redirect-page.html", "utf8");
 var IGNORE_URL_REGEX = /^([a-z]+\:|\/\/|\#)/;
 
 function cleanObj(obj) {
@@ -223,7 +223,7 @@ module.exports = {
 					}
 				});
 
-				file.contents = new Buffer($.html());
+				file.contents = Buffer.from($.html());
 				this.push(file);
 			}
 		});
@@ -248,6 +248,10 @@ module.exports = {
 			file.sitePath = "/" + file.path.substring(file.base.length);
 			file.sitePath = file.sitePath.replace(/\/index.html?/i, "/");
 
+			if (file.sitePath === "/404.html") {
+				return callback();
+			}
+
 			var localeLookup = {};
 
 			localeNames.forEach(function (localeName) {
@@ -266,16 +270,16 @@ module.exports = {
 
 			var html = REDIRECT_HTML
 				.replace(/ALTERNATES/g, localeNames.map(function (targetLocale) {
-					if (locales[targetLocale]) {
+					if (targetLocale !== defaultLocale) {
 						return '<link rel="alternate" href="/' + targetLocale + file.sitePath + '" hreflang="' + targetLocale + '">';
 					}
 					return '';
 				}).join(""))
 				.replace(/SITE_PATH/g, file.sitePath)
 				.replace(/DEFAULT_LANGUAGE/g, defaultLocale)
-				.replace(/LOCALE_LOOKUP/g, JSON.stringify(localeNames));
+				.replace(/LOCALE_LOOKUP/g, JSON.stringify(localeLookup));
 
-			file.contents = new Buffer(html);
+			file.contents = Buffer.from(html);
 			this.push(file);
 			callback();
 		});

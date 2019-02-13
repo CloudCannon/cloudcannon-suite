@@ -20,6 +20,7 @@
                 width: 100%;
                 height: 100%;
                 background-color: #F5F4F8;
+                font-family: Helvetica, Arial;
             }
 
             body {
@@ -36,7 +37,7 @@
         </div>
         <script>
             (function () {
-                var currentPath = SITE_PATH;
+                var currentPath = "SITE_PATH";
                 var defaultLocale = "DEFAULT_LANGUAGE";
                 var supportedLocales = LOCALE_LOOKUP;
                 
@@ -54,13 +55,12 @@
                     }
 
                     function getBestLanguage() {
-                        var storedLocale = localStorage.getItem("eu-cc");
+                        var storedLocale = localStorage.getItem("force-language") || localStorage.getItem("eu-cc");
                         if (storedLocale) {
                             return storedLocale;
                         }
 
                         var languages = getBrowserLanguages();
-
                         for (var i = 0; i < languages.length; i++) {
                             var match = languages[0].toLowerCase().match(/[a-z]+/gi),
                                 language = match[0], country = match[1];
@@ -83,7 +83,7 @@
                     language = defaultLocale;
                 }
 
-                var url = location.protocol + "//" + location.hostname + "/" + language + currentPath;
+                var url = location.protocol + "//" + location.host + "/" + language + currentPath;
                 var search = location.search || '';
 
                 var referrer = document.referrer;
