@@ -227,6 +227,15 @@ module.exports = function (gulp, config) {
 		}, done);
 	});
 
+	gulp.task("i18n:generate-redirect-html-pages", function (done) {
+		return gulp.src(config.i18n.src + "/**/*.html")
+			.pipe(i18n.redirectPage({
+				defaultLocale: config.i18n.default_language,
+				localeNames: localeNames,
+				locales: locales
+			})).pipe(gulp.dest(config.i18n.dest))
+	});
+
 	gulp.task("i18n:clone-prelocalised-html-pages", function (done) {
 		async.each(localeNames, function (targetLocale, next) {
 			return gulp.src(config.i18n.src + "/" + targetLocale + "/**/*.html")
@@ -281,7 +290,8 @@ module.exports = function (gulp, config) {
 		"i18n:load-wordwraps",
 		"i18n:clone-assets",
 		"i18n:translate-html-pages",
-		"i18n:clone-prelocalised-html-pages"
+		"i18n:clone-prelocalised-html-pages",
+		"i18n:generate-redirect-html-pages"
 	));
 
 	// -----

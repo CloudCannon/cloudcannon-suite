@@ -1,5 +1,6 @@
 var Vinyl = require("vinyl"),
 	PluginError = require("plugin-error"),
+	fs = require("fs"),
 	c = require("ansi-colors"),
 	through = require("through2").obj,
 	sortObject = require("sort-object-keys"),
@@ -8,6 +9,7 @@ var Vinyl = require("vinyl"),
 	crypto = require("crypto"),
 	path = require("path");
 
+const REDIRECT_HTML = fs.readFileSync("./redirect-page.html");
 var IGNORE_URL_REGEX = /^([a-z]+\:|\/\/|\#)/;
 
 function cleanObj(obj) {
@@ -217,13 +219,65 @@ module.exports = {
 				localeNames.forEach(function (localeName) {
 					if (localeName != targetLocale) {
 						var redirectUrl = localeName + file.sitePath;
-						$("head").append('<link rel="alternate" href="' + redirectUrl + '" hreflang="' + localeName + '">\n');
+						$("head").append('<link rel="alternate" href="/' + redirectUrl + '" hreflang="' + localeName + '">\n');
 					}
 				});
 
 				file.contents = new Buffer($.html());
 				this.push(file);
 			}
+		});
+	},
+
+	redirectPage: function (options) {
+		options = options || {};
+
+		var defaultLocale = options.defaultLocale,
+			locales = options.locales,
+			localeNames = options.localeNames;
+
+		return through(function (file, encoding, callback) {
+			if (file.isNull()) {
+				return callback(null, file);
+			}
+
+			if (file.isStream()) {
+				return callback(new PluginError("local-ejs", "Streaming not supported"));
+			}
+
+			file.sitePath = "/" + file.path.substring(file.base.length);
+			file.sitePath = file.sitePath.replace(/\/index.html?/i, "/");
+
+			var localeLookup = {};
+
+			localeNames.forEach(function (localeName) {
+				var match = localeName.toLowerCase().match(/[a-z]+/gi);
+				var language = match[0], country = match[1];
+
+				localeLookup[language] = localeName;
+				if (country) {
+					localeLookup[language + "-" + country] = localeName;
+					localeLookup[language + "_" + country] = localeName;
+				}
+
+				localeLookup[localeName] = localeName;
+			});
+
+
+			var html = REDIRECT_HTML
+				.replace(/ALTERNATES/g, localeNames.map(function (targetLocale) {
+					if (locales[targetLocale]) {
+						return '<link rel="alternate" href="/' + targetLocale + file.sitePath + '" hreflang="' + targetLocale + '">';
+					}
+					return '';
+				}).join(""))
+				.replace(/SITE_PATH/g, file.sitePath)
+				.replace(/DEFAULT_LANGUAGE/g, defaultLocale)
+				.replace(/LOCALE_LOOKUP/g, JSON.stringify(localeNames));
+
+			file.contents = new Buffer(html);
+			this.push(file);
+			callback();
 		});
 	}
 };
