@@ -38,7 +38,6 @@
         </div>
         <script>
             (function () {
-                var currentPath = "SITE_PATH";
                 var defaultLocale = "DEFAULT_LANGUAGE";
                 var supportedLocales = LOCALE_LOOKUP;
                 
@@ -84,7 +83,25 @@
                     language = defaultLocale;
                 }
 
-                var url = location.protocol + "//" + location.host + "/" + language + currentPath;
+                var redirectPath;
+                var linkElements = document.getElementsByTagName("link");
+                for (var i = 0; i < linkElements.length; i++) {
+                    if (linkElements[i].getAttribute("rel") === "canonical") {
+                        redirectPath = linkElements[i].getAttribute("href")
+                    }
+
+                    if (linkElements[i].getAttribute("hreflang") === language) {
+                        redirectPath = linkElements[i].getAttribute("href");
+                        break;
+                    }
+                }
+
+                // Use meta refresh for default path
+                if (!redirectPath) { 
+                    return;
+                }
+
+                var url = location.protocol + "//" + location.host + redirectPath;
                 var search = location.search || '';
 
                 var referrer = document.referrer;
