@@ -149,18 +149,16 @@ module.exports = {
 			locale = options.locales[targetLocale],
 			localeNames = options.localeNames;
 
+		var localeLookup = {};
+		for (var i = 0; i < localeNames.length; i++) {
+			localeLookup[localeNames[i]] = true;
+		}
+
 		return handleHTMLFile({
 			skipFile: function (file) {
-				var baseFolder = file.sitePath.split(path.sep).shift(),
-					isLocaleString = false;
+				var baseFolder = file.sitePath.split(path.sep).shift();
 
-				for (var i = 0; i < localeNames.length; i++) {
-					if (baseFolder === localeNames[i]) {
-						return true;
-					}
-				}
-
-				return false;
+				return !!localeLookup[baseFolder];
 			},
 			rewriteLinks: function rewriteLinks(file, href) {
 				if (!href || IGNORE_URL_REGEX.test(href)) {
@@ -233,8 +231,28 @@ module.exports = {
 		options = options || {};
 
 		var defaultLocale = options.defaultLocale,
-			locales = options.locales,
 			localeNames = options.localeNames;
+
+		var localeLookup = {};
+		for (var i = 0; i < localeNames.length; i++) {
+			localeLookup[localeNames[i]] = true;
+		}
+
+
+		var redirectLookup = {};
+
+		localeNames.forEach(function (localeName) {
+			var match = localeName.toLowerCase().match(/[a-z]+/gi);
+			var language = match[0], country = match[1];
+
+			redirectLookup[language] = localeName;
+			if (country) {
+				redirectLookup[language + "-" + country] = localeName;
+				redirectLookup[language + "_" + country] = localeName;
+			}
+
+			redirectLookup[localeName] = localeName;
+		});
 
 		return through(function (file, encoding, callback) {
 			if (file.isNull()) {
@@ -248,24 +266,11 @@ module.exports = {
 			file.sitePath = "/" + file.path.substring(file.base.length);
 			file.sitePath = file.sitePath.replace(/\/index.html?/i, "/");
 
-			if (file.sitePath === "/404.html") {
+			var baseFolder = file.sitePath.split(path.sep).shift();
+			if (file.sitePath === "/404.html" || localeLookup[baseFolder]) {
 				return callback();
 			}
 
-			var localeLookup = {};
-
-			localeNames.forEach(function (localeName) {
-				var match = localeName.toLowerCase().match(/[a-z]+/gi);
-				var language = match[0], country = match[1];
-
-				localeLookup[language] = localeName;
-				if (country) {
-					localeLookup[language + "-" + country] = localeName;
-					localeLookup[language + "_" + country] = localeName;
-				}
-
-				localeLookup[localeName] = localeName;
-			});
 
 
 			var html = REDIRECT_HTML
@@ -277,7 +282,7 @@ module.exports = {
 				}).join(""))
 				.replace(/SITE_PATH/g, file.sitePath)
 				.replace(/DEFAULT_LANGUAGE/g, defaultLocale)
-				.replace(/LOCALE_LOOKUP/g, JSON.stringify(localeLookup));
+				.replace(/LOCALE_LOOKUP/g, JSON.stringify(redirectLookup));
 
 			file.contents = Buffer.from(html);
 			this.push(file);
