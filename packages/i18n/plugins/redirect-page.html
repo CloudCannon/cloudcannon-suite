@@ -91,13 +91,13 @@
                 if (referrer && search.indexOf("utm_referrer") < 0) {
                     search += "&utm_referrer=" + referrer;
                 }
-                search = search.replace(/^&/, "");
+
+                search = search.replace(/^&/, "?");
 
                 var hash = location.hash || '';
-                var q = !!~search.indexOf('?') ? '?' : '';
                 var h = !!~hash.indexOf('#') ? '#' : '';
 
-                location.replace(url + q + search + h + hash);
+                location.replace(url + search + h + hash);
             })();
         </script>
     </body>

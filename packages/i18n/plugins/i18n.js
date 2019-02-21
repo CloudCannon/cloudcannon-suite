@@ -20,6 +20,10 @@ function cleanObj(obj) {
 	}
 }
 
+function getBaseFolder(sitePath) {
+	return sitePath.replace(/^\/+/, "").split(path.sep).shift();
+}
+
 function generateDefaultI18nKey($, $el) {
 	var outerHTML = $.html($el);
 	return crypto.createHash("sha256").update(outerHTML).digest("base64").replace(/=+$/, "");
@@ -39,7 +43,7 @@ function handleHTMLFile(options) {
 		file.sitePath = file.sitePath.replace(/\/index.html?/i, "/");
 
 		if (options.skipFile && options.skipFile(file)) {
-			log("Skipping " + file.sitePath);
+			log("Skipping HTML " + c.grey("'" + file.sitePath + "'"));
 			return callback();
 		}
 
@@ -118,7 +122,7 @@ module.exports = {
 					if (additions.hasOwnProperty(newKey)) {
 						if (locale[newKey] && locale[newKey] !== additions[newKey]) {
 							log(c.yellow("Duplicate data-i18n") + " "
-								+ c.blue(newKey));
+								+ c.grey(newKey));
 						} else {
 							locale[newKey] = additions[newKey];
 						}
@@ -135,7 +139,7 @@ module.exports = {
 				}));
 
 				log(c.green("Generation complete") + " "
-					+ c.blue("i18n/source.json")
+					+ c.grey("i18n/source.json")
 					+ " available with " + Object.keys(sorted).length + " keys");
 
 				callback();
@@ -156,7 +160,7 @@ module.exports = {
 
 		return handleHTMLFile({
 			skipFile: function (file) {
-				var baseFolder = file.sitePath.split(path.sep).shift();
+				var baseFolder = getBaseFolder(file.sitePath);
 
 				return !!localeLookup[baseFolder];
 			},
@@ -165,13 +169,10 @@ module.exports = {
 					return;
 				}
 
-				var parts = href.replace(/^\/+/, "").split("/");
-				if (parts.length >= 2) {
-					for (var i = 0; i < localeNames.length; i++) {
-						if (parts[1] === localeNames[i]) {
-							return;
-						}
-					}
+				var baseFolder = getBaseFolder(href);
+				if (localeLookup[baseFolder]) {
+					log("Skipping link " + c.grey("'" + href + "'"));
+					return;
 				}
 
 				var parsed = path.parse(href);
@@ -180,6 +181,7 @@ module.exports = {
 					return;
 				}
 
+				var parts = href.replace(/^\/+/, "").split("/");
 				parts.unshift(targetLocale);
 
 				var updated = "/" + parts.join("/") + "/";
@@ -195,7 +197,7 @@ module.exports = {
 					locale[key].count++;
 				} else if ($el.html()) {
 					log(c.yellow("Missing translation") + " "
-						+ c.blue(targetLocale + file.sitePath) +
+						+ c.grey(targetLocale + file.sitePath) +
 						" [data-i18n=" + key + "]");
 				}
 
@@ -205,7 +207,7 @@ module.exports = {
 						locale[key + "." + attr].count++;
 					} else if ($el.attr(attr)) {
 						log(c.yellow("Missing translation") + " "
-							+ c.blue(targetLocale + file.sitePath) +
+							+ c.grey(targetLocale + file.sitePath) +
 							" [data-i18n=" + key + "][" + attr + "]");
 					}
 				});
@@ -266,12 +268,10 @@ module.exports = {
 			file.sitePath = "/" + file.path.substring(file.base.length);
 			file.sitePath = file.sitePath.replace(/\/index.html?/i, "/");
 
-			var baseFolder = file.sitePath.split(path.sep).shift();
+			var baseFolder = getBaseFolder(file.sitePath);
 			if (file.sitePath === "/404.html" || localeLookup[baseFolder]) {
 				return callback();
 			}
-
-
 
 			var html = REDIRECT_HTML
 				.replace(/ALTERNATES/g, localeNames.map(function (targetLocale) {
