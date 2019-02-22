@@ -239,6 +239,11 @@ module.exports = function (gulp, config) {
 	gulp.task("i18n:clone-prelocalised-html-pages", function (done) {
 		async.each(localeNames, function (targetLocale, next) {
 			return gulp.src(config.i18n.src + "/" + targetLocale + "/**/*.html")
+				.pipe(i18n.translate({
+					targetLocale: targetLocale,
+					localeNames: localeNames,
+					locales: locales
+				}))
 				.pipe(gulp.dest(config.i18n.dest + "/" + targetLocale))
 				.on('end', next);
 		}, done);
