@@ -184,7 +184,7 @@ module.exports = {
 				var parts = href.replace(/^\/+/, "").split("/");
 				parts.unshift(targetLocale);
 
-				var updated = "/" + parts.join("/") + "/";
+				var updated = "/" + parts.join("/");
 				return updated.replace(/\/+/g, "/");
 			},
 			processElement: function (file, $el, key, attributes) {
