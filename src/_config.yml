@@ -1,0 +1,110 @@
+# ----
+# Site
+
+title: CloudCannon Suite
+description: An opinionated set of tools used to build and maintain static sites.
+url: https://suite.cloudcannon.com
+disqus_shortname: cloudcannon
+theme: jekyll-theme-cloudcannon
+baseurl:
+
+active_sibling: Suite
+main_url: ""
+permalink: pretty
+timezone: Pacific/Auckland
+collections:
+  packages:
+    title: Packages
+    permalink: /packages/:title/
+    output: true
+defaults:
+  - scope:
+      path: ""
+    values:
+      header_class: "short"
+      layout: suite
+      _options:
+        content:
+          width: 800
+          height: 2000
+          format: p h2 h3 h4 h5 h6 yellow-highlight green-highlight
+          link: true
+          removeformat: true
+          bold: true
+          italic: true
+          image: true
+          numberedlist: true
+          bulletedlist: true
+          code: true
+          styles: "/src/css/editor.css"
+        _block:
+          width: 800
+          height: 2000
+          format: p h2 h3 h4 h5 h6 yellow-highlight green-highlight
+          link: true
+          removeformat: true
+          bold: true
+          italic: true
+          image: true
+          numberedlist: true
+          bulletedlist: true
+          code: true
+          styles: "/src/css/editor.css"
+  -
+    scope:
+      path: ""
+      type: "packages"
+    values:
+      layout: packages
+      seo:
+        type: Article
+      _comments:
+        category: Group navigation links with this field
+        order: Used to sort links in the navigation
+          
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+  - jekyll-sitemap
+  - jekyll-data
+
+# ----------
+# SEO plugin
+
+lang: en_NZ
+logo: /siteicon.png
+twitter:
+  username: CloudCannon
+facebook:
+  publisher: https://www.facebook.com/CloudCannon
+social:
+  name: CloudCannon
+  links:
+    - https://twitter.com/CloudCannon
+    - https://www.facebook.com/CloudCannon
+    - https://plus.google.com/+CloudCannon
+    - https://www.youtube.com/c/CloudCannon
+    - https://github.com/CloudCannon
+ 
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - package.json
+_options:
+  _block:
+    width: 800
+    height: 2000
+    format: p h2 h3 h4 h5 h6 yellow-highlight green-highlight
+    link: true
+    removeformat: true
+    bold: true
+    italic: true
+    image: true
+    numberedlist: true
+    bulletedlist: true
+    code: true
+    styles: "/src/css/editor.css"
+
+header_classes:
+  - "landing"
+  - "short"

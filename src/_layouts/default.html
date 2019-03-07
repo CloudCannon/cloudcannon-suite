@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="generator" content="Jekyll v{{ jekyll.version }}">
+		<link href="https://fonts.googleapis.com/css?family=Muli:400,600,700{% if layout.icons or page.icons %}|Material+Icons{% endif %}" rel="stylesheet">
+		<link rel="stylesheet" href="{{ site.baseurl }}/css/screen.css" type="text/css">
+
+		<link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+		<link rel="shortcut icon" type="image/png" sizes="128x128" href="/assets/favicon-128x128.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+		<link rel="manifest" href="/assets/manifest.json">
+		<link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#407afc">
+		<meta name="msapplication-config" content="/assets/browserconfig.xml" />
+		<meta name="theme-color" content="#407afc">
+
+		{% feed_meta %}
+		{% seo %}
+		{% include analytics.html %}
+	</head>
+
+	<body {% if site.body_class %}class="{{ site.body_class }}"{% endif %}>
+		{% include navigation/siblings.html %}
+		
+		{{ content }}
+		{% include navigation/footer.html %}
+		<script>
+			var signedIn = /^(.*;)?\s*signed_in\s*=\s*[^;]+(.*)?$/.test(document.cookie);
+			document.body.className += ' ' + (signedIn ? 'user-signed-in' : '');
+
+			document.getElementById("open-nav").addEventListener("click", function (event) {
+				event.preventDefault();
+				document.body.classList.toggle("nav-open");
+
+				if (document.body.classList.contains("nav-open")) {
+					document.getElementById("search-input").focus();
+				}
+			});
+		</script>
+	</body>
+</html>
