@@ -7,6 +7,8 @@ suite.jekyllDev(gulp, {
 	}
 });
 
+suite.dev(gulp);
+suite.i18n(gulp);
 suite.screenshots(gulp);
 
 suite.help(gulp);
