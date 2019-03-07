@@ -1,4 +1,5 @@
 <nav class="docs-nav">
+
 	<ul>
 		<li class="nav-item top-level {% if page.url == "/" %}current{% endif %}">
 			<a href="/">CloudCannon Suite</a>
@@ -12,6 +13,7 @@
 			{% endif %}
 		{% endfor %}
 	</ul>
+
 	
 	<ul class="packages">
 		{% assign packages = site.packages | sort: 'weight_number' %}

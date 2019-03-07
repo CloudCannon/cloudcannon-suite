@@ -7,16 +7,18 @@ dev_path: packages/jekyll-dev
 _is_package: true
 ---
 
+Now that you have `@cloudcannon/suite` and `gulp` installed, we have to configure our gulpfile. For a basic setup you can add:
+
 ```
 const gulp = require("gulp");
-const suite = require("cloudcannon-suite");
+const suite = require("@cloudcannon/suite");
 
-suite.jekyllDev(gulp);
+suite.dev(gulp);
 ```
 
-### Usage
+## Usage
 
-Running `gulp dev` runs jekyll build on the `src` directory and outputs the site to `dist/site`. Once completed the a local webserver will be started on port 4000. Any changes to the `src` folder will trigger a rebuild of the contents.
+Running `gulp dev` runs `jekyll build` on the `src` directory and outputs the site to `dist/site`. Once completed the a local webserver will be started on port 4000. Any changes to the `src` folder will trigger a rebuild of the contents.
 
 ```
 $ gulp jekyllDev
@@ -40,9 +42,9 @@ Auto-regeneration: disabled. Use --watch to enable.
 [12:02:15] Finished 'dev' after 1.43 s
 ```
 
-### Subtasks
+## Subtasks
 
-#### install
+### install
 
 Runs `bundle install` on the `src` folder
 
@@ -50,7 +52,7 @@ Runs `bundle install` on the `src` folder
 $ gulp jekyllDev:install
 ```
 
-#### build
+### build
 
 Runs` bundle exec jekyll serve` on the `src` folder
 
@@ -58,7 +60,7 @@ Runs` bundle exec jekyll serve` on the `src` folder
 $ gulp jekyllDev:build
 ```
 
-#### serve
+### serve
 
 Runs a local webserver on the `dest` folder
 
@@ -66,7 +68,7 @@ Runs a local webserver on the `dest` folder
 $ gulp jekyllDev:serve
 ```
 
-#### watch
+### watch
 
 Watches the `src` folder and triggers builds
 
@@ -74,51 +76,49 @@ Watches the `src` folder and triggers builds
 $ gulp jekyllDev:watch
 ```
 
-### Default Configuration
+## Default Configuration
 
 Below is the default configuration for the Dev package:
 
 ```
 {
-namespace: "dev",
-jekyll: {
-src: "src",
-dest: "dist/site"
-},
-tasks: [],
-serve: {
-port: 4000,
-open: true
-}
+    namespace: "dev",
+    jekyll: {
+        src: "src",
+        dest: "dist/site"
+    },
+    tasks: [],
+    serve: {
+        port: 4000,
+        open: true
+    }
 }
 ```
 
-### Configuration
+## Configuration
 
 If you have a more complex set up you can use any of the following options with the Dev package.
 
-#### namespace
+### namespace
 
 Sets the namespace of the gulp commands (i.e. gulp namespace:command)
 
-#### jekyll.src
+### jekyll.src
 
 Sets the input folder for jekyll
 
-#### jekyll.dest
+### jekyll.dest
 
 Sets the output folder for dev build
 
-#### tasks
+### tasks
 
 Adds additional tasks to be run before the jekyll build. This is useful for reducing build time in jekyll.
 
-#### serve.port
+### serve.port
 
 Specifies the port to serve the built site from.
 
-#### serve.open
+### serve.open
 
 Should the dev:serve task automatically open a tab in a browser
-
-&nbsp;

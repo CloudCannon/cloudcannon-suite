@@ -7,7 +7,7 @@
 	},
 	{
 		"path": "gulpfile.js",
-		"description_markdown": "A javascript file required to configure cloudcannon suite.",
+		"description_markdown": "A JavaScript file required to configure CloudCannon suite.",
 		"required": true,
 		"committed": true
 	},
@@ -31,20 +31,20 @@
 	},
 	{
 		"path": "siteicon.png",
-		"description_markdown": "The jekyll source of the site.",
+		"description_markdown": "The Jekyll source of the site.",
 		"required": false,
 		"committed": true
 	},
 
 	{
 		"path": "src",
-		"description_markdown": "The jekyll source of the site.",
+		"description_markdown": "The Jekyll source of the site.",
 		"required": false,
 		"committed": true
 	},
 	{
 		"path": "docs",
-		"description_markdown": "The jekyll source of the documentation site.",
+		"description_markdown": "The Jekyll source of the documentation site.",
 		"required": false,
 		"committed": true
 	},

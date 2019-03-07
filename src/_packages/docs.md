@@ -7,18 +7,18 @@ _is_package: true
 dev_path: packages/jekyll-docs
 ---
 
-Now that you have `cloudcannon-suite` and `gulp` installed, we have to configure our gulpfile. For a basic setup you can add:
+Now that you have `@cloudcannon/suite` and `gulp` installed, we have to configure our gulpfile. For a basic setup you can add:
 
 ```
 const gulp = require("gulp");
-const suite = require("cloudcannon-suite");
+const suite = require("@cloudcannon/suite");
 
 suite.jekyllDocs(gulp);
 ```
 
-### Usage
+## Usage
 
-Running `gulp docs` runs jekyll build on the `docs` directory and outputs the site to `dist/docs`. Once completed the a local webserver will be started on port 5000. Any changes to the `docs` folder will trigger a rebuild of the contents.
+Running `gulp docs` runs `jekyll build` on the `docs` directory and outputs the site to `dist/docs`. Once completed, a local webserver will be started on port 5000. Any changes to the `docs` folder will trigger a rebuild of the contents.
 
 ```
 $ gulp jekyllDocs
@@ -42,9 +42,9 @@ Configuration file: /Users/george/Work/cloudcannon/suite/docs/_config.yml
 [12:04:13] Finished 'docs' after 1.57 s
 ```
 
-### Subtasks
+## Subtasks
 
-#### install
+### install
 
 Runs `bundle install` on the `src` folder
 
@@ -52,7 +52,7 @@ Runs `bundle install` on the `src` folder
 $ gulp jekyllDocs:install
 ```
 
-#### build
+### build
 
 Runs `bundle exec jekyll serve` on the `src` folder
 
@@ -60,7 +60,7 @@ Runs `bundle exec jekyll serve` on the `src` folder
 $ gulp jekyllDocs:build
 ```
 
-#### serve
+### serve
 
 Runs a local webserver on the `dest` folder
 
@@ -68,7 +68,7 @@ Runs a local webserver on the `dest` folder
 $ gulp jekyllDocs:serve
 ```
 
-#### watch
+### watch
 
 Watches the `src` folder and triggers builds
 
@@ -76,7 +76,7 @@ Watches the `src` folder and triggers builds
 $ gulp jekyllDocs:watch
 ```
 
-### Default Configuration
+## Default Configuration
 
 Below is the default configuration for the Docs package:
 
@@ -87,16 +87,16 @@ Below is the default configuration for the Docs package:
         dest: "dist/docs"
     },
     tasks: [],
-        serve: {
-        port: 4000,
-        open: true
+    serve: {
+    port: 4000,
+    open: true
     }
 }
 ```
 
-### Configuration
+## Configuration
 
-If you have a more complex set up you can use any of the following options with the Docs package.
+If you have a more complex set up you can use any of the following options with the Docs package:
 
 ### jekyll.src
 
@@ -117,5 +117,3 @@ Specifies the port to serve the built site from.
 ### serve.open
 
 Should the docs:serve task automatically open a tab in a browser
-
-&nbsp;

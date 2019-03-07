@@ -1,28 +1,28 @@
 ---
 title: Screenshots
 namespace: screenshots
-description: Generate screenshots of your site using phantomJS
+description: Generate screenshots of your site using Puppeteer
 image: /images/devices.svg
 dev_path: packages/reports
 _is_package: true
 ---
 
-Now that you have `cloudcannon-suite` and `gulp` installed, we have to configure our gulpfile. For a basic setup you can add:
+Now that you have `@cloudcannon/suite` and `gulp` installed, we have to configure our gulpfile. For a basic setup you can add:
 
 ```
 const gulp = require("gulp");
-const suite = require("cloudcannon-suite");
+const suite = require("@cloudcannon/suite");
 
 suite.screenshots(gulp);
 ```
 
-### Subtasks
+## Subtasks
 
 ```
 $ gulp screenshots:
 ```
 
-### Default Configuration
+## Default Configuration
 
 Below is the default configuration for the Screenshots package:
 
@@ -33,14 +33,14 @@ Below is the default configuration for the Screenshots package:
         dest: "dist/docs"
     },
     tasks: [],
-        serve: {
+    serve: {
         port: 4000,
         open: true
     }
 }
 ```
 
-### Configuration
+## Configuration
 
 If you have a more complex set up you can use any of the following options with the Screenshots package.
 
@@ -63,5 +63,3 @@ Specifies the port to serve the built site from.
 ### serve.open
 
 Should the docs:serve task automatically open a tab in a browser
-
-&nbsp;

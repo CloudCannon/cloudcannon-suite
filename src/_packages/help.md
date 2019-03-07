@@ -7,17 +7,17 @@ dev_path: packages/help
 _is_package: true
 ---
 
-Now that you have `cloudcannon-suite` and `gulp` installed, we have to configure our gulpfile. For a basic setup you can add:
+Now that you have `@cloudcannon/suite` and `gulp` installed, we have to configure our gulpfile. For a basic setup you can add:
 {: .present-before-paste}
 
 ```
 const gulp = require("gulp");
-const suite = require("cloudcannon-suite");
+const suite = require("@cloudcannon/suite");
 
 suite.help(gulp);
 ```
 
-### Usage
+## Usage
 
 Running `gulp help` lists all tasks installed in your gulp configuration.
 {: .present-before-paste}
