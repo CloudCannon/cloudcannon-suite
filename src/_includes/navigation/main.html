@@ -1,0 +1,11 @@
+<nav class="main">
+    {% for item in site.data.navigation.main %}
+        <a {% if page.url == item.link or item.link contains "packages/" and page.url contains "packages/" %} class="active" {% endif %}
+            id="{{ item.name | slugify }}-nav-button"
+            href="{{ item.link }}">
+            {{ item.name }}
+        </a>
+    {% endfor %}
+</nav>
+
+<script src="{{site.baseurl}}/js/nav-bar-toggle.js" defer></script>

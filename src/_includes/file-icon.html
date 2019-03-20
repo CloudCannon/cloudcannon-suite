@@ -5,6 +5,11 @@
 
 {% if filename_parts_size > 1 %}
 	{% assign icon = "code" %}
+	{% if ext == "png" %}
+		{% assign icon = "image" %}
+	{% elsif ext == "gitignore" %}
+		{% assign icon = "share" %}
+	{% endif %}
 {% endif %}
 
 {{ icon }}

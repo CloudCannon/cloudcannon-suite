@@ -8,21 +8,43 @@ disqus_shortname: cloudcannon
 theme: jekyll-theme-cloudcannon
 baseurl:
 
+
 active_sibling: Suite
-main_url: ""
+main_url: https://cloudcannon.com
 permalink: pretty
 timezone: Pacific/Auckland
+
+collections_dir: collections
+
 collections:
-  packages:
-    title: Packages
-    permalink: /packages/:title/
+  Dev:
+    title: Dev
+    permalink: /dev/:title/
     output: true
+  Dist:
+    title: Dist
+    permalink: /dist/:title/
+    output: true
+  Help:
+    title: Help
+    permalink: /help/:title/
+    output: true
+  I18n:
+    title: I18n
+    permalink: /i18n/:title/
+    output: true
+  sections:
+    title: Sections
+    permalink: /:path/
+    output: false
+
 defaults:
   - scope:
       path: ""
     values:
       header_class: "short"
       layout: suite
+      icons: true
       _options:
         content:
           width: 800
@@ -50,17 +72,34 @@ defaults:
           bulletedlist: true
           code: true
           styles: "/src/css/editor.css"
-  -
-    scope:
+  - scope:
       path: ""
-      type: "packages"
+      type: "Dev"
+    values:
+      layout: "packages"
+      seo:
+        type: Article
+  - scope:
+      path: ""
+      type: "Dist"
     values:
       layout: packages
       seo:
         type: Article
-      _comments:
-        category: Group navigation links with this field
-        order: Used to sort links in the navigation
+  - scope:
+      path: ""
+      type: "Help"
+    values:
+      layout: packages
+      seo:
+        type: Article
+  - scope:
+      path: ""
+      type: "I18n"
+    values:
+      layout: packages
+      seo:
+        type: Article
           
 plugins:
   - jekyll-feed

@@ -1,0 +1,24 @@
+{% assign current_package = site.sections | where: "name", page.package | first %}
+
+<div class="doc-nav {% unless current_package %}none{% endunless %}">
+    <div class="wrapper wrapper-large" style="padding: 0 10px;">
+        <ul class="doc-nav-sections">
+            {% assign sorted_sections = site.sections | sort: "order_number" %}
+            {% for section in sorted_sections %}
+                {% assign package = site.collections | where: "label", section.name | first %}
+                {% if package.docs %}
+                    {% assign first_in_package = package.docs | sort: "order_number" | first %}
+                    <li class="doc-nav-section">
+                        <a href="{{first_in_package.url}}" class="doc-nav-section-link {% if page.url contains section.url %}current{% endif %}">
+                            <i class="material-icons">{{ section.icon }}</i>
+                            <strong>{{section.name}}</strong>
+                        </a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+    {% unless current_package %}
+        <div class="doc-nav-sections-empty-fix"></div>
+    {% endunless %}
+</div>

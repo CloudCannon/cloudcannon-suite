@@ -1,2 +1,6 @@
-- link:
-  name:
+- link: /setup/
+  name: Setup
+- link: /dev/introduction
+  name: Packages
+- link: /changelog/
+  name: Change Log

@@ -27,3 +27,4 @@
 /smileys/* http://smiley.cloudcannon.com/
 /previewer/ http://previewer.cloudcannon.com/
 /previewer/* http://previewer.cloudcannon.com/
+/packages/dev/ /dev/introduction/

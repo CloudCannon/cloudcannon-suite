@@ -3,7 +3,6 @@ layout: default
 icons: true
 header_class: short
 ---
-
 {% if page.header_class == "landing" %}
   <header class="{{ page.header_class }}">
 	  {% include navigation/top.html %}
@@ -16,18 +15,18 @@ header_class: short
   </header>
 {% endif %}
 
-<div class="dark-content docs-container">
+<div class="docs-container">
 	<div class="wrapper wrapper-large">
-		{% include suite-nav.html %}
+		{% unless page.hide_contents %}
+			{% include page-nav.html %}
+		{% endunless %}
 		<section class="docs-main">
 			<article class="content">
 				<div class="page-header">
-					{% if page.heading %}
+					{% if page.heading and page.url %}
 						<h1>{{ page.heading }}</h1>
-					{% elsif page.title %}
+					{% elsif page.title and page.url %}
 						<h1>{{ page.title }}</h1>
-					{% elsif page.name %}
-						<h1>{{ page.name }}</h1>
 					{% endif %}
 
 					{% if page.subtitle %}
@@ -36,9 +35,18 @@ header_class: short
 						<p class="subtitle">{{ page.description }}</p>
 					{% endif %}
 				</div>
-
 				{{ content }}
 			</article>
 		</section>
 	</div>
 </div>
+
+{% unless page.hide_contents %}
+<script src="/js/sticky-sidebar.js"></script>
+<script>
+	var sidebar = new StickySidebar("#docs-nav", {
+		topSpacing: 20,
+		bottomSpacing: 20
+	});
+</script>
+{% endunless %}
