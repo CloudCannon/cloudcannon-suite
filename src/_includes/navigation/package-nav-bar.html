@@ -5,7 +5,7 @@
         <ul class="doc-nav-sections">
             {% assign sorted_sections = site.sections | sort: "order_number" %}
             {% for section in sorted_sections %}
-                {% assign package = site.collections | where: "label", section.name | first %}
+                {% assign package = site.collections | where: "title", section.name | first %}
                 {% if package.docs %}
                     {% assign first_in_package = package.docs | sort: "order_number" | first %}
                     <li class="doc-nav-section">

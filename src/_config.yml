@@ -17,19 +17,19 @@ timezone: Pacific/Auckland
 collections_dir: collections
 
 collections:
-  Dev:
+  dev:
     title: Dev
     permalink: /dev/:title/
     output: true
-  Dist:
+  dist:
     title: Dist
     permalink: /dist/:title/
     output: true
-  Help:
+  help:
     title: Help
     permalink: /help/:title/
     output: true
-  I18n:
+  i18n:
     title: I18n
     permalink: /i18n/:title/
     output: true
@@ -74,28 +74,28 @@ defaults:
           styles: "/src/css/editor.css"
   - scope:
       path: ""
-      type: "Dev"
+      type: "dev"
     values:
       layout: "packages"
       seo:
         type: Article
   - scope:
       path: ""
-      type: "Dist"
+      type: "dist"
     values:
       layout: packages
       seo:
         type: Article
   - scope:
       path: ""
-      type: "Help"
+      type: "help"
     values:
       layout: packages
       seo:
         type: Article
   - scope:
       path: ""
-      type: "I18n"
+      type: "i18n"
     values:
       layout: packages
       seo:
