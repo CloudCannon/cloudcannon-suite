@@ -76,7 +76,7 @@ icons: true
 </div>
 
 {% assign first_section = site.sections | sort: "order_number" | first %}
-{% assign first_package = site.collections | where: "label", first_section.name | first %}
+{% assign first_package = site.collections | where: "title", first_section.name | first %}
 {% assign first_doc = first_package.docs | sort: "order_number" | first %}
 
 <div class="split-choice-wrapper">
