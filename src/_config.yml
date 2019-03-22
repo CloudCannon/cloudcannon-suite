@@ -17,19 +17,19 @@ timezone: Pacific/Auckland
 collections_dir: collections
 
 collections:
-  Dev:
+  dev:
     title: Dev
     permalink: /dev/:title/
     output: true
-  Dist:
+  dist:
     title: Dist
     permalink: /dist/:title/
     output: true
-  Help:
+  help:
     title: Help
     permalink: /help/:title/
     output: true
-  I18n:
+  i18n:
     title: I18n
     permalink: /i18n/:title/
     output: true
