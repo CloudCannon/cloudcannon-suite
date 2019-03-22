@@ -74,20 +74,30 @@ img.demonstration {
 			border: 5px solid $cards-background-color;
 		}
 		.feature-text {
+			display: flex;
 			width: 50%;
 			align-content: center;
 			flex-direction: column;
 			margin: 0 5% 0 0;
+
+			a {
+				max-width: 50%;
+			}
+
+			@media only screen and (max-width: $desktop-min) {
+				// mobile
+				width: 100%;
+				margin: 0 auto 24px auto;
+				a {
+					margin-left: auto;
+					margin-right: auto;
+				}
+			}
 		}
 
 		@media only screen and (max-width: $desktop-min) {
 			// mobile
 			flex-flow: column;
-			.feature-text { 
-				width: 100%;
-				margin: 0 auto 10px auto;
-			}
-
 		}
 	}
 }
@@ -166,14 +176,20 @@ img.demonstration {
 		display: flex;
 		flex-wrap: wrap;
 		padding: 0;
-		margin: 20px -10px;
+		margin: 20px 0px;
 		list-style: none;
 
 		li {
 			margin: 10px;
-			flex: 1 1 200px;
+			flex: 1 1 250px;
 			display: flex;
 			max-width: 250px;
+
+			@media only screen and (max-width: $desktop-min) {
+				margin-left: auto;
+				margin-right: auto;
+			}
+
 
 			a {
 				flex: 1;
