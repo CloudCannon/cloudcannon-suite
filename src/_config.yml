@@ -2,148 +2,78 @@
 # Site
 
 title: CloudCannon Suite
-description: An opinionated set of tools used to build and maintain static sites.
-url: https://suite.cloudcannon.com
-disqus_shortname: cloudcannon
-theme: jekyll-theme-cloudcannon
+url: "https://long-pig.cloudvent.net"
 baseurl:
+google_analytics_key:
 
+# Values for the jekyll-seo-tag gem (https://github.com/jekyll/jekyll-seo-tag)
+logo: /siteicon.png
+description: An opinionated set of tools used to build and maintain static sites.
+author:
+  name: CloudCannon Inc.
+  email: support@cloudcannon.com
+  twitter: CloudCannon
+social:
+  name: CloudCannon Suite
+  links:
+    - https://github.com/CloudCannon/cloudcannon-suite
 
-active_sibling: Suite
-main_url: https://cloudcannon.com
+# -----
+# Build
+
+timezone: Etc/UTC
+
 permalink: pretty
-timezone: Pacific/Auckland
 
-collections_dir: collections
+plugins:
+  - jekyll-sitemap
+  - jekyll-seo-tag
+  - jekyll-feed
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - README.md
+  - LICENCE
 
 collections:
-  dev:
-    title: Dev
-    permalink: /dev/:title/
+  packages:
+    title: Packages
+    permalink: /packages/:title/
     output: true
-  dist:
-    title: Dist
-    permalink: /dist/:title/
-    output: true
-  help:
-    title: Help
-    permalink: /help/:title/
-    output: true
-  i18n:
-    title: I18n
-    permalink: /i18n/:title/
-    output: true
-  sections:
-    title: Sections
-    permalink: /:path/
-    output: false
 
 defaults:
-  - scope:
+  -
+    scope:
       path: ""
     values:
-      header_class: "short"
-      layout: suite
-      icons: true
+      layout: default
+  -
+    scope:
+      path: ""
+      type: "packages"
+    values:
+      layout: package
+      seo:
+        type: Article
+      _comments:
+        category: Group navigation links with this field
+        order: Used to sort links in the navigation
       _options:
         content:
           width: 800
           height: 2000
-          format: p h2 h3 h4 h5 h6 yellow-highlight green-highlight
-          link: true
-          removeformat: true
-          bold: true
-          italic: true
-          image: true
-          numberedlist: true
-          bulletedlist: true
-          code: true
-          styles: "/src/css/editor.css"
-        _block:
-          width: 800
-          height: 2000
-          format: p h2 h3 h4 h5 h6 yellow-highlight green-highlight
-          link: true
-          removeformat: true
-          bold: true
-          italic: true
-          image: true
-          numberedlist: true
-          bulletedlist: true
-          code: true
-          styles: "/src/css/editor.css"
-  - scope:
+  -
+    scope:
       path: ""
-      type: "dev"
+      type: "posts"
     values:
-      layout: "packages"
-      seo:
-        type: Article
-  - scope:
-      path: ""
-      type: "dist"
-    values:
-      layout: packages
-      seo:
-        type: Article
-  - scope:
-      path: ""
-      type: "help"
-    values:
-      layout: packages
-      seo:
-        type: Article
-  - scope:
-      path: ""
-      type: "i18n"
-    values:
-      layout: packages
-      seo:
-        type: Article
-          
-plugins:
-  - jekyll-feed
-  - jekyll-seo-tag
-  - jekyll-sitemap
-  - jekyll-data
+      _comments:
+        type: Marks the impact of this release
 
-# ----------
-# SEO plugin
+# -----------
+# CloudCannon
 
-lang: en_NZ
-logo: /siteicon.png
-twitter:
-  username: CloudCannon
-facebook:
-  publisher: https://www.facebook.com/CloudCannon
-social:
-  name: CloudCannon
-  links:
-    - https://twitter.com/CloudCannon
-    - https://www.facebook.com/CloudCannon
-    - https://plus.google.com/+CloudCannon
-    - https://www.youtube.com/c/CloudCannon
-    - https://github.com/CloudCannon
- 
-exclude:
-  - Gemfile
-  - Gemfile.lock
-  - package.json
-_options:
-  _block:
-    width: 800
-    height: 2000
-    format: p h2 h3 h4 h5 h6 yellow-highlight green-highlight
-    link: true
-    removeformat: true
-    bold: true
-    italic: true
-    image: true
-    numberedlist: true
-    bulletedlist: true
-    code: true
-    styles: "/src/css/editor.css"
-
-header_classes:
-  - "landing"
-  - "short"
+types:
+  - minor
+  - major

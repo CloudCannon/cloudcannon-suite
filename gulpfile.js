@@ -8,6 +8,7 @@ suite.dist(gulp, {
     }
 });
 suite.i18n(gulp);
+
 suite.help(gulp);
 
 gulp.task("default", ["help"]);
