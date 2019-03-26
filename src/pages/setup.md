@@ -73,7 +73,7 @@ const suite = require("@cloudcannon/suite");
 suite.dev(gulp);
 ```
 
-## Run
+## Test your suite
 Run `gulp dev:install` in your project directory. This runs `bundle install` for your site.
 
 Next run `gulp dev` in your project directory to build and serve your site. See the [Dev package](/dev/introduction) for more information about this.
@@ -116,6 +116,6 @@ If you run into any issues, check that your project's file structure matches the
 		</strong>
 
 		{{ file.description_markdown | markdownify }}
-	</li>
+</li>
 {% endfor %}
 </ul>
