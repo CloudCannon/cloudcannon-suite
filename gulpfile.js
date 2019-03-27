@@ -1,5 +1,5 @@
 const gulp = require("gulp");
-const suite = require("@cloudcannon/suite");
+const suite = require(".");
 
 suite.dev(gulp);
 suite.dist(gulp, {
@@ -8,6 +8,7 @@ suite.dist(gulp, {
     }
 });
 suite.i18n(gulp);
+suite.state(gulp, {});
 suite.help(gulp);
 
-gulp.task("default", ["help"]);
+gulp.task("default", gulp.series("help"));

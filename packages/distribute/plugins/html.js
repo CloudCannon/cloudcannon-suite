@@ -83,7 +83,7 @@ module.exports = function (options) {
 			}
 		});
 
-		file.contents = new Buffer($.html());
+		file.contents = Buffer.from($.html());
 		this.push(file);
 		callback();
 	});
