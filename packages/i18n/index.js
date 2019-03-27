@@ -34,7 +34,7 @@ var configDefaults = {
 };
 
 module.exports = function (gulp, config) {
-	var gulpSequence = require('gulp-sequence').use(gulp)
+	//var gulpSequence = require('gulp-sequence').use(gulp)
 
 	config = config || {};
 
@@ -123,10 +123,6 @@ module.exports = function (gulp, config) {
 			.pipe(props2json({ minify: false }))
 			.pipe(gulp.dest(config.i18n.locale_src));
 	});
-
-	// Transfers json files from the new CloudCannon format
-	// to the old i18n folder structure
-	gulp.task("i18n:legacy-update", gulpSequence("i18n:load-locales", "i18n:add-character-based-wordwraps", "i18n:load-wordwraps", "i18n:legacy-save-to-properties-files"));
 
 	gulp.task("i18n:legacy-save-to-properties-files", function (done) {
 		log(c.green("Transferring files") + " from "
@@ -227,9 +223,23 @@ module.exports = function (gulp, config) {
 		}, done);
 	});
 
+	gulp.task("i18n:generate-redirect-html-pages", function (done) {
+		return gulp.src(config.i18n.src + "/**/*.html")
+			.pipe(i18n.redirectPage({
+				defaultLocale: config.i18n.default_language,
+				localeNames: localeNames,
+				locales: locales
+			})).pipe(gulp.dest(config.i18n.dest))
+	});
+
 	gulp.task("i18n:clone-prelocalised-html-pages", function (done) {
 		async.each(localeNames, function (targetLocale, next) {
 			return gulp.src(config.i18n.src + "/" + targetLocale + "/**/*.html")
+				.pipe(i18n.translate({
+					targetLocale: targetLocale,
+					localeNames: localeNames,
+					locales: locales
+				}))
 				.pipe(gulp.dest(config.i18n.dest + "/" + targetLocale))
 				.on('end', next);
 		}, done);
@@ -238,7 +248,7 @@ module.exports = function (gulp, config) {
 	// ---------
 	// Wordwraps
 
-	gulp.task("i18n:add-character-based-wordwraps", ["i18n:load-locales"], function (done) {
+	gulp.task("i18n:add-character-based-wordwraps", gulp.series("i18n:load-locales", function (done) {
 		if (!config.i18n.google_credentials_filename) {
 			return done();
 		}
@@ -265,7 +275,12 @@ module.exports = function (gulp, config) {
 				});
 			}, done);
 		});
-	});
+	}));
+
+	// Transfers json files from the new CloudCannon format
+	// to the old i18n folder structure
+	gulp.task("i18n:legacy-update", gulp.series("i18n:load-locales", "i18n:add-character-based-wordwraps", "i18n:load-wordwraps", "i18n:legacy-save-to-properties-files"));
+
 
 	gulp.task("i18n:clean", function () {
 		return del(config.i18n.dest);
@@ -274,14 +289,15 @@ module.exports = function (gulp, config) {
 	// -----
 	// Build
 
-	gulp.task("i18n:build", gulpSequence(
+	gulp.task("i18n:build", gulp.series(
 		"i18n:clean",
 		"i18n:load-locales",
 		"i18n:add-character-based-wordwraps",
 		"i18n:load-wordwraps",
 		"i18n:clone-assets",
 		"i18n:translate-html-pages",
-		"i18n:clone-prelocalised-html-pages"
+		"i18n:clone-prelocalised-html-pages",
+		"i18n:generate-redirect-html-pages"
 	));
 
 	// -----
@@ -292,19 +308,19 @@ module.exports = function (gulp, config) {
 		gulp.watch(config.i18n._src + "/**/*", ["i18n:build", "i18n:generate"]);
 	});
 
-	gulp.task("i18n:serve", ["i18n:build"], function() {
+	gulp.task("i18n:serve", gulp.series("i18n:build", function() {
 		return gulp.src(config.i18n.dest)
 			.pipe(webserver({
-				open: path.join(config.i18n.default_language) + config.serve.path,
+				open: config.serve.path,
 				port: config.serve.port
 			}));
-	});
+	}));
 
 
 	// -------
 	// Default
 
-	gulp.task("i18n", gulpSequence("i18n:serve", "i18n:watch"));
+	gulp.task("i18n", gulp.series("i18n:serve", "i18n:watch"));
 
-	gulp.task("i18n:kickoff", gulpSequence("dev:build", ["i18n:generate", "screenshots:dev"]));
+	gulp.task("i18n:kickoff", gulp.series("dev:build", "i18n:generate"));
 };

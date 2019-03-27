@@ -35,7 +35,7 @@ module.exports = function (options) {
 
 		var rewritten = rewriter.rewrite(css);
 
-		file.contents = new Buffer(rewritten);
+		file.contents = Buffer.from(rewritten);
 		this.push(file);
 		callback();
 	});

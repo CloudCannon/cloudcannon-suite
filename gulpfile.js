@@ -1,8 +1,14 @@
 const gulp = require("gulp");
 const suite = require(".");
 
-suite.jekyllDocs(gulp);
-suite.screenshots(gulp);
+suite.dev(gulp);
+suite.dist(gulp, {
+    "dist": {
+        "baseurl": "staging"
+    }
+});
+suite.i18n(gulp);
+suite.state(gulp, {});
 suite.help(gulp);
 suite.proofer(gulp, { 
   internal_domains: ['localhost:4000'], 
@@ -10,4 +16,6 @@ suite.proofer(gulp, {
   cache: { 
     timeframe: 60000,
     storage_dir: '_cache.json'
-  }});
+}});
+
+gulp.task("default", gulp.series("help"));

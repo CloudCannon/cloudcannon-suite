@@ -1,0 +1,15 @@
+<div class="wrapper wrapper-large">
+    <div class="feature-item">
+        <div class="feature-text">
+            <h2>{{include.heading}}</h2>
+            <p>{{include.subheading}}</p>
+            {% if include.url %}
+                <a href={{include.url}} class="button light">Learn More</a>
+            {% endif %}
+        </div>
+        <div class="feature-image">
+            <img src="{{site.baseurl}}/images/{{include.image_path}}">
+        </div>
+    </div>
+    
+</div>

@@ -5,9 +5,9 @@ var del = require("del"),
 	webserver = require("gulp-webserver"),
 	htmlRewrite = require("./plugins/html"),
 	cssRewrite = require("./plugins/css"),
-	log = require("fancy-log"),
-	rename = require("gulp-rename"),
-	gulpSequence = require("gulp-sequence");
+	log = require("fancy-log")
+	//rename = require("gulp-rename")
+	//gulpSequence = require("gulp-sequence");
 
 var configDefaults = {
 	dist: {
@@ -66,26 +66,26 @@ module.exports = function (gulp, config) {
 			.pipe(gulp.dest(fullDest));
 	});
 
-	gulp.task("dist:build", gulpSequence("dist:clean", ["dist:rewrite-html", "dist:rewrite-css", "dist:clone-assets"]));
+	gulp.task("dist:build", gulp.series("dist:clean", gulp.parallel("dist:rewrite-html", "dist:rewrite-css", "dist:clone-assets")));
 
 	// -----
 	// Serve
 
 	gulp.task("dist:watch", function () {
-		gulp.watch(config.dist._src + "/**/*", ["dist:build"]);
+		gulp.watch(config.dist._src + "/**/*", gulp.series("dist:build"));
 	});
 
-	gulp.task("dist:serve", ["dist:build"], function() {
+	gulp.task("dist:serve", gulp.series("dist:build", function() {
 		return gulp.src(config.dist.dest)
 			.pipe(webserver({
 				open: path.join(config.dist.baseurl, config.serve.path),
 				port: config.serve.port
 			}));
-	});
+	}));
 
 
 	// -------
 	// Default
 
-	gulp.task("dist", gulpSequence("dist:serve", "dist:watch"));
+	gulp.task("dist", gulp.series("dist:serve", "dist:watch"));
 };

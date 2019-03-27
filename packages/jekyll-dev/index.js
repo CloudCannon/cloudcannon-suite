@@ -2,9 +2,9 @@ var c = require("ansi-colors"),
 	path = require("path"),
 	fs = require("fs"),
 	log = require("fancy-log"),
-	yamlParser = require("js-yaml")
+	yamlParser = require("js-yaml"),
 	defaults = require("defaults"),
-	gulpSequence = require("gulp-sequence"),
+	//gulpSequence = require("gulp-sequence"),
 	browserSync = require('browser-sync').create(),
 	childProcess = require("child_process");
 
@@ -97,7 +97,7 @@ module.exports = function (gulp, config) {
 
 	var nspc = config.namespace;
 
-	var nestedSequence = gulpSequence.use(gulp);
+	//var nestedSequence = gulpSequence.use(gulp);
 
 	// ------
 	// Jekyll
@@ -140,10 +140,10 @@ module.exports = function (gulp, config) {
 		return runBundleCommand(commands, false, done);
 	});
 
-	gulp.task(nspc + ":reload", [nspc + ":build"], function (done) {
+	gulp.task(nspc + ":reload", gulp.series(nspc + ":build", function (done) {
 		browserSync.reload();
 		done();
-	});
+	}));
 
 	gulp.task(nspc + ":install", function (done) {
 		return runBundleCommand(["install", "--path", "../vendor/bundle"], false, done);
@@ -177,7 +177,7 @@ module.exports = function (gulp, config) {
 
 		function completeWatch(watches) {
 			log(c.grey("👓 watching: " + jekyllWatchFiles.join("\n\t")));
-			gulp.watch(jekyllWatchFiles, [nspc + ":reload"]);
+			gulp.watch(jekyllWatchFiles, gulp.series(nspc + ":reload"));
 			log(c.grey("✔ done"));
 			done();
 		}
@@ -276,8 +276,10 @@ module.exports = function (gulp, config) {
 	// Default
 
 	if (customTasks.length > 0) {
-		gulp.task(nspc, nestedSequence(customTasks, nspc + ":build", [nspc + ":watch", nspc + ":serve"]));
+		//gulp.task(nspc, nestedSequence(customTasks, nspc + ":build", [nspc + ":watch", nspc + ":serve"]));
+		gulp.task(npsc, gulp.series(customTasks, nspc + ":build", gulp.parallel(nspc + ":watch", nspc + ":serve")));
 	} else {
-		gulp.task(nspc, nestedSequence(nspc + ":build", [nspc + ":watch", nspc + ":serve"]));
+		gulp.task(nspc, gulp.series(nspc + ":build", gulp.parallel(nspc + ":watch", nspc + ":serve")));
+		//gulp.task(nspc, nestedSequence(nspc + ":build", [nspc + ":watch", nspc + ":serve"]));
 	}
 };

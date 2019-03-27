@@ -1,0 +1,116 @@
+---
+title: CloudCannon Suite
+permalink: /
+sitemap:
+  changefreq: daily
+  priority: '0.8'
+header_class: landing
+layout: default
+icons: true
+---
+{% if page.header_class == "landing" %}
+  <header class="{{ page.header_class }}">
+	  {% include navigation/top.html %}
+	  
+	  {% include components/hero/main.html image="" heading="CloudCannon Suite" subtitle="An opinionated set of tools used to build and maintain static sites." %}
+  </header>
+{% else %}
+  <header class="short">
+  	  {% include navigation/top.html %}
+  </header>
+{% endif %}
+
+<div class="wrapper wrapper-large content">
+	<h2>Welcome</h2>
+	<p class="editable">
+		The CloudCannon Suite is a set of tools designed to make Jekyll development even easier.<br> 
+	</p>
+	<ul class="large-boxes">
+		<li><a href="https://learn.cloudcannon.com/" target="_blank">
+			<strong>Unfamiliar with Jekyll?</strong>
+			<small>Check out our tutorials</small>
+		</a></li>
+		<li><a href="/setup/#install-prerequisites">
+			<strong>New to the suite?</strong>
+			<small>Install global requirements</small>
+		</a></li>
+		<li><a href="/setup/#project-structure">
+			<strong>Have a new site?</strong>
+			<small>Add package.json and gulpfile</small>
+		</a></li>
+		<li><a href="dev/introduction/">
+			<strong>Need more?</strong>
+			<small>Browse packages</small>
+		</a></li>
+	</ul>
+</div>
+
+<div class="feature-wrapper">
+	{% include feature-item.html
+		heading="Develop"
+		subheading="Install dependencies, build your site and serve it locally. The Suite watches your source and rebuilds automatically with every edit."
+		image_path="gulp-dev-aviator.gif"
+		url="/dev/introduction"
+	%}
+
+	{% include feature-item.html
+		heading="Distribute"
+		subheading="Clone your site under a different baseurl easily, without worrying about broken references."
+		image_path="gulp-dist.gif"
+		url="/dist/introduction"
+	%}
+
+	{% include feature-item.html
+		heading="Internationalisation"
+		subheading="Take advantage of streamlined processes for translating and localising your content."
+		image_path="gulp-i18n-cause.gif"
+		url="/i18n/introduction"
+	%}
+
+	{% include feature-item.html
+		heading="Structure"
+		subheading="Use an opinionated file structure for greater consistency and organisation."
+		image_path="site-structure.png"
+		url="/setup/#structure"
+	%}
+</div>
+
+{% assign first_section = site.sections | sort: "order_number" | first %}
+{% assign first_package = site.collections | where: "title", first_section.name | first %}
+{% assign first_doc = first_package.docs | sort: "order_number" | first %}
+
+<div class="split-choice-wrapper">
+	<div class="split-choice">
+		<div class="split-choice-content">
+			<i class="material-icons">extension</i>
+			<h3>Add a package</h3>
+			<p>Find and install a package to suit your needs.</p>
+			<a class="button light" href="{{ first_doc.url }}">Learn more</a>
+		</div>
+	</div>
+	<div class="split-choice">
+		<div class="split-choice-content">
+			<i class="material-icons">settings</i>
+			<h3>Get started</h3>
+			<p>Set up a new project in a few simple steps.</p>
+			<a class="button" href="/setup/">Setup</a>
+		</div>
+	</div>
+	<div class="split-choice">
+		<div class="split-choice-content">
+			<i class="material-icons">chat</i>
+			<h3>Let's Chat</h3>
+			<p>If you couldn't find what you needed, send us a message.</p>
+			<a class="button light" href="{{ site.main_url }}/contact/">Contact Support</a>
+		</div>
+	</div>
+	<div class="split-choice">
+		<div class="split-choice-content">
+			<i class="material-icons">grade</i>
+			<h3>Jekyll Tutorials</h3>
+			<p>New to Jekyll? Check out our tutorials.</p>
+			<a class="button light" href="https://learn.cloudcannon.com">Learn Jekyll</a>
+		</div>
+	</div>
+</div>
+
