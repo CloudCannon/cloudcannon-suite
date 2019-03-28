@@ -1,5 +1,7 @@
 dist/
+reports/
 .DS_Store
 */.sass-cache/
 node_modules
+_cache.json
 vendor/bundle

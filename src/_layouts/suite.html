@@ -1,0 +1,52 @@
+---
+layout: default
+icons: true
+header_class: short
+---
+{% if page.header_class == "landing" %}
+  <header class="{{ page.header_class }}">
+	  {% include navigation/top.html %}
+	  
+	  {% include components/hero/main.html image="" heading="CloudCannon Suite" subtitle="An opinionated set of tools used to build and maintain static sites." %}
+  </header>
+{% else %}
+  <header class="short">
+  	  {% include navigation/top.html %}
+  </header>
+{% endif %}
+
+<div class="docs-container">
+	<div class="wrapper wrapper-large">
+		{% unless page.hide_contents %}
+			{% include page-nav.html %}
+		{% endunless %}
+		<section class="docs-main">
+			<article class="content">
+				<div class="page-header">
+					{% if page.heading and page.url %}
+						<h1>{{ page.heading }}</h1>
+					{% elsif page.title and page.url %}
+						<h1>{{ page.title }}</h1>
+					{% endif %}
+
+					{% if page.subtitle %}
+						<p class="subtitle">{{ page.subtitle }}</p>
+					{% elsif page.description %}
+						<p class="subtitle">{{ page.description }}</p>
+					{% endif %}
+				</div>
+				{{ content }}
+			</article>
+		</section>
+	</div>
+</div>
+
+{% unless page.hide_contents %}
+<script src="/js/sticky-sidebar.js"></script>
+<script>
+	var sidebar = new StickySidebar("#docs-nav", {
+		topSpacing: 20,
+		bottomSpacing: 20
+	});
+</script>
+{% endunless %}

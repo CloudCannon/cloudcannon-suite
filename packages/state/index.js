@@ -3,14 +3,15 @@ var del = require("del"),
 	defaults = require("defaults"),
 	webserver = require("gulp-webserver"),
 	htmlDependencies = require("./plugins/html"),
-	cssDependencies = require("./plugins/css"),
-	rename = require("gulp-rename"),
-	gulpSequence = require("gulp-sequence");
+	cssDependencies = require("./plugins/css")
+	//rename = require("gulp-rename"),
+	//gulpSequence = require("gulp-sequence");
 
 var configDefaults = {
 	state: {
 		src: "dist/site",
-		dest: "reports/state"
+		dest: "reports/state",
+		baseurl: ""
 	},
 	serve: {
 		port: 9001,
@@ -22,7 +23,7 @@ var configDefaults = {
 module.exports = function (gulp, config) {
 	config = config || {};
 
-	config.state = defaults(config.state, configDefaults.dist);
+	config.state = defaults(config.state, configDefaults.state);
 	config.serve = defaults(config.serve, configDefaults.serve);
 
 
@@ -40,13 +41,13 @@ module.exports = function (gulp, config) {
 
 	gulp.task("state:html-dependencies", function () {
 		return gulp.src(config.state.src + "/**/*.html")
-			.pipe(htmlDependencies())
+			.pipe(htmlDependencies({baseurl: config.state.baseurl}))
 			.pipe(gulp.dest(fullDest));
 	});
 
 	gulp.task("state:css-dependencies", function () {
 		return gulp.src(config.state.src + "/**/*.css")
-			.pipe(cssDependencies())
+			.pipe(cssDependencies({baseurl: config.state.baseurl}))
 			.pipe(gulp.dest(fullDest));
 	});
 
@@ -59,26 +60,28 @@ module.exports = function (gulp, config) {
 			.pipe(gulp.dest(fullDest));
 	});
 
-	gulp.task("state:build", gulpSequence("state:clean", ["state:html-dependencies", "state:css-dependencies", "state:clone-assets"]));
+	gulp.task("state:build", gulp.series("state:clean", gulp.parallel("state:html-dependencies", "state:css-dependencies", "state:clone-assets")));
+	//gulp.task("state:build", gulpSequence("state:clean", ["state:html-dependencies", "state:css-dependencies", "state:clone-assets"]));
+
 
 	// -----
 	// Serve
 
 	gulp.task("state:watch", function () {
-		gulp.watch(config.state._src + "/**/*", ["state:build"]);
+		gulp.watch(config.state._src + "/**/*", gulp.series("state:build"));
 	});
 
-	gulp.task("state:serve", ["state:build"], function() {
+	gulp.task("state:serve", gulp.series("state:build", function() {
 		return gulp.src(config.state.dest)
 			.pipe(webserver({
 				open: path.join(config.state.baseurl, config.serve.path),
 				port: config.serve.port
 			}));
-	});
+	}));
 
 
 	// -------
 	// Default
 
-	gulp.task("state", gulpSequence("state:serve", "state:watch"));
+	gulp.task("state", gulp.series("state:serve", "state:watch"));
 };

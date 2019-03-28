@@ -12,7 +12,7 @@ module.exports = function (options) {
 		if (IGNORE_URL_REGEX.test(href)) {
 			return href;
 		}
-		return "/" + path.join(options.baseurl, href);
+		return path.join(options.baseurl, href);
 	}
 
 	return through(function (file, encoding, callback) {
@@ -23,7 +23,7 @@ module.exports = function (options) {
 			return callback(new PluginError("cloudcannon-suite-dist-html", "Streaming not supported"));
 		}
 
-		file.sitePath = "/" + file.path.substring(file.base.length);
+		file.sitePath =  "/" + file.path.substring(file.base.length);
 		file.sitePath = file.sitePath.replace(/\/index.html?/i, "/");
 
 		var $ = cheerio.load(file.contents.toString(encoding), { lowerCaseAttributeNames:false, decodeEntities: false });
@@ -83,7 +83,7 @@ module.exports = function (options) {
 			}
 		});
 
-		file.contents = new Buffer($.html());
+		file.contents = Buffer.from($.html());
 		this.push(file);
 		callback();
 	});

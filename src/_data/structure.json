@@ -7,7 +7,7 @@
 	},
 	{
 		"path": "gulpfile.js",
-		"description_markdown": "A javascript file required to configure cloudcannon suite.",
+		"description_markdown": "A JavaScript file required to configure CloudCannon suite.",
 		"required": true,
 		"committed": true
 	},
@@ -31,20 +31,14 @@
 	},
 	{
 		"path": "siteicon.png",
-		"description_markdown": "The jekyll source of the site.",
+		"description_markdown": "The icon for the site.",
 		"required": false,
 		"committed": true
 	},
 
 	{
 		"path": "src",
-		"description_markdown": "The jekyll source of the site.",
-		"required": false,
-		"committed": true
-	},
-	{
-		"path": "docs",
-		"description_markdown": "The jekyll source of the documentation site.",
+		"description_markdown": "The Jekyll source of the site.",
 		"required": false,
 		"committed": true
 	},
@@ -68,24 +62,17 @@
 		"committed": false
 	},
 	{
+		"path": "dist/prod",
+		"description_markdown": "The output for the `gulp dist` command.",
+		"required": false,
+		"committed": false
+	},
+	{
 		"path": "dist/translated_site",
 		"description_markdown": "The output for the `gulp i18n` command.",
 		"required": false,
 		"committed": false
 	},
-	{
-		"path": "dist/docs",
-		"description_markdown": "The output for the `gulp docs` command.",
-		"required": false,
-		"committed": false
-	},
-	{
-		"path": "dist/reports",
-		"description_markdown": "The output for the `gulp reports` command.",
-		"required": false,
-		"committed": false
-	},
-
 	{
 		"path": "i18n",
 		"description_markdown": "The folder for the i18n steps.",

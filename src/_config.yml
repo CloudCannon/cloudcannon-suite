@@ -2,78 +2,148 @@
 # Site
 
 title: CloudCannon Suite
-url: "https://long-pig.cloudvent.net"
-baseurl:
-google_analytics_key:
-
-# Values for the jekyll-seo-tag gem (https://github.com/jekyll/jekyll-seo-tag)
-logo: /siteicon.png
 description: An opinionated set of tools used to build and maintain static sites.
-author:
-  name: CloudCannon Inc.
-  email: support@cloudcannon.com
-  twitter: CloudCannon
-social:
-  name: CloudCannon Suite
-  links:
-    - https://github.com/CloudCannon/cloudcannon-suite
+url: https://suite.cloudcannon.com
+disqus_shortname: cloudcannon
+theme: jekyll-theme-cloudcannon
+baseurl:
 
-# -----
-# Build
 
-timezone: Etc/UTC
-
+active_sibling: Suite
+main_url: https://cloudcannon.com
 permalink: pretty
+timezone: Pacific/Auckland
 
-plugins:
-  - jekyll-sitemap
-  - jekyll-seo-tag
-  - jekyll-feed
-
-exclude:
-  - Gemfile
-  - Gemfile.lock
-  - README.md
-  - LICENCE
+collections_dir: collections
 
 collections:
-  packages:
-    title: Packages
-    permalink: /packages/:title/
+  dev:
+    title: Dev
+    permalink: /dev/:title/
     output: true
+  dist:
+    title: Dist
+    permalink: /dist/:title/
+    output: true
+  help:
+    title: Help
+    permalink: /help/:title/
+    output: true
+  i18n:
+    title: I18n
+    permalink: /i18n/:title/
+    output: true
+  sections:
+    title: Sections
+    permalink: /:path/
+    output: false
 
 defaults:
-  -
-    scope:
+  - scope:
       path: ""
     values:
-      layout: default
-  -
-    scope:
-      path: ""
-      type: "packages"
-    values:
-      layout: package
-      seo:
-        type: Article
-      _comments:
-        category: Group navigation links with this field
-        order: Used to sort links in the navigation
+      header_class: "short"
+      layout: suite
+      icons: true
       _options:
         content:
           width: 800
           height: 2000
-  -
-    scope:
+          format: p h2 h3 h4 h5 h6 yellow-highlight green-highlight
+          link: true
+          removeformat: true
+          bold: true
+          italic: true
+          image: true
+          numberedlist: true
+          bulletedlist: true
+          code: true
+          styles: "/src/css/editor.css"
+        _block:
+          width: 800
+          height: 2000
+          format: p h2 h3 h4 h5 h6 yellow-highlight green-highlight
+          link: true
+          removeformat: true
+          bold: true
+          italic: true
+          image: true
+          numberedlist: true
+          bulletedlist: true
+          code: true
+          styles: "/src/css/editor.css"
+  - scope:
       path: ""
-      type: "posts"
+      type: "dev"
     values:
-      _comments:
-        type: Marks the impact of this release
+      layout: "packages"
+      seo:
+        type: Article
+  - scope:
+      path: ""
+      type: "dist"
+    values:
+      layout: packages
+      seo:
+        type: Article
+  - scope:
+      path: ""
+      type: "help"
+    values:
+      layout: packages
+      seo:
+        type: Article
+  - scope:
+      path: ""
+      type: "i18n"
+    values:
+      layout: packages
+      seo:
+        type: Article
+          
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+  - jekyll-sitemap
+  - jekyll-data
 
-# -----------
-# CloudCannon
+# ----------
+# SEO plugin
 
-types:
-  - minor
-  - major
+lang: en_NZ
+logo: /siteicon.png
+twitter:
+  username: CloudCannon
+facebook:
+  publisher: https://www.facebook.com/CloudCannon
+social:
+  name: CloudCannon
+  links:
+    - https://twitter.com/CloudCannon
+    - https://www.facebook.com/CloudCannon
+    - https://plus.google.com/+CloudCannon
+    - https://www.youtube.com/c/CloudCannon
+    - https://github.com/CloudCannon
+ 
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - package.json
+_options:
+  _block:
+    width: 800
+    height: 2000
+    format: p h2 h3 h4 h5 h6 yellow-highlight green-highlight
+    link: true
+    removeformat: true
+    bold: true
+    italic: true
+    image: true
+    numberedlist: true
+    bulletedlist: true
+    code: true
+    styles: "/src/css/editor.css"
+
+header_classes:
+  - "landing"
+  - "short"
