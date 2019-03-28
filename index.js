@@ -4,7 +4,6 @@ console.log(c.yellow(`Running ${pjson.name} ${pjson.version}`));
 
 module.exports = {
 	dev: require("./packages/jekyll-dev"),
-	jekyllDev: require("./packages/jekyll-dev"),
 	i18n: require("./packages/i18n"),
 	dist: require("./packages/distribute"),
 	help: require("./packages/help"),
