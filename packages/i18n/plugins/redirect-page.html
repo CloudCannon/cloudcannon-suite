@@ -112,9 +112,8 @@
                 search = search.replace(/^&/, "?");
 
                 var hash = location.hash || '';
-                var h = !!~hash.indexOf('#') ? '#' : '';
 
-                location.replace(url + search + h + hash);
+                location.replace(url + search + hash);
             })();
         </script>
     </body>
