@@ -4,7 +4,6 @@ var c = require("ansi-colors"),
 	log = require("fancy-log"),
 	yamlParser = require("js-yaml"),
 	defaults = require("defaults"),
-	//gulpSequence = require("gulp-sequence"),
 	browserSync = require('browser-sync').create(),
 	childProcess = require("child_process");
 
@@ -96,8 +95,6 @@ module.exports = function (gulp, config) {
 	config.jekyll.dest = path.join(cwd, config.jekyll.dest);
 
 	var nspc = config.namespace;
-
-	//var nestedSequence = gulpSequence.use(gulp);
 
 	// ------
 	// Jekyll
@@ -264,7 +261,7 @@ module.exports = function (gulp, config) {
 		});
 	});
 
-	gulp.task(nspc + ":serve", function() {
+	gulp.task(nspc + ":serve", function () {
 		browserSync.init({
 			server: {
 				baseDir: config.jekyll.dest
@@ -272,14 +269,12 @@ module.exports = function (gulp, config) {
 			port: config.serve.port,
 		});
 	});
+	
 	// -------
 	// Default
-
 	if (customTasks.length > 0) {
-		//gulp.task(nspc, nestedSequence(customTasks, nspc + ":build", [nspc + ":watch", nspc + ":serve"]));
 		gulp.task(npsc, gulp.series(customTasks, nspc + ":build", gulp.parallel(nspc + ":watch", nspc + ":serve")));
 	} else {
 		gulp.task(nspc, gulp.series(nspc + ":build", gulp.parallel(nspc + ":watch", nspc + ":serve")));
-		//gulp.task(nspc, nestedSequence(nspc + ":build", [nspc + ":watch", nspc + ":serve"]));
 	}
 };

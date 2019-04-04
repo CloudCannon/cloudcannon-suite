@@ -1,11 +1,9 @@
 var del = require("del"),
 	path = require("path"),
 	defaults = require("defaults"),
-	webserver = require("gulp-webserver"),
+	browserSync = require('browser-sync').create(),
 	htmlDependencies = require("./plugins/html"),
-	cssDependencies = require("./plugins/css")
-	//rename = require("gulp-rename"),
-	//gulpSequence = require("gulp-sequence");
+	cssDependencies = require("./plugins/css");
 
 var configDefaults = {
 	state: {
@@ -61,8 +59,6 @@ module.exports = function (gulp, config) {
 	});
 
 	gulp.task("state:build", gulp.series("state:clean", gulp.parallel("state:html-dependencies", "state:css-dependencies", "state:clone-assets")));
-	//gulp.task("state:build", gulpSequence("state:clean", ["state:html-dependencies", "state:css-dependencies", "state:clone-assets"]));
-
 
 	// -----
 	// Serve
@@ -71,12 +67,19 @@ module.exports = function (gulp, config) {
 		gulp.watch(config.state._src + "/**/*", gulp.series("state:build"));
 	});
 
+	gulp.task("state:reload", gulp.series("state:build", function (done) {
+		browserSync.reload();
+		done();
+	}));
+
 	gulp.task("state:serve", gulp.series("state:build", function() {
-		return gulp.src(config.state.dest)
-			.pipe(webserver({
-				open: path.join(config.state.baseurl, config.serve.path),
-				port: config.serve.port
-			}));
+		browserSync.init({
+			startPath: path.join(config.state.baseurl, config.serve.path),
+			server: {
+				baseDir: config.state.dest
+			},
+			port: config.serve.port,
+		});
 	}));
 
 

@@ -5,7 +5,7 @@ var async = require("async"),
 	log = require("fancy-log"),
 	path = require("path"),
 	defaults = require("defaults"),
-	webserver = require("gulp-webserver"),
+	browserSync = require('browser-sync').create(),
 	prop = require("properties"),
 	props2json = require("gulp-props2json"),
 	i18n = require("./plugins/i18n"),
@@ -304,16 +304,23 @@ module.exports = function (gulp, config) {
 	// Serve
 
 	gulp.task("i18n:watch", function () {
-		gulp.watch(config.i18n._locale_src + "/**/*", ["i18n:build"]);
-		gulp.watch(config.i18n._src + "/**/*", ["i18n:build", "i18n:generate"]);
+		gulp.watch(config.i18n._locale_src + "/**/*", gulp.parallel("i18n:reload"));
+		gulp.watch(config.i18n._src + "/**/*", gulp.parallel("i18n:reload", "i18n:generate"));
 	});
 
+	gulp.task("i18n:reload", gulp.series("i18n:build", function (done) {
+		browserSync.reload();
+		done();
+	}));
+
 	gulp.task("i18n:serve", gulp.series("i18n:build", function() {
-		return gulp.src(config.i18n.dest)
-			.pipe(webserver({
-				open: config.serve.path,
-				port: config.serve.port
-			}));
+		browserSync.init({
+			startPath: config.serve.path,
+			server: {
+				baseDir: config.i18n.dest
+			},
+			port: config.serve.port,
+		});
 	}));
 
 
