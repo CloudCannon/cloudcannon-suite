@@ -310,7 +310,6 @@ module.exports = function (gulp, config) {
 	gulp.task("i18n:serve", ["i18n:build"], function() {
 		return gulp.src(config.i18n.dest)
 			.pipe(webserver({
-				open: config.serve.path,
 				port: config.serve.port
 			}));
 	});
