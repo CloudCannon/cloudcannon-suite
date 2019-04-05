@@ -73,23 +73,28 @@ module.exports = function (gulp, config) {
 		gulp.watch(config.dist._src + "/**/*", gulp.series("dist:reload"));
 	});
 
-	gulp.task("dist:reload", gulp.series("dist:build", function (done) {
+	gulp.task("dist:browser-sync", function (done) {
 		browserSync.reload();
 		done();
-	}));
+	});
 	
-	gulp.task("dist:serve", gulp.series("dist:build", function() {
+	gulp.task("dist:reload", gulp.series("dist:build", "dist:browser-sync"));
+
+	gulp.task("dist:serve", function (done) {
 		browserSync.init({
+			startPath: path.join(config.dist.baseurl, config.serve.path),
+
 			server: {
 				baseDir: config.dist.dest
 			},
 			port: config.serve.port,
 		});
-	}));
+		done();
+	});
 
 
 	// -------
 	// Default
 
-	gulp.task("dist", gulp.series("dist:serve", "dist:watch"));
+	gulp.task("dist", gulp.series("dist:build", "dist:serve", "dist:watch"));
 };

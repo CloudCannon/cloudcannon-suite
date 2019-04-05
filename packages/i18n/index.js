@@ -248,8 +248,13 @@ module.exports = function (gulp, config) {
 	// ---------
 	// Wordwraps
 
-	gulp.task("i18n:add-character-based-wordwraps", gulp.series("i18n:load-locales", function (done) {
+	gulp.task("i18n:add-character-based-wordwraps", function (done) {
 		if (!config.i18n.google_credentials_filename) {
+			return done();
+		}
+
+		if (!localeNames) {
+			log("i18n:load-locales must be run to load the locales first");
 			return done();
 		}
 
@@ -275,7 +280,7 @@ module.exports = function (gulp, config) {
 				});
 			}, done);
 		});
-	}));
+	});
 
 	// Transfers json files from the new CloudCannon format
 	// to the old i18n folder structure
@@ -304,24 +309,26 @@ module.exports = function (gulp, config) {
 	// Serve
 
 	gulp.task("i18n:watch", function () {
-		gulp.watch(config.i18n._locale_src + "/**/*", gulp.parallel("i18n:reload"));
+		gulp.watch(config.i18n._locale_src + "/*.json", gulp.parallel("i18n:reload"));
 		gulp.watch(config.i18n._src + "/**/*", gulp.parallel("i18n:reload", "i18n:generate"));
 	});
 
-	gulp.task("i18n:reload", gulp.series("i18n:build", function (done) {
+	gulp.task("i18n:browser-sync", function (done) {
 		browserSync.reload();
 		done();
-	}));
+	});
+	
+	gulp.task("i18n:reload", gulp.series("i18n:build", "i18n:browser-sync"));
 
-	gulp.task("i18n:serve", gulp.series("i18n:build", function() {
+	gulp.task("i18n:serve", function (done) {
 		browserSync.init({
-			startPath: config.serve.path,
 			server: {
 				baseDir: config.i18n.dest
 			},
 			port: config.serve.port,
 		});
-	}));
+		done();
+	});
 
 
 	// -------

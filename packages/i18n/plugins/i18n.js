@@ -266,7 +266,7 @@ module.exports = {
 			}
 
 			file.sitePath = "/" + file.path.substring(file.base.length);
-			file.sitePath = file.sitePath.replace(/\/index.html?/i, "/");
+			file.sitePath = file.sitePath.replace(/\/index.html?/i, "/").replace(/\/+/i, "/");
 
 			var baseFolder = getBaseFolder(file.sitePath);
 			if (file.sitePath === "/404.html" || localeLookup[baseFolder]) {

@@ -136,12 +136,7 @@ module.exports = function (gulp, config) {
 
 		return runBundleCommand(commands, false, done);
 	});
-
-	gulp.task(nspc + ":reload", gulp.series(nspc + ":build", function (done) {
-		browserSync.reload();
-		done();
-	}));
-
+	
 	gulp.task(nspc + ":install", function (done) {
 		return runBundleCommand(["install", "--path", "../vendor/bundle"], false, done);
 	});
@@ -164,7 +159,7 @@ module.exports = function (gulp, config) {
 		var jekyllWatchFiles = [config.jekyll._src + "/**/*"];
 		for (var taskName in config.tasks) {
 			if (config.tasks.hasOwnProperty(taskName)) {
-				gulp.watch(config.tasks[taskName].watch, [nspc + ":" + taskName]);
+				gulp.watch(config.tasks[taskName].watch, gulp.series(nspc + ":" + taskName));
 
 				config.tasks[taskName].watch.forEach(function (glob) {
 					jekyllWatchFiles.push("!" + glob);
@@ -261,15 +256,22 @@ module.exports = function (gulp, config) {
 		});
 	});
 
-	gulp.task(nspc + ":serve", function () {
+	gulp.task(nspc + ":browser-sync", function (done) {
+		browserSync.reload();
+		done();
+	});
+	
+	gulp.task(nspc + ":reload", gulp.series(nspc + ":build", nspc + ":browser-sync"));
+	gulp.task(nspc + ":serve", function (done) {
 		browserSync.init({
 			server: {
 				baseDir: config.jekyll.dest
 			},
 			port: config.serve.port,
 		});
+		done();
 	});
-	
+
 	// -------
 	// Default
 	if (customTasks.length > 0) {

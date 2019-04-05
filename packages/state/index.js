@@ -67,20 +67,22 @@ module.exports = function (gulp, config) {
 		gulp.watch(config.state._src + "/**/*", gulp.series("state:build"));
 	});
 
-	gulp.task("state:reload", gulp.series("state:build", function (done) {
+	gulp.task("state:browser-sync", function (done) {
 		browserSync.reload();
 		done();
-	}));
+	});
+	
+	gulp.task("state:reload", gulp.series("state:build", "state:browser-sync"));
 
-	gulp.task("state:serve", gulp.series("state:build", function() {
+	gulp.task("state:serve", function (done) {
 		browserSync.init({
-			startPath: path.join(config.state.baseurl, config.serve.path),
 			server: {
 				baseDir: config.state.dest
 			},
 			port: config.serve.port,
 		});
-	}));
+		done();
+	});
 
 
 	// -------
