@@ -40,7 +40,7 @@ function handleHTMLFile(options) {
 		}
 
 		file.sitePath = "/" + file.path.substring(file.base.length);
-		file.sitePath = file.sitePath.replace(/\/index.html?/i, "/");
+		file.sitePath = file.sitePath.replace(/\/index.html?/i, "/").replace(/\/+/i, "/");
 
 		if (options.skipFile && options.skipFile(file)) {
 			log("Skipping HTML " + c.grey("'" + file.sitePath + "'"));
@@ -52,9 +52,7 @@ function handleHTMLFile(options) {
 		$("[data-i18n]").each(function processElement() {
 			var $el = $(this),
 				key = $el.attr("data-i18n"),
-				attributes = $el.attr("data-i18n-attrs"),
-				value = $el.html(),
-				additions = {};
+				attributes = $el.attr("data-i18n-attrs");
 
 			if (!key) {
 				key = generateDefaultI18nKey($, $el);

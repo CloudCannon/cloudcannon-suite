@@ -334,7 +334,7 @@ module.exports = function (gulp, config) {
 	// -------
 	// Default
 
-	gulp.task("i18n", gulp.series("i18n:serve", "i18n:watch"));
+	gulp.task("i18n", gulp.series("i18n:build", "i18n:serve", "i18n:watch"));
 
 	gulp.task("i18n:kickoff", gulp.series("dev:build", "i18n:generate"));
 };
