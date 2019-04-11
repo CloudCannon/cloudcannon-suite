@@ -1,4 +1,5 @@
 dist/
+i18n/wrapped/
 reports/
 .DS_Store
 */.sass-cache/
