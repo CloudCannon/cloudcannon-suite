@@ -51,24 +51,6 @@ module.exports = function (gulp, config) {
 	config.i18n.generated_locale_dest = path.join(cwd, config.i18n.generated_locale_dest);
 	config.i18n.legacy_path = path.join(cwd, config.i18n.legacy_path);
 
-	gulp.task("i18n:test-wrap", function (done) {
-		let attr = {"class": "wordwrap"};
-
-		log("Wrapping 六本木ヒルズでご飯を食べます。");
-		wordwrap.parse("六本木ヒルズでご飯を食べます。", "ja", attr).then(parsed => {
-			log(parsed);
-
-			log("Wrapping 渋谷のryanカレーを食べに行く。");
-			wordwrap.parse("渋谷のryanカレーを食べに行く。", "ja", attr).then(parsed => {
-				log(parsed);
-				done();
-			});
-
-		});
-
-		
-	});
-
 	function readLocalesFromDir(dir, done) {
 		var returnedLocales = {};
 		fs.readdir(dir, function(err, files) {
