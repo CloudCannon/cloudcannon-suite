@@ -83,7 +83,7 @@ module.exports = function ChunkList(chunkArray) {
             if (chunk.hasCJK() && !(maxLength && chunk.word.length > maxLength)) {
                 let attributeString = "";
                 for (let key in attributes) {
-                    attributeString += ` ${key}='${attributes[key]}'`;
+                    attributeString += ` ${key}=\"${attributes[key]}\"`;
                 }
                 elements.push(`<span${attributeString}>${chunk.word}</span>`);
             } else {
