@@ -77,7 +77,8 @@ module.exports = {
             'document': {
                 'type': 'PLAIN_TEXT',
                 'content': text
-            }
+            },
+            'encodingType': 'UTF32'
         };
 
         if (language) {

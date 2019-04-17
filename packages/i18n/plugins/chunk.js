@@ -7,7 +7,7 @@ module.exports = function Chunk(word, POS /* part of speech */, label, dependenc
     this.dependency = dependency;
 
     this.isSpace = function() {
-        return this.POS === "SPACE";
+        return this.POS === "SPACE" || this.word === " ";
     }
 
     this.isPunctuation = function () {

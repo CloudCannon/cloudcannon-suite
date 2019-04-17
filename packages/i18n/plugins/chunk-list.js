@@ -64,7 +64,7 @@ module.exports = function ChunkList(chunkArray) {
             }
         }
         if (tempBucket.length > 0) {
-            targetChunks.concat(tempBucket);
+            targetChunks = targetChunks.concat(tempBucket);
         }
         if (!direction) {
             targetChunks = targetChunks.reverse();
