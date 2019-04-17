@@ -312,7 +312,7 @@ module.exports = function (gulp, config) {
 				attributes: {"class":"wordwrap"}
 			}, function (err, parsed) {
 				if (parsed) {
-					output[key] = parsed.replace('\n', ' ').replace('\r', '');
+					output[key] = parsed.replace(/\n/g, ' ').replace(/\r/g, '');
 				}
 				next(err);
 			});
