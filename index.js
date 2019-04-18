@@ -8,5 +8,6 @@ module.exports = {
 	dist: require("./packages/distribute"),
 	help: require("./packages/help"),
 	proofer: require("./packages/proofer"),
-	state: require("./packages/state")
+	state: require("./packages/state"),
+	screenshots: require("./packages/screenshots")
 };
