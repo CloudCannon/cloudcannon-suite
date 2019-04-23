@@ -123,11 +123,15 @@ module.exports = function (gulp, config) {
 			}
 
 			var json = {};
-			for (var key in locales[localeName]) {
+
+			var keys = Object.keys(locales[localeName]).sort();
+			for (let i = 0; i < keys.length; i++) {
+				const key = keys[i];
+
 				if (locales[localeName].hasOwnProperty(key)) {
 					json[key] = locales[localeName][key].translation;
 				}
-			}
+			}	
 
 			if (localeName === "th") {
 				localeName = "th_TH";
@@ -172,12 +176,6 @@ module.exports = function (gulp, config) {
 	});
 
 	gulp.task("i18n:load-wordwraps", function (done) {
-		if (!process.env.GOOGLE_APPLICATION_CREDENTIALS) {
-			log("Environment variable GOOGLE_APPLICATION_CREDENTIALS not found");
-			log("export GOOGLE_APPLICATION_CREDENTIALS=\"/PATH/TO/CREDENTIALS/google-creds.json\"");
-			return done();
-		}
-
 		var wrappedDir = path.join(config.i18n.locale_src, "../wrapped");
 		readLocalesFromDir(wrappedDir, function (err, returnedLocales) {
 			if (!err) {
@@ -191,8 +189,6 @@ module.exports = function (gulp, config) {
 
 			done(err);
 		});
-
-		return done();
 	});
 
 	gulp.task("i18n:clone-assets",  function () {
