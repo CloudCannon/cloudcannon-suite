@@ -13,7 +13,7 @@ require('events').EventEmitter.prototype._maxListeners = 100;
 
 const tagmap = {};
 
-module.exports = async function (gulp, config, done) {
+module.exports = function (gulp, config) {
 	config = config || {};
 	config = defaults(config, {
 		dest: "reports/screenshots",
@@ -65,9 +65,7 @@ module.exports = async function (gulp, config, done) {
 		gulp.task("screenshots:" + namespace + "-tool", gulp.series("screenshots:" + namespace, async function (done) {
 			gulp.src(config.dest + "/" + namespace)
                 .pipe(webserver({open: true}));
-        }));
-
-        done();
+		}));
 	}
 
 	gulp.task("screenshots:clean", function () {

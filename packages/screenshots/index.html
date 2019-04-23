@@ -430,12 +430,12 @@
 
         function updateList() {
             if (!filter.value) {
-                document.querySelectorAll('.sidebar > a').forEach(function(element){
+                document.querySelectorAll('.sidebar a').forEach(function(element){
                     element.classList.remove("hide");
                 });
                 return;
             }
-            document.querySelectorAll('.sidebar > a').forEach(function(element){
+            document.querySelectorAll('.sidebar a').forEach(function(element){
                 element.classList.add("hide");
             });
             document.querySelectorAll('[href*="'+filter.value+'"]').forEach(function(element){

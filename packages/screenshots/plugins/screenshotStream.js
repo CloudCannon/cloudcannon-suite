@@ -1,8 +1,11 @@
 const through = require("through2").obj,
 	//exec = require('await-exec'),
 	log = require("fancy-log"),
+	c = require('ansi-colors'),
 	fs = require('fs-extra'),
-	path = require("path");
+	path = require("path"),
+	timeout = ms => new Promise(res => setTimeout(res, ms)),
+	merge = require("merge-img");
 
 module.exports = function (screenshotter, tagmap) {
 	return through(async function(file, enc, cb) {
@@ -64,25 +67,72 @@ module.exports = function (screenshotter, tagmap) {
 			}
 		});
 
-		log(`Taking screenshot`)
-		let img = await screenshotter.takeScreenshot(page);
+		log(`Taking screenshot`);
+
+		if (screenshotter.options.delay) {
+			log(`Waiting ${screenshotter.options.delay}ms`);
+			await timeout(screenshotter.options.delay);
+		}
+	
+		let screenshotOptions = {encoding: (screenshotter.options.base64 ? "base64" : "binary")};
+	
+		log(`Finding page size`);
+		const { width, height } = await page.evaluate(() => {
+			const body = document.querySelector('body');
+			const boundingBox = body.getBoundingClientRect();
+			return {width: boundingBox.width, height: boundingBox.height};
+		}).catch(e => log.error(e));
+
+		let segmentHeight = 4000;
+		let numSegments = Math.ceil(height / segmentHeight);
+	
+		screenshotOptions.clip = {
+			x: 0,
+			y: 0,
+			width,
+			height: segmentHeight
+		};
+
+		log(`Taking screenshot in ${numSegments} parts, at ${width}px by ${height}px total`);
+		let screenshot = await page.screenshot(screenshotOptions);
+		for (let n = 1; n < numSegments; n++) {
+			screenshotOptions.clip.y = Math.min(segmentHeight * n, height);
+			screenshotOptions.clip.height = Math.min(screenshotOptions.clip.height, height - screenshotOptions.clip.y);
+			const screenshotBottom = await page.screenshot(screenshotOptions);
+			screenshot = await merge([screenshot, screenshotBottom], { direction: true });
+		}
+	
+		log(c.greenBright(`Screenshot completed ${page.url()} ✓`));
+	
+		log(`Page closing`);
+		await page.close();
+		log(`Page closed`);
 
 		log(`Shutting down browser and server`);
 		await screenshotter.shutdownServer();
 		await screenshotter.shutdownBrowser();
 
-		log(`Ensuring directory`)
+		log(`Ensuring directory`);
 		let shotDir = path.join(screenshotter.options.dest, urlPath);
 		await fs.ensureDir(path.dirname(shotDir));
 
-		if (img) {
-			log(`Outputting image`)
-			await fs.writeFile(shotDir.replace(/html$/, 'png'), img, (error) => {if(error)console.log(error)});
+		if (screenshot) {
+			log(`Outputting image`);
+			if (numSegments > 1) {
+				await screenshot.write(shotDir.replace(/html$/, 'png'), (error) => {
+					if (error)console.log(error);
+				});
+			} else {
+				await fs.writeFile(shotDir.replace(/html$/, 'png'), screenshot, (error) => {
+					if(error)console.log(error);
+				});
+			}
+			
 			//await fs.ensureDir(shotDir.replace(/html$/, 'tiles/'));
 			//await exec(`convert ${shotDir.replace(/html$/, 'png')} -crop 240x240 ${shotDir.replace(/html$/, 'tiles')}/tile%d.png`);
 		}
 
-		log(`Outputting json`)
+		log(`Outputting json`);
 		await fs.writeFile(shotDir.replace(/html$/, 'json'), JSON.stringify([...tags], null, 2));
 
 		this.push(file);
