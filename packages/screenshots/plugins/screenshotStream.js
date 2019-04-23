@@ -94,12 +94,17 @@ module.exports = function (screenshotter, tagmap) {
 		};
 
 		log(`Taking screenshot in ${numSegments} parts, at ${width}px by ${height}px total`);
-		let screenshot = await page.screenshot(screenshotOptions);
-		for (let n = 1; n < numSegments; n++) {
+		let screenshot;
+		for (let n = 0; n < numSegments; n++) {
 			screenshotOptions.clip.y = Math.min(segmentHeight * n, height);
 			screenshotOptions.clip.height = Math.min(screenshotOptions.clip.height, height - screenshotOptions.clip.y);
 			const screenshotBottom = await page.screenshot(screenshotOptions);
-			screenshot = await merge([screenshot, screenshotBottom], { direction: true });
+
+			if (screenshot) {
+				screenshot = await merge([screenshot, screenshotBottom], { direction: true });
+			} else {
+				screenshot = screenshotBottom;
+			}
 		}
 	
 		log(c.greenBright(`Screenshot completed ${page.url()} ✓`));

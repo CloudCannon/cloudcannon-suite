@@ -6,7 +6,7 @@ var fs = require('fs-extra'),
 	del = require("del"),
 	log = require("fancy-log"),
 	screenshotStream = require("./plugins/screenshotStream"),
-	webserver = require("gulp-webserver"),
+	browserSync = require('browser-sync').create(),
 	Screenshotter = require('@cloudcannon/screenshot-util');
 
 require('events').EventEmitter.prototype._maxListeners = 100;
@@ -63,8 +63,13 @@ module.exports = function (gulp, config) {
 		}));
 
 		gulp.task("screenshots:" + namespace + "-tool", gulp.series("screenshots:" + namespace, async function (done) {
-			gulp.src(config.dest + "/" + namespace)
-                .pipe(webserver({open: true}));
+			browserSync.init({
+				server: {
+					baseDir: config.dest + "/" + namespace
+				},
+				port: 8000
+			});
+			done();
 		}));
 	}
 
