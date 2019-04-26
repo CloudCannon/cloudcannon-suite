@@ -37,7 +37,7 @@ module.exports = function (gulp, config) {
         var options = config.sites[namespace];
         
 		gulp.task("screenshots:" + namespace + ":clean", function () {
-			return del(options.dest + "/" + namespace);
+			return del(config.dest + "/" + namespace);
 		});
 
 		var screenshotter = new Screenshotter({
