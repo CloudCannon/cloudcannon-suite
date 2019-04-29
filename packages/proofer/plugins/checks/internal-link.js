@@ -18,6 +18,13 @@ var internalLink = function internalLink() {
 
 		var path = this.getPath(file, value, options);
 
+		if (options.ignore_mailto && path.includes("/mailto:")) {
+			return;
+		}
+		if (options.ignore_cc_editor_links && path.includes("cloudcannon:")) {
+			return;
+		}
+
 		if (! (path in this.links)) {
 			this.links[path] = [];
 		}

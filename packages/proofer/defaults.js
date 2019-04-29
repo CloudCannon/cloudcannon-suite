@@ -17,6 +17,8 @@ module.exports = {
 	external_only: false,
 	file_ignore: [],
 	http_status_ignore: [],
+	ignore_mailto: true,
+	ignore_cc_editor_links: true,
 	internal_domains: [],
 	log_level: ":info",
 	only_4xx: false,
