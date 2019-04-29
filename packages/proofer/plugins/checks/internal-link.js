@@ -34,14 +34,17 @@ var internalLink = function internalLink() {
 		var path;
 
 		if (value.startsWith('/')) {
-			path = file.base + value.substring(1, value.length);
+			if (file.base[-1] === "/") {
+				value = value.substring(1);
+			}
+			path = file.base + value;
 		} else {
 			var currentDir = file.path.split('/');
 			currentDir.pop();
 			currentDir = currentDir.join('/');
 			path = p.resolve(currentDir, value);
 		}
-
+		
 		return this.handlePathEdgeCases(path, options);
 	},
 
@@ -118,7 +121,7 @@ var internalLink = function internalLink() {
 			}).then(($) => {
 				for (var i in linkData) {
 					var hash = urlParse(linkData[i].value).hash;
-					if (hash !== '' && $(hash).length <= 0) {
+					if (hash !== '' && hash !== "#" && $(hash).length <= 0) {
 						reporter.log(linkData[i].file, linkData[i].$el, "Hash " + hash + " not found at " + path);
 					}
 				}

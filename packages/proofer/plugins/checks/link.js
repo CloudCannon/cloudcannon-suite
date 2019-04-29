@@ -67,7 +67,7 @@ module.exports = {
 			return true;
 		}
 		
-		if (value === undefined || value == null) {
+		if (value === undefined || value === null) {
 			reporter.log(file, $el, attr + ' not set');
 			return false;
 		}
@@ -77,7 +77,11 @@ module.exports = {
 		if (this.ignoreUrl(value, options)) {
 			return true;
 		}
-
+		
+		if (value.substring(0, 2) === '\\"' || value.substring(0, 2) === "\\'") {
+			value = value.slice(2, -2);
+		}
+		
 		if (value === '#' && attr === 'href') {
 			if (this.allowHashHref(options)) {
 				return true;

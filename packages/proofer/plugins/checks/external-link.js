@@ -133,7 +133,6 @@ var externalLink = function externalLink() {
 			cache.add(url, result, true);
 			return statusCode;
 		}).catch((err) => {
-			console.log(err);
 			return false;
 		});
 	},

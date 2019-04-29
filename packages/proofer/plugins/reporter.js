@@ -41,7 +41,7 @@ var reporter = function reporter(){
 	}
 
 	if (reporter.caller != reporter.getInstance){
-			throw new Error("This object cannot be instanciated");
+			throw new Error("This object cannot be instantiated");
 	}
 
 	this.output = function (options) {
