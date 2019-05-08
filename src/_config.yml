@@ -29,6 +29,10 @@ collections:
     title: Help
     permalink: /help/:title/
     output: true
+  proofer:
+    title: Proofer
+    permalink: /proofer/:title/
+    output: true
   i18n:
     title: I18n
     permalink: /i18n/:title/
@@ -89,6 +93,13 @@ defaults:
   - scope:
       path: ""
       type: "help"
+    values:
+      layout: packages
+      seo:
+        type: Article
+  - scope:
+      path: ""
+      type: "proofer"
     values:
       layout: packages
       seo:
