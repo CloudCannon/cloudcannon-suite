@@ -83,6 +83,24 @@ module.exports = function (options) {
 			}
 		});
 
+		$("style").each(function () {
+			var style = $(this).html().replace(/\s/g, "");
+			console.log(style);
+			var startIndex = 0;
+			while (startIndex < style.length) {
+				var urlIndex = style.indexOf("url(", startIndex),
+					endIndex = style.indexOf(")", urlIndex);
+				if (urlIndex === -1 || endIndex === -1) {
+					break;
+				}
+				var url = style.slice(urlIndex + 5, endIndex -1),
+					updated = rewritePath(file, url);
+				style = style.replace(url, updated);
+				startIndex = style.indexOf(")", urlIndex);
+			}
+			$(this).html(style);
+		});	
+
 		file.contents = Buffer.from($.html());
 		this.push(file);
 		callback();
