@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<head>
+    <title>State</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background-color: #222;
+            margin: 8px 0;
+        }
+        #top-bar {
+            width: 100%;
+            text-align: center;
+            border-bottom: 1px solid black;
+            display: flex;
+        }
+        #toggle-button {
+            background-color: #eee;
+            width: 100%;
+        }
+        #toggle-button h2 {
+            color: #444;
+            font-size: 1.2em;
+        }
+        #container {
+            display: flex;
+            flex-direction: row;
+            text-align: right;
+            width: 100vw;
+            height: 100vh;
+        }
+        #container h2 {
+            font-size: 1em;
+            text-align: center;
+        }
+        .list {
+            display: flex;
+            flex-direction: column;
+            min-width: 150px;
+            max-width: 300px;
+            padding: 0 10px;
+            border-right: 1px solid black;
+            background-color: #eee;
+            overflow-x: hidden;
+            overflow-y: scroll;
+        }
+        .node {
+            margin: 4px 0;
+            color: #444;
+        }
+        .node .count {
+            font-weight: bold;
+        }
+        .node.leaf {
+            color: #aaa;
+        }
+        .node.open, .node:hover:not(.leaf) {
+            background-color: #ddd;
+        }
+        .node.duplicate {
+            background-color: black;
+            color: white;
+        }
+        .node.hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="top-bar">
+        <div id="toggle-button" onclick="toggleMode()"></div>
+    </div>
+    <div id="container">
+        <div class="list" data-list-num="0">
+            <input class="filter" type="text" onchange="filterByString(this)">
+        </div>
+    </div>
+
+    <script>
+        var container = document.getElementById("container");
+        var button = document.getElementById("toggle-button");
+        var usedGraph = {};
+        var dependencyGraph = {};
+        var dependentsGraph = {};
+
+        // start
+        fetchJSONFile("dependencies.json", function (data) {
+            dependencyGraph = data;
+            fetchJSONFile("dependents.json", function (data) { 
+                dependentsGraph = data;
+                usedGraph = dependentsGraph;
+                toggleMode();
+            });
+        });
+        
+        function filterByString (filter) {
+            closeListsToTheRight(filter.parentElement.getAttribute("data-list-num"));
+            if (!filter.value) {
+                filter.parentElement.querySelectorAll("a.node").forEach(function(element) {
+                    element.classList.remove("hidden");
+                });
+            } else {
+                filter.parentElement.querySelectorAll("a.node").forEach(function(element) {
+                    if (element.getAttribute("data-filename").includes(filter.value)) {
+                        element.classList.remove("hidden");
+                    } else {
+                        element.classList.add("hidden");
+                    }
+                });
+            }
+        }
+
+        function toggleMode () {
+            closeListsToTheRight(-1);
+            if (usedGraph === dependencyGraph) {
+                usedGraph = dependentsGraph;
+                button.innerHTML = "<h1>X is required by Y</h1>";
+            } else {
+                usedGraph = dependencyGraph;
+                button.innerHTML = "<h1>X requires Y</h1>";
+            }
+
+            var list = document.createElement("div");
+            list.classList.add("list");
+            list.setAttribute("data-list-num", 0);
+            var filter = document.createElement("input");
+            filter.setAttribute("type", "text");
+            filter.classList.add("filter");
+            list.appendChild(filter);
+            filter.addEventListener("change", function(){filterByString(filter);} );
+            container.appendChild(list);
+
+            var array = Object.keys(usedGraph).map(function(key) {
+                return [key, getNumChildren(key)];
+            });
+            array.sort(function(a, b) {
+                return b[1] - a[1];
+            });
+            for (var i = 0; i < array.length; i++) {
+                addNode(array[i][0], list);
+            }
+        }
+
+        function closeListsToTheRight (index) {
+            container.querySelectorAll(".list").forEach(function(element) {
+                if (element.getAttribute("data-list-num") > index) {
+                    element.parentNode.removeChild(element);
+                }
+            });
+        }
+
+        function createNewList(listData, num) {
+            var list = document.createElement("div");
+            list.classList.add("list");
+            list.setAttribute("data-list-num", num);
+            var filter = document.createElement("input");
+            filter.setAttribute("type", "text");
+            filter.classList.add("filter");
+            list.appendChild(filter);
+            filter.addEventListener("change", function(){filterByString(filter);} );
+            container.appendChild(list);
+
+            for (var key in listData) {
+                if (listData[key].length === 0) {
+                    continue;
+                }
+                listData[key].sort(function(a, b) {
+                    // sort highest to lowest
+                    return getNumChildren(b) - getNumChildren(a);
+                });
+                var header = document.createElement("h2");
+                header.innerHTML = key;
+                list.appendChild(header);
+                for (var i = 0; i < listData[key].length; i++) {
+                    addNode(listData[key][i], list);
+                }
+            }
+        }
+
+        function isLeaf(filename) {
+            var dataObj = usedGraph[filename];
+            for (var key in dataObj) {
+                if (dataObj[key] && dataObj[key].length > 0) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function getNumChildren(filename){
+            var dataObj = usedGraph[filename];
+            var count = 0;
+            for (var key in dataObj) {
+                count += dataObj[key].length;
+            }
+            return count;
+        }
+
+        function isRepeat(filename) {
+            var instances = document.querySelectorAll("[data-filename='" + filename + "']:not(.hidden)");
+            return instances.length > 1;
+        }
+
+        function addNode(filename, parentElement) {
+            if (!parentElement) {
+                var children = container.querySelectorAll(".list");
+                parentElement = children[children.length - 1];
+            }
+            var numChildren = getNumChildren(filename);
+            var node = document.createElement("a");
+            node.classList.add("node");
+            node.setAttribute("data-filename", filename);
+            node.innerHTML = `${filename} <span class='count'>[${numChildren}]</span>`;
+            parentElement.appendChild(node);
+
+            if (isLeaf(filename)) {
+                node.classList.add("leaf");
+            } else {
+                if (isRepeat(filename)) {
+                    node.onmouseover = function () {
+                        document.querySelectorAll("[data-filename='" + filename + "']").forEach(function(element) {
+                            element.classList.add("duplicate");
+                        });
+                    };
+                    node.onmouseout = function () {
+                        document.querySelectorAll("[data-filename='" + filename + "']").forEach(function(element) {
+                            element.classList.remove("duplicate");
+                        });
+                    };
+                }
+                node.onclick = function() {
+                    openNode(filename, parentElement);
+                    node.classList.remove("duplicate");
+                }
+            }
+        }
+
+        function openNode (filename, parentElement) {
+            var nodeInstances = [].slice.call(document.querySelectorAll("[data-filename='" + filename + "']:not(.hidden)"));
+            nodeInstances.sort(function(a, b) {
+                parseInt(a.parentElement.getAttribute("data-list-num")) 
+                - parseInt(b.parentElement.getAttribute("data-list-num"));
+            });
+
+            var listData = usedGraph[filename];
+            var listNum = parseInt(nodeInstances[0].parentElement.getAttribute("data-list-num"));
+            closeListsToTheRight(listNum);
+            createNewList(listData, listNum + 1);
+            nodeInstances[0].parentElement.querySelectorAll(".open").forEach(function(child) {
+                child.classList.remove("open");
+            });
+            document.querySelectorAll("[data-filename='" + filename + "']").forEach(function(element) {
+                element.classList.remove("duplicate");
+            });
+            nodeInstances[0].classList.add("open");
+        }
+
+        function fetchJSONFile(path, callback) {
+            var httpRequest = new XMLHttpRequest();
+            httpRequest.onreadystatechange = function() {
+                if (httpRequest.readyState === 4) {
+                    if (httpRequest.status === 200 || httpRequest.status === 0) {
+                        var data = JSON.parse(httpRequest.responseText);
+                        if (callback) callback(data);
+                    }
+                }
+            };
+            httpRequest.open('GET', path);
+            httpRequest.send(); 
+        }
+    </script>
+</body>

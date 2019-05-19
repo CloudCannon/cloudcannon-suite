@@ -19,5 +19,6 @@ suite.proofer(gulp, {
         storage_dir: '_cache.json'
     }
 });
+suite.state(gulp);
 
 gulp.task("default", gulp.series("help"));
