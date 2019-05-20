@@ -19,6 +19,7 @@ var configDefaults = {
 		path: "/"
 	},
 	options: {
+		ignore_inline_svg: true,
 		ignore_mailto: true,
 		ignore_cc_editor_links: true
 	}
