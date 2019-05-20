@@ -3,8 +3,6 @@ var del = require("del"),
 	defaults = require("defaults"),
 	fs = require("fs-extra"),
 	browserSync = require('browser-sync').create(),
-	htmlDependencies = require("./plugins/html"),
-	cssDependencies = require("./plugins/css"),
 	dependencies = require("./plugins/dependencies"),
 	dependents = require("./plugins/dependents");
 
@@ -48,29 +46,6 @@ module.exports = function (gulp, config) {
 		return del(config.state.dest);
 	});
 
-	gulp.task("state:html-dependencies", function () {
-		return gulp.src(config.state.src + "/**/*.html")
-			.pipe(htmlDependencies({baseurl: config.state.baseurl}))
-			.pipe(gulp.dest(fullDest));
-	});
-
-	gulp.task("state:css-dependencies", function () {
-		return gulp.src(config.state.src + "/**/*.css")
-			.pipe(cssDependencies({baseurl: config.state.baseurl}))
-			.pipe(gulp.dest(fullDest));
-	});
-
-	gulp.task("state:clone-assets", function () {
-		return gulp.src([
-				config.state.src + "/**/*",
-				"!" + config.state.src + "/**/*.html",
-				"!" + config.state.src + "/**/*.css"
-			], { nodir: true })
-			.pipe(gulp.dest(fullDest));
-	});
-
-	gulp.task("state:build", gulp.series("state:clean", gulp.parallel("state:html-dependencies", "state:css-dependencies", "state:clone-assets")));
-
 	// -----
 	// Graph
 
@@ -93,17 +68,7 @@ module.exports = function (gulp, config) {
 			});
 	});
 
-	gulp.task("state:serve-site", function (done) {
-		browserSync.init({
-			server: {
-				baseDir: config.state.dest
-			},
-			port: 7000
-		});
-		done();
-	});
-
-	gulp.task("state:build-site", async function (done) {
+	gulp.task("state:build", async function (done) {
 		try {
 			await fs.ensureDir(config.state.dest);
 			await fs.copyFile(path.join(config.state.report, dependenciesFilename), path.join(config.state.dest, dependenciesFilename));
@@ -164,7 +129,6 @@ module.exports = function (gulp, config) {
 			});
 	}));
 
-	gulp.task("state:graph", gulp.series("state:dependents", "state:build-site", "state:serve-site"));
 
 	// -----
 	// Serve
@@ -194,5 +158,5 @@ module.exports = function (gulp, config) {
 	// -------
 	// Default
 
-	gulp.task("state", gulp.series("state:serve", "state:watch"));
+	gulp.task("state", gulp.series("state:dependents", "state:clean", "state:build", "state:serve"));
 };
