@@ -12,13 +12,13 @@
             text-align: center;
             border-bottom: 1px solid black;
             display: flex;
-        }
-        #toggle-button {
             background-color: #eee;
-            width: 100%;
-        }
-        #toggle-button h2 {
             color: #444;
+        }
+        #top-bar div {
+            flex: 1;
+        }
+        #toggle-button h1 {
             font-size: 1.2em;
         }
         #container {
@@ -28,9 +28,20 @@
             width: 100vw;
             height: 100vh;
         }
-        #container h2 {
+        #container h3 {
             font-size: 1em;
             text-align: center;
+        }
+        #container h3:after {
+            content: "";
+            width: 0;
+            height: 0;
+            border-top: 5px solid #444;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            display: inline-block;
+            vertical-align: middle;
+            margin-left: 4px;
         }
         .list {
             display: flex;
@@ -43,7 +54,13 @@
             overflow-x: hidden;
             overflow-y: scroll;
         }
+        .list h2 {
+            font-size: 1em;
+            font-style: italic;
+            text-align: center;
+        }
         .node {
+            display: block;
             margin: 4px 0;
             color: #444;
         }
@@ -53,14 +70,14 @@
         .node.leaf {
             color: #aaa;
         }
-        .node.open, .node:hover:not(.leaf) {
+        .node.open, .node:hover:not(.leaf):not(.duplicate) {
             background-color: #ddd;
         }
         .node.duplicate {
             background-color: black;
             color: white;
         }
-        .node.hidden {
+        .node.hiddenByFilter, .node.hiddenByCollapse, .node.hiddenUsed, .node.hiddenUnused {
             display: none;
         }
     </style>
@@ -69,6 +86,18 @@
 
     <div id="top-bar">
         <div id="toggle-button" onclick="toggleMode()"></div>
+        <div>
+            <label for="hide-unused">Hide Unused</label>
+            <input type="checkbox" name="hide-unused" id="toggle-hide-unused">
+        </div>
+        <div>
+            <label for="hide-used">Hide Used</label>
+            <input type="checkbox" name="hide-used" id="toggle-hide-used">
+        </div>
+        <div>
+            <label for="acyclic-graph">Prevent graph loops</label>
+            <input type="checkbox" name="acyclic-graph" id="toggle-acyclic" checked>
+        </div>
     </div>
     <div id="container">
         <div class="list" data-list-num="0">
@@ -82,6 +111,37 @@
         var usedGraph = {};
         var dependencyGraph = {};
         var dependentsGraph = {};
+        var hideUsedToggle = document.getElementById("toggle-hide-used");
+        var hideUnusedToggle = document.getElementById("toggle-hide-unused");
+        var acyclicToggle = document.getElementById("toggle-acyclic");
+
+        hideUsedToggle.addEventListener("change", function (event) {
+            if (event.target.checked) {
+                document.querySelectorAll("a.node").forEach(function(element){
+                    if (parseInt(element.getAttribute("data-node-child-count")) > 0) {
+                        element.classList.add("hiddenUsed");
+                    }
+                });
+            } else {
+                document.querySelectorAll(".hiddenUsed").forEach(function(element){
+                    element.classList.remove("hiddenUsed");
+                });
+            }
+        });
+        hideUnusedToggle.addEventListener("change", function (event) {
+            if (event.target.checked) {
+                document.querySelectorAll("a.node").forEach(function(element){
+                    if (parseInt(element.getAttribute("data-node-child-count")) < 1) {
+                        element.classList.add("hiddenUnused");
+                    }
+                });
+            } else {
+                document.querySelectorAll(".hiddenUnused").forEach(function(element){
+                    element.classList.remove("hiddenUnused");
+                });
+            }
+        });
+        
 
         // start
         fetchJSONFile("dependencies.json", function (data) {
@@ -97,14 +157,14 @@
             closeListsToTheRight(filter.parentElement.getAttribute("data-list-num"));
             if (!filter.value) {
                 filter.parentElement.querySelectorAll("a.node").forEach(function(element) {
-                    element.classList.remove("hidden");
+                    element.classList.remove("hiddenByFilter");
                 });
             } else {
                 filter.parentElement.querySelectorAll("a.node").forEach(function(element) {
                     if (element.getAttribute("data-filename").includes(filter.value)) {
-                        element.classList.remove("hidden");
+                        element.classList.remove("hiddenByFilter");
                     } else {
-                        element.classList.add("hidden");
+                        element.classList.add("hiddenByFilter");
                     }
                 });
             }
@@ -149,10 +209,48 @@
             });
         }
 
-        function createNewList(listData, num) {
+        function toggleSublist (listElement) {
+            const filterValue = listElement.parentElement.querySelector("input.filter").value;
+            if (listElement.classList.contains("sublist-closed")) {
+                listElement.classList.remove("sublist-closed");
+                listElement.querySelectorAll("a.node").forEach(function (element) {
+                    if ((!filterValue || filterValue.length > 0) || element.getAttribute("data-filename").includes(filterValue)) {
+                        element.classList.remove("hiddenByCollapse");
+                    } 
+                });
+            } else {
+                listElement.classList.add("sublist-closed");
+                listElement.querySelectorAll("a.node").forEach(function (element) {
+                    element.classList.add("hiddenByCollapse");
+                });
+            }
+        }
+
+        function createSublist(listData, key, list) {
+            listData[key].sort(function(a, b) {
+                return getNumChildren(b) - getNumChildren(a);
+            });
+            var sublist = document.createElement("div");
+            list.appendChild(sublist);
+            var header = document.createElement("h3");
+            header.innerHTML = `${key} [${listData[key].length}]`;
+            header.onclick = function () {
+                toggleSublist(sublist);
+            }
+            sublist.appendChild(header);
+            for (var i = 0; i < listData[key].length; i++) {
+                addNode(listData[key][i], sublist);
+            }
+        }
+
+        function createNewList(filename, num) {
+            var listData = usedGraph[filename];
             var list = document.createElement("div");
             list.classList.add("list");
             list.setAttribute("data-list-num", num);
+            var header = document.createElement("h2");
+            header.innerText = filename;
+            list.appendChild(header);
             var filter = document.createElement("input");
             filter.setAttribute("type", "text");
             filter.classList.add("filter");
@@ -161,20 +259,14 @@
             container.appendChild(list);
 
             for (var key in listData) {
-                if (listData[key].length === 0) {
-                    continue;
-                }
-                listData[key].sort(function(a, b) {
-                    // sort highest to lowest
-                    return getNumChildren(b) - getNumChildren(a);
-                });
-                var header = document.createElement("h2");
-                header.innerHTML = key;
-                list.appendChild(header);
-                for (var i = 0; i < listData[key].length; i++) {
-                    addNode(listData[key][i], list);
-                }
+                if (listData[key].length > 0) {
+                    createSublist(listData, key, list);
+                }   
             }
+        }
+
+        function getVisibleNodesWithFilename(filename) {
+            return [].slice.call(document.querySelectorAll("[data-filename='" + filename + "']")).filter(element => !isHidden(element));
         }
 
         function isLeaf(filename) {
@@ -187,6 +279,13 @@
             return true;
         }
 
+        function isHidden(element) {
+            return element.classList.contains("hiddenByFilter") 
+                || element.classList.contains("hiddenUsed")
+                || element.classList.contains("hiddenUnused")
+                || element.classList.contains("hiddenByCollapse");
+        }
+
         function getNumChildren(filename){
             var dataObj = usedGraph[filename];
             var count = 0;
@@ -197,7 +296,7 @@
         }
 
         function isRepeat(filename) {
-            var instances = document.querySelectorAll("[data-filename='" + filename + "']:not(.hidden)");
+            var instances = getVisibleNodesWithFilename(filename);
             return instances.length > 1;
         }
 
@@ -210,12 +309,19 @@
             var node = document.createElement("a");
             node.classList.add("node");
             node.setAttribute("data-filename", filename);
+            node.setAttribute("data-node-child-count", numChildren);
             node.innerHTML = `${filename} <span class='count'>[${numChildren}]</span>`;
             parentElement.appendChild(node);
 
             if (isLeaf(filename)) {
                 node.classList.add("leaf");
+                if (hideUnusedToggle.checked) {
+                    node.classList.add("hiddenUnused");
+                }
             } else {
+                if (hideUsedToggle.checked) {
+                    node.classList.add("hiddenUsed");
+                }
                 if (isRepeat(filename)) {
                     node.onmouseover = function () {
                         document.querySelectorAll("[data-filename='" + filename + "']").forEach(function(element) {
@@ -236,23 +342,28 @@
         }
 
         function openNode (filename, parentElement) {
-            var nodeInstances = [].slice.call(document.querySelectorAll("[data-filename='" + filename + "']:not(.hidden)"));
-            nodeInstances.sort(function(a, b) {
-                parseInt(a.parentElement.getAttribute("data-list-num")) 
-                - parseInt(b.parentElement.getAttribute("data-list-num"));
-            });
-
-            var listData = usedGraph[filename];
-            var listNum = parseInt(nodeInstances[0].parentElement.getAttribute("data-list-num"));
+            var firstNodeInstance;
+            if (acyclicToggle.checked) {
+                var nodeInstances = getVisibleNodesWithFilename(filename);
+                nodeInstances.sort(function(a, b) {
+                    parseInt(a.parentElement.getAttribute("data-list-num")) 
+                    - parseInt(b.parentElement.getAttribute("data-list-num"));
+                });
+                firstNodeInstance = nodeInstances[0];
+            } else {
+                firstNodeInstance = [].slice.call(parentElement.querySelectorAll("[data-filename='" + filename + "']"))[0];
+            }
+            
+            var listNum = parseInt(firstNodeInstance.closest(".list").getAttribute("data-list-num"));
             closeListsToTheRight(listNum);
-            createNewList(listData, listNum + 1);
-            nodeInstances[0].parentElement.querySelectorAll(".open").forEach(function(child) {
+            createNewList(filename, listNum + 1);
+            firstNodeInstance.parentElement.querySelectorAll(".open").forEach(function(child) {
                 child.classList.remove("open");
             });
             document.querySelectorAll("[data-filename='" + filename + "']").forEach(function(element) {
                 element.classList.remove("duplicate");
             });
-            nodeInstances[0].classList.add("open");
+            firstNodeInstance.classList.add("open");
         }
 
         function fetchJSONFile(path, callback) {
