@@ -21,7 +21,8 @@ var configDefaults = {
 	options: {
 		ignore_inline_svg: true,
 		ignore_mailto: true,
-		ignore_cc_editor_links: true
+		ignore_cc_editor_links: true,
+		scan_js: true
 	}
 };
 
@@ -42,10 +43,6 @@ module.exports = function (gulp, config) {
 	config.state.dest = path.join(cwd, config.state.dest);
 
 	var fullDest = path.join(config.state.dest, config.state.baseurl);
-
-	gulp.task("state:clean", function () {
-		return del(config.state.dest);
-	});
 
 	// -----
 	// Graph
@@ -86,17 +83,22 @@ module.exports = function (gulp, config) {
 	var filenameList = [];
 
 	function getFilenameList (done) {
+		if (!config.options.scan_js) {
+			done();
+		} else {
 		gulp.src([config.state.src + "/**/*"], { nodir: true })
 			.on("data", function (file) {
 				filenameList.push(file.path.substring(file.base.length).replace(/\/index.html?/i, "/"));
 			}).on("end", function(){
 				done();
 			});
+		}
 	}
 
 	gulp.task("state:dependencies", gulp.series(getFilenameList, function (done) {
+		let srcPath = config.state.src + "/**/*";
 		gulp.src(
-			[config.state.src + "/**/*.html", config.state.src + "/**/*.css"], 
+			[srcPath + ".html", srcPath + ".css", srcPath + ".js"], 
 			{ nodir: true })
 		.pipe(dependencies(config.options, filenameList))
 		.on("data", function (data) {
@@ -130,21 +132,13 @@ module.exports = function (gulp, config) {
 			});
 	}));
 
-
 	// -----
 	// Serve
 
-	gulp.task("state:watch", function () {
-		gulp.watch(config.state._src + "/**/*", gulp.series("state:build"));
-	});
-
-	gulp.task("state:browser-sync", function (done) {
-		browserSync.reload();
-		done();
+	gulp.task("state:clean", function () {
+		return del(config.state.dest);
 	});
 	
-	gulp.task("state:reload", gulp.series("state:build", "state:browser-sync"));
-
 	gulp.task("state:serve", function (done) {
 		browserSync.init({
 			server: {
@@ -154,7 +148,6 @@ module.exports = function (gulp, config) {
 		});
 		done();
 	});
-
 
 	// -------
 	// Default

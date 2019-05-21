@@ -24,6 +24,29 @@ function ignoreChecks (url, options) {
         || ignoreCCEditorLinks(url, options);
 }
 
+function processJS (content, options, files) {
+    var data = {
+        "Assets": [],
+        "Internal Links": [],
+        "External Links": []
+    };
+    files.forEach(function(filename) {
+        if (filename === "/") {
+            return;
+        }
+        if (content.includes(filename)) {
+            if (!ignoreChecks(filename, options)) {
+                if (isExternalUri(filename) && !(data["External Links"].includes(filename))) {
+                    data["External Links"].push(filename);
+                } else if (!isExternalUri(filename) && !data["Internal Links"].includes(filename)) {
+                    data["Internal Links"].push(filename);
+                }
+            }
+        }
+    });
+    return data;
+}
+
 function processCSS (content, options) {
     var data = {
         "Assets": [],
@@ -117,16 +140,18 @@ function processHTML ($, options, files) {
             startIndex = endIndex;
         }
     });
-    $("script").each(function () {
-        var script = $(this).html();
-        // for each filename, add url if script.includes(filename)
-        files.forEach(function(filename) {
-            if (script.includes(filename)) {
-                addURL(filename);
-            }
-        });
+    if ("scan_js" in options && options["scan_js"] === true) {
+        $("script").each(function () {
+            var script = $(this).html();
+            // for each filename, add url if script.includes(filename)
+            files.forEach(function(filename) {
+                if (script.includes(filename)) {
+                    addURL(filename);
+                }
+            });
 
-    });
+        });
+    }
     return data;
 };
 
@@ -153,6 +178,9 @@ module.exports = function (config, filenameList) {
         } else if (ext === "css") {
             var content = file.contents.toString(encoding);
             data = processCSS(content.replace(/\s/g, ""), options);
+        } else if (ext === "js" && "scan_js" in options && options["scan_js"] === true) {
+            var content = file.contents.toString(encoding);
+            data = processJS(content.replace(/\s/g, ""), options, files);
         }
 
         this.push([file.sitePath, data]);
