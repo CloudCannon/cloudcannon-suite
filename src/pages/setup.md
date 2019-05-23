@@ -54,8 +54,8 @@ Create a `package.json` in your project directory, if you don't already have one
 Open your package.json and add dependencies for Gulp and the CloudCannon Suite as follows:
 ```json
 "dependencies": {
-     "gulp": "^3.9.1",
-     "@cloudcannon/suite": "^1.1.6"
+     "gulp": "^4.0.0",
+     "@cloudcannon/suite": "^2.0.0-rc5"
 }
 ```
 

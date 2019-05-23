@@ -29,15 +29,26 @@ $ gulp help
 
 Main Tasks
 ------------------------------
-    docs
-    help
+    dev
+    dist
 
 Sub Tasks
 ------------------------------
-    docs:build
-    docs:install
-    docs:serve
-    docs:watch
+    dev:browser-sync
+    dev:build
+    dev:install
+    dev:reload
+    dev:serve
+    dev:watch
+    dist:browser-sync
+    dist:build
+    dist:clean
+    dist:clone-assets
+    dist:reload
+    dist:rewrite-css
+    dist:rewrite-html
+    dist:serve
+    dist:watch
 
 [09:54:07] Finished 'help' after 1.86 ms
 ```

@@ -70,8 +70,6 @@ If set to true, check any fragment identifiers on external URLs.
 
 If set to false, don't check for missing favicon.
 
-#### check_opengraph
-
 #### check_img_http
 
 If set to true, report an error when an external image doesn't have an HTTPS src.
@@ -95,8 +93,6 @@ If set to true, don't report an error when an alt tag is an empty string.
 #### enforce_https
 
 If set to true, report an error when an external non-image element doesn't have HTTPS src.
-
-#### error_sort
 
 #### extension
 
@@ -126,8 +122,6 @@ If set to true, [CloudCannon editor links](https://docs.cloudcannon.com/editing/
 
 List of internal domains to check links against.
 
-#### log_level
-
 #### only_4xx
 
 If set to true, only report error codes starting with '4' (i.e. 401, 404...).
@@ -143,10 +137,6 @@ Path of the JSON file to write error reports to.
 #### url_ignore
 
 List of URLs to ignore when checking links.
-
-#### url_swap
-
-#### verbose
 
 #### cache.timeline
 
