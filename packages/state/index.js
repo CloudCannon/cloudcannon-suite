@@ -3,8 +3,6 @@ var del = require("del"),
 	defaults = require("defaults"),
 	fs = require("fs-extra"),
 	browserSync = require('browser-sync').create(),
-	htmlDependencies = require("./plugins/html"),
-	cssDependencies = require("./plugins/css"),
 	dependencies = require("./plugins/dependencies"),
 	dependents = require("./plugins/dependents");
 
@@ -21,8 +19,10 @@ var configDefaults = {
 		path: "/"
 	},
 	options: {
+		ignore_inline_svg: true,
 		ignore_mailto: true,
-		ignore_cc_editor_links: true
+		ignore_cc_editor_links: true,
+		scan_js: true
 	}
 };
 
@@ -43,33 +43,6 @@ module.exports = function (gulp, config) {
 	config.state.dest = path.join(cwd, config.state.dest);
 
 	var fullDest = path.join(config.state.dest, config.state.baseurl);
-
-	gulp.task("state:clean", function () {
-		return del(config.state.dest);
-	});
-
-	gulp.task("state:html-dependencies", function () {
-		return gulp.src(config.state.src + "/**/*.html")
-			.pipe(htmlDependencies({baseurl: config.state.baseurl}))
-			.pipe(gulp.dest(fullDest));
-	});
-
-	gulp.task("state:css-dependencies", function () {
-		return gulp.src(config.state.src + "/**/*.css")
-			.pipe(cssDependencies({baseurl: config.state.baseurl}))
-			.pipe(gulp.dest(fullDest));
-	});
-
-	gulp.task("state:clone-assets", function () {
-		return gulp.src([
-				config.state.src + "/**/*",
-				"!" + config.state.src + "/**/*.html",
-				"!" + config.state.src + "/**/*.css"
-			], { nodir: true })
-			.pipe(gulp.dest(fullDest));
-	});
-
-	gulp.task("state:build", gulp.series("state:clean", gulp.parallel("state:html-dependencies", "state:css-dependencies", "state:clone-assets")));
 
 	// -----
 	// Graph
@@ -93,17 +66,7 @@ module.exports = function (gulp, config) {
 			});
 	});
 
-	gulp.task("state:serve-site", function (done) {
-		browserSync.init({
-			server: {
-				baseDir: config.state.dest
-			},
-			port: 7000
-		});
-		done();
-	});
-
-	gulp.task("state:build-site", async function (done) {
+	gulp.task("state:build", async function (done) {
 		try {
 			await fs.ensureDir(config.state.dest);
 			await fs.copyFile(path.join(config.state.report, dependenciesFilename), path.join(config.state.dest, dependenciesFilename));
@@ -120,17 +83,22 @@ module.exports = function (gulp, config) {
 	var filenameList = [];
 
 	function getFilenameList (done) {
+		if (!config.options.scan_js) {
+			done();
+		} else {
 		gulp.src([config.state.src + "/**/*"], { nodir: true })
 			.on("data", function (file) {
 				filenameList.push(file.path.substring(file.base.length).replace(/\/index.html?/i, "/"));
 			}).on("end", function(){
 				done();
 			});
+		}
 	}
 
 	gulp.task("state:dependencies", gulp.series(getFilenameList, function (done) {
+		let srcPath = config.state.src + "/**/*";
 		gulp.src(
-			[config.state.src + "/**/*.html", config.state.src + "/**/*.css"], 
+			[srcPath + ".html", srcPath + ".css", srcPath + ".js"], 
 			{ nodir: true })
 		.pipe(dependencies(config.options, filenameList))
 		.on("data", function (data) {
@@ -164,22 +132,13 @@ module.exports = function (gulp, config) {
 			});
 	}));
 
-	gulp.task("state:graph", gulp.series("state:dependents", "state:build-site", "state:serve-site"));
-
 	// -----
 	// Serve
 
-	gulp.task("state:watch", function () {
-		gulp.watch(config.state._src + "/**/*", gulp.series("state:build"));
-	});
-
-	gulp.task("state:browser-sync", function (done) {
-		browserSync.reload();
-		done();
+	gulp.task("state:clean", function () {
+		return del(config.state.dest);
 	});
 	
-	gulp.task("state:reload", gulp.series("state:build", "state:browser-sync"));
-
 	gulp.task("state:serve", function (done) {
 		browserSync.init({
 			server: {
@@ -190,9 +149,8 @@ module.exports = function (gulp, config) {
 		done();
 	});
 
-
 	// -------
 	// Default
 
-	gulp.task("state", gulp.series("state:serve", "state:watch"));
+	gulp.task("state", gulp.series("state:dependents", "state:clean", "state:build", "state:serve"));
 };

@@ -77,11 +77,24 @@ module.exports = function (screenshotter, tagmap) {
 		let screenshotOptions = {encoding: (screenshotter.options.base64 ? "base64" : "binary")};
 	
 		log(`Finding page size`);
-		const { width, height } = await page.evaluate(() => {
-			const body = document.querySelector('body');
-			const boundingBox = body.getBoundingClientRect();
-			return {width: boundingBox.width, height: boundingBox.height};
-		}).catch(e => log.error(e));
+
+		const { width, height } = await Promise.race([
+			page.evaluate(function() {
+				const body = document.querySelector('body');
+				const boundingBox = body.getBoundingClientRect();
+				return {width: boundingBox.width, height: boundingBox.height};
+			}).catch(e => log.error(e)),
+			new Promise(function(resolve) {
+				setTimeout(function() {resolve(false);}, 2000);
+			})
+		]);
+
+		if (!width || !height) {
+			log(`Couldn't find page dimensions in time, shutting down browser and server`);
+			await screenshotter.shutdownServer();
+			await screenshotter.shutdownBrowser();
+			return cb();
+		}
 
 		let segmentHeight = 4000;
 		let numSegments = Math.ceil(height / segmentHeight);
