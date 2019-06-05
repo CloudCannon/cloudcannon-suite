@@ -2,6 +2,19 @@
 title: Setup
 package: Dev
 order_number: 2
+subtasks:
+  - name: install
+    desc: Runs `bundle install` on the `src` folder
+    code: gulp dev:install
+  - name: build
+    desc: Runs `bundle exec jekyll build` on the `src` folder
+    code: gulp dev:build
+  - name: serve
+    desc: Runs a local webserver on the `dest` folder
+    code: gulp dev:serve
+  - name: watch
+    desc: Watches the `src` folder and triggers builds
+    code: gulp dev:watch
 ---
 To use this package, add `suite.dev(gulp)` to your Gulpfile:
 
@@ -45,36 +58,4 @@ Note also that you will need to manually run `bundle update` in `src` when you w
 
 Use <kbd>Ctrl</kbd>+<kbd>C</kbd> to stop the server running.
 
-### Subtasks
-
-#### install
-
-Runs `bundle install` on the `src` folder
-
-```bash
-$ gulp dev:install
-```
-
-#### build
-
-Runs `bundle exec jekyll build` on the `src` folder
-
-```bash
-$ gulp dev:build
-```
-
-#### serve
-
-Runs a local webserver on the `dest` folder
-
-```bash
-$ gulp dev:serve
-```
-
-#### watch
-
-Watches the `src` folder and triggers builds
-
-```bash
-$ gulp dev:watch
-```
+{% include package-subtasks.md %}

@@ -2,8 +2,29 @@
 title: Setup
 package: Dist
 order_number: 2
+subtasks:
+  - name: build
+    desc: Compiles HTML and CSS to be run at a baseurl
+    code: gulp dist:build
+  - name: serve
+    desc: Runs a local webserver on the `dest` folder
+    code: gulp dist:serve
+  - name: watch
+    desc: Watches the `src` folder and triggers builds
+    code: gulp dist:watch
+  - name: rewrite-html
+    desc: Clones HTML files from `src` to `dist` and rewrites attributes to include baseurl (`src`, `href`, `srcset` and `meta[http-equiv='refresh']`)
+    code: gulp dist:rewrite-html
+  - name: rewrite-css
+    desc: Clones CSS files from src to dist and rewrites urls to include baseurl
+    code: gulp dist:rewrite-css
+  - name: clone-assets
+    desc: Clones all other files from `src` to `dist`
+    code: gulp dist:clone-assets
+  - name: clean
+    desc: Removes all files from the `dist` folder
+    code: gulp dist:clean
 ---
-
 To use this package, add `suite.dist(gulp)` to your Gulpfile. You can pass in an options object to configure the baseurl. See [Configuration](/dist/configuration) for more details.
 
 ```js
@@ -42,61 +63,4 @@ $ gulp dist
 [12:04:33] Finished 'dist:watch' after 6.66 s
 [12:04:33] Finished 'dist' after 14 s
 ```
-
-### Subtasks
-
-#### build
-
-Compiles HTML and CSS to be run at a baseurl
-
-```bash
-$ gulp dist:build
-```
-
-#### serve
-
-Runs a local webserver on the `dest` folder
-
-```bash
-$ gulp dist:serve
-```
-
-#### watch
-
-Watches the `src` folder and triggers builds
-
-```bash
-$ gulp dist:watch
-```
-
-#### rewrite-html
-
-Clones HTML files from `src` to `dist` and rewrites attributes to include baseurl (`src`, `href`, `srcset` and `meta[http-equiv='refresh']`)
-
-```bash
-$ gulp dist:rewrite-html
-```
-
-#### rewrite-css
-
-Clones CSS files from src to dist and rewrites urls to include baseurl
-
-```bash
-$ gulp dist:rewrite-css
-```
-
-#### clone-assets
-
-Clones all other files from `src` to `dist`
-
-```bash
-$ gulp dist:clone-assets
-```
-
-#### clean
-
-Removes all files from the `dist` folder
-
-```bash
-$ gulp dist:clean
-```
+{% include package-subtasks.md %}
