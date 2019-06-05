@@ -4,13 +4,17 @@ package: Dist
 order_number: 2
 ---
 
-To use this package, your `gulpfile.js` needs the following:
+To use this package, add `suite.dist(gulp)` to your Gulpfile. You can pass in an options object to configure the baseurl. See [Configuration](/dist/configuration) for more details.
 
 ```js
 const gulp = require("gulp");
 const suite = require("@cloudcannon/suite");
 
-suite.dist(gulp, {"dist":{"baseurl":"p"}});
+suite.dist(gulp, {
+    "dist": {
+        "baseurl":"p"
+    }
+});
 ```
 
 ### Usage
@@ -43,7 +47,7 @@ $ gulp dist
 
 #### build
 
-Compiles HTML and CSS to be run at a base url
+Compiles HTML and CSS to be run at a baseurl
 
 ```bash
 $ gulp dist:build

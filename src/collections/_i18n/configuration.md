@@ -2,6 +2,21 @@
 title: Configuration
 package: I18n
 order_number: 3
+config_options:
+  - key: i18n.src
+    use: Sets the input folder for i18n. This should contain a static site, with tagged content.
+  - key: i18n.dest
+    use: Sets the output folder for i18n build (destination for the translated site).
+  - key: i18n.default\_language
+    use: Sets the default language for the site (i.e. the language of `source.json`).
+  - key: i18n.locale\_src
+    use: Sets the folder to read the translated json files for i18n:translate.
+  - key: i18n.generated\_locale\_dest
+    use: Sets the folder to output the source json file from i18n:generate.
+  - key: i18n.legacy\_path
+    use: Sets the folder to transfer legacy locale files with `i18n:legacy-transfer`.
+  - key: serve.port
+    use: Specifies the port to serve the built site from.
 ---
 Below is the default configuration for the I18n package:
 
@@ -26,36 +41,15 @@ Below is the default configuration for the I18n package:
 
 ### Custom Configuration
 
-If you have a more complex set up you can use any of the following options with the I18n package. Configuration options are set in `packages/i18n/index.js`.
+You can override these defaults by passing in options in your Gulpfile:
 
-#### i18n.src
+```js
+/* gulpfile.js */
+suite.i18n(gulp, {
+    "i18n": {
+        "default_language": "fr"
+    }
+});
+```
 
-Sets the input folder for i18n. This should contain a static site, with tagged content.
-
-#### i18n.dest
-
-Sets the output folder for i18n build (destination for the translated site).
-
-#### i18n.default\_language
-
-Sets the default language for the site.
-
-#### i18n.locale\_src
-
-Sets the folder to read the translated json files for i18n:translate.
-
-#### i18n.generated\_locale\_dest
-
-Sets the folder to output the source json file from i18n:generate.
-
-#### i18n.legacy\_path
-
-Sets the folder to transfer legacy locale files with `i18n:legacy-transfer`.
-
-#### serve.port
-
-Specifies the port to serve the built site from.
-
-#### serve.open
-
-Should the `i18n:serve` task automatically open a tab in a browser?
+{% include package-config.md %}

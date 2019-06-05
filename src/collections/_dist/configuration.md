@@ -2,44 +2,44 @@
 title: Configuration
 package: Dist
 order_number: 3
+config_options:
+  - key: dist.baseurl
+    use: "`required` Sets the baseurl to append to urls."
+  - key: dist.src
+    use: Sets the input folder for dist task. This should contain your compiled site.
+  - key: dist.dest
+    use: Sets the output folder for dist build.
+  - key: serve.port
+    use: Specifies the port to serve the built site from.
 ---
 Below is the default configuration for the Distribute package.
 
 ```js
 {
   dist: {
-  src: "dist/site",
-  dest: "dist/prod",
-  baseurl: ""
+    src: "dist/site",
+    dest: "dist/prod",
+    baseurl: ""
   },
   serve: {
-  port: 9000,
-  open: true,
-  path: "/"
+    port: 9000,
+    open: true,
+    path: "/"
   }
 };
 ```
 
 ### Custom Configuration
 
-If you have a more complex set up you can use any of the following options with the Distribute package.  Configuration options are set in `packages/distribute/index.js`.
+You can override these defaults by passing in options in your Gulpfile:
 
-#### dist.baseurl `required` 
+```js
+/* gulpfile.js */
+suite.dist(gulp, {
+    "dist": {
+        "src": "/path/to/src/"
+    }
+});
+```
 
-Sets the baseurl to append to urls.
-
-#### dist.src
-
-Sets the input folder for dist task
-
-#### dist.dest
-
-Sets the output folder for dist build
-
-#### serve.port
-
-Specifies the port to serve the built site from.
-
-#### serve.open
-
-Should the docs:serve task automatically open a tab in a browser
+{% include package-config.md %}

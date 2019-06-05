@@ -3,9 +3,10 @@ title: Setup
 package: Dev
 order_number: 2
 ---
-To use this package, your `gulpfile.js` needs the following:
+To use this package, add `suite.dev(gulp)` to your Gulpfile:
 
 ```js
+/* gulpfile.js */
 const gulp = require("gulp");
 const suite = require("@cloudcannon/suite");
 
@@ -56,7 +57,7 @@ $ gulp dev:install
 
 #### build
 
-Runs `bundle exec jekyll serve` on the `src` folder
+Runs `bundle exec jekyll build` on the `src` folder
 
 ```bash
 $ gulp dev:build

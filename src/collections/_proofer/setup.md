@@ -3,17 +3,14 @@ title: Setup
 package: Proofer
 order_number: 2
 ---
-To use this package, add the following to your `gulpfile.js`:
+To use this package, add `suite.proofer(gulp)` to your Gulpfile.
 
 ```js
-suite.proofer(gulp, { 
-    internal_domains: ['localhost:4000'], 
-    check_external_hash: true, 
-    cache: { 
-        timeframe: 60000,
-        storage_dir: '_cache.json'
-    }
-});
+/* gulpfile.js */
+const gulp = require("gulp");
+const suite = require("@cloudcannon/suite");
+
+suite.proofer(gulp);
 ```
 
 ### Usage

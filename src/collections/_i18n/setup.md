@@ -40,28 +40,27 @@ For example:
 {"welcome_message": "Hola, bienvenido a mi página web"}
 ```
 
+### Usage
+
 When you run `gulp i18n`, translated versions of the site are built using these locales. They are served under a baseurl matching the name of the locale - for example, an English version of the site will be served at `localhost:8000/en/`, while a Spanish version will simultaneously be served at `localhost:8000/es/`.
 
 ### Gulp setup
 
-To use this package, your `gulpfile.js` needs the following:
+To use this package, add `suite.i18n(gulp)` to your Gulpfile:
 
 ```js
+/* gulpfile.js */
 const gulp = require("gulp");
 const suite = require("@cloudcannon/suite");
 
 suite.i18n(gulp);
 ```
 
-### Usage
-
-```bash
-$ gulp i18n
-```
-
 ### Subtasks
 
 #### build
+
+Builds the translated site to the `dest` folder. Make sure to run `gulp dev:build` first, so that you have a compiled site to use as the source for this.
 
 ```bash
 $ gulp i18n:build
@@ -69,24 +68,26 @@ $ gulp i18n:build
 
 #### serve
 
-Runs a local webserver on the `dest` folder
+Runs a local webserver on the `dest` folder.
 
-```bash
+```sh
 $ gulp i18n:serve
 ```
 
 #### watch
 
-Watches the `src` and `locale_src` folder to trigger builds
+Watches the `src` and `locale_src` folder to trigger builds.
 
 ```bash
 $ gulp i18n:watch
 ```
 
-#### legacy-transfer
+#### legacy-update
+
+Converts locales to the legacy system.
 
 ```bash
-$ gulp i18n:legacy-transfer
+$ gulp i18n:legacy-update
 ```
 
 #### generate
@@ -97,32 +98,19 @@ Generates the default locale at `i18n/source.json`. This is not run as part of t
 $ gulp i18n:generate
 ```
 
-#### load-locales
-
-```bash
-$ gulp i18n:load-locales
-```
-
 #### clean
+
+Deletes the contents of the `dest` folder.
 
 ```bash
 $ gulp i18n:clean
 ```
 
-#### clone-assets
+#### add-character-based-wordwraps
+
+Creates a new locale for Japanese translations at `i18n/wrapped/`. This new locale has added span tags to wordwrap characters more appropriately. This requires a Google Cloud Natural Language API key to be set:
 
 ```bash
-$ gulp i18n:clone-assets
-```
-
-#### translate-html-pages
-
-```bash
-$ gulp i18n:translate-html-pages
-```
-
-#### clone-prelocalised-html-pages
-
-```bash
-$ gulp i18n:clone-prelocalised-html-pages
+$ export GOOGLE_APPLICATION_CREDENTIALS="/PATH/TO/CREDENTIALS/credentials.json"
+$ gulp i18n:add-character-based-wordwraps
 ```
