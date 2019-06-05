@@ -54,6 +54,9 @@
             overflow-x: hidden;
             overflow-y: scroll;
         }
+        .list.hidden {
+            display: none;
+        }
         .list h2 {
             font-size: 1em;
             font-style: italic;
@@ -86,32 +89,36 @@
 
     <div id="top-bar">
         <div id="toggle-button" onclick="toggleMode()"></div>
-        <div>
-            <label for="hide-unused">Hide Unused</label>
-            <input type="checkbox" name="hide-unused" id="toggle-hide-unused">
+        <div class="option-buttons">
+            <div>
+                <label for="hide-unused">Hide Unused</label>
+                <input type="checkbox" name="hide-unused" id="toggle-hide-unused">
+            </div>
+            <div>
+                <label for="hide-used">Hide Used</label>
+                <input type="checkbox" name="hide-used" id="toggle-hide-used">
+            </div>
+            <div>
+                <label for="acyclic-graph">Prevent loops</label>
+                <input type="checkbox" name="acyclic-graph" id="toggle-acyclic" checked>
+            </div>
         </div>
-        <div>
-            <label for="hide-used">Hide Used</label>
-            <input type="checkbox" name="hide-used" id="toggle-hide-used">
-        </div>
-        <div>
-            <label for="acyclic-graph">Prevent loops</label>
-            <input type="checkbox" name="acyclic-graph" id="toggle-acyclic" checked>
-        </div>
-        <div>
-            <label>Sort highest</label>
-            <input type="radio" name="sorting" class="sort-mode-button" value="sort-high" checked>
-            <label>Sort lowest</label>
-            <input type="radio" name="sorting" class="sort-mode-button" value="sort-low">
-            <label>Alphabetical</label>
-            <input type="radio" name="sorting" class="sort-mode-button" value="alphabetical">
+        <div class="sorting-buttons">
+            <div>
+                <label>Sort highest</label>
+                <input type="radio" name="sorting" class="sort-mode-button" value="sort-high" checked>
+            </div>
+            <div>
+                <label>Sort lowest</label>
+                <input type="radio" name="sorting" class="sort-mode-button" value="sort-low">
+            </div>
+            <div>
+                <label>Alphabetical</label>
+                <input type="radio" name="sorting" class="sort-mode-button" value="alphabetical">
+            </div>
         </div>
     </div>
-    <div id="container">
-        <div class="list" data-list-num="0">
-            <input class="filter" type="text" onchange="filterByString(this)">
-        </div>
-    </div>
+    <div id="container"></div>
 
     <script>
         var container = document.getElementById("container");
@@ -122,7 +129,10 @@
         var hideUsedToggle = document.getElementById("toggle-hide-used");
         var hideUnusedToggle = document.getElementById("toggle-hide-unused");
         var acyclicToggle = document.getElementById("toggle-acyclic");
-        var sortMode = "sort-high"
+        var sortMode = "sort-high";
+
+        var dependencyList;
+        var dependentsList;
 
         hideUsedToggle.addEventListener("change", function (event) {
             if (event.target.checked) {
@@ -175,17 +185,64 @@
                 });
             }
         });
-        
 
         // start
-        fetchJSONFile("dependencies.json", function (data) {
-            dependencyGraph = data;
-            fetchJSONFile("dependents.json", function (data) { 
-                dependentsGraph = data;
+        fetchJSONFile("dependencies.json", function (dependencyData) {
+            dependencyGraph = dependencyData;
+            fetchJSONFile("dependents.json", function (dependentData) { 
+                dependentsGraph = dependentData;
+                initFirstLists();
                 usedGraph = dependentsGraph;
                 toggleMode();
             });
         });
+
+        function initFirstLists () {
+            function makeList (graph) {
+                usedGraph = graph;
+                console.log(graph);
+                var list = document.createElement("div");
+                list.classList.add("list");
+                list.setAttribute("data-list-num", 0);
+                var filter = document.createElement("input");
+                filter.setAttribute("type", "text");
+                filter.classList.add("filter");
+                list.appendChild(filter);
+                filter.addEventListener("change", function(){filterByString(filter);} );
+                container.appendChild(list);
+
+                var array = Object.keys(graph).map(function(key) {
+                    return [key, getNumChildren(key)];
+                });
+                array.sort(function(a, b) {
+                    return sort(a, b);
+                });
+                for (var i = 0; i < array.length; i++) {
+                    addNode(array[i][0], list);
+                }
+                if (graph !== usedGraph) {
+                    list.classList.add("hidden");
+                }
+                return list;
+            }
+            dependencyList = makeList(dependencyGraph);
+            dependentsList = makeList(dependentsGraph);
+        }
+
+        function toggleMode () {
+            closeListsToTheRight(0);
+            if (usedGraph === dependencyGraph) {
+                usedGraph = dependentsGraph;
+                dependentsList.classList.remove("hidden");
+                dependencyList.classList.add("hidden");
+                button.innerHTML = "<h1>Toggle Direction ←</h1><p>(X is referenced by Y)</p>";
+            } else {
+                usedGraph = dependencyGraph;
+                dependentsList.classList.add("hidden");
+                dependencyList.classList.remove("hidden");
+                button.innerHTML = "<h1>Toggle Direction →</h1><p>(X references Y)</p>";
+            }
+        }
         
         function filterByString (filter) {
             closeListsToTheRight(filter.parentElement.getAttribute("data-list-num"));
@@ -233,37 +290,6 @@
                     return sortAlphabetical(a, b);
                 default:
                     return sortHighestFirst(a, b);
-            }
-        }
-
-        function toggleMode () {
-            closeListsToTheRight(-1);
-            if (usedGraph === dependencyGraph) {
-                usedGraph = dependentsGraph;
-                button.innerHTML = "<h1>X is required by Y</h1>";
-            } else {
-                usedGraph = dependencyGraph;
-                button.innerHTML = "<h1>X requires Y</h1>";
-            }
-
-            var list = document.createElement("div");
-            list.classList.add("list");
-            list.setAttribute("data-list-num", 0);
-            var filter = document.createElement("input");
-            filter.setAttribute("type", "text");
-            filter.classList.add("filter");
-            list.appendChild(filter);
-            filter.addEventListener("change", function(){filterByString(filter);} );
-            container.appendChild(list);
-
-            var array = Object.keys(usedGraph).map(function(key) {
-                return [key, getNumChildren(key)];
-            });
-            array.sort(function(a, b) {
-                return sort(a, b);
-            });
-            for (var i = 0; i < array.length; i++) {
-                addNode(array[i][0], list);
             }
         }
 
@@ -315,8 +341,15 @@
             var list = document.createElement("div");
             list.classList.add("list");
             list.setAttribute("data-list-num", num);
+            
             var header = document.createElement("h2");
-            header.innerText = filename;
+
+            if (usedGraph === dependencyGraph) {
+                header.innerText = filename + "  →";
+            } else {
+                header.innerText = filename + "  ←";
+            }
+            
             list.appendChild(header);
             var filter = document.createElement("input");
             filter.setAttribute("type", "text");

@@ -13,18 +13,18 @@ module.exports = function (config, data) {
         file.sitePath = file.path.substring(file.base.length);
         file.sitePath = file.sitePath.replace(/\/index.html?/i, "/");
         
-        var dependants = {
+        var dependents = {
             "Required By": []
         };
         for (var key in data) {
             for (var list in data[key]) {
                 if (data[key][list].includes(file.sitePath)) {
-                    dependants["Required By"].push(key);
+                    dependents["Required By"].push(key);
                     break;
                 }
             }
         }
-        this.push([file.sitePath, dependants]);
+        this.push([file.sitePath, dependents]);
         callback();
     });
 }
