@@ -11,12 +11,12 @@ config_options:
     use: The location to output JSON reports.
   - key: state.port 
     use: The port on which to serve the visualiser site.
-  - key: options.ignore_inline_svg
-    use: If set to false, the scanner will pick up inline SVGs as referenced assets, and include them in the reports.
+  - key: options.ignore_data_urls
+    use: Unless set to true, the scanner will pick up data urls as referenced assets, and include them in the reports.
   - key: options.ignore_mailto
-    use: If set to false, the scanner will pick up `mailto:` links in the HTML, and include them in the reports.
+    use: Unless set to true, the scanner will pick up `mailto:` links in the HTML, and include them in the reports.
   - key: options.ignore_cc_editor_links
-    use: If set to false, the scanner will pick up [CloudCannon editor links](https://docs.cloudcannon.com/editing/experience/editor-links/) and include them in the reports.
+    use: Unless set to true, the scanner will pick up [CloudCannon editor links](https://docs.cloudcannon.com/editing/experience/editor-links/) and include them in the reports.
   - key: options.scan_js
     use: If set to true, the scanner will also scan all your JavaScript files and `<script>` tags for references. This causes it to run slower, but may build a more accurate/detailed dependency graph.
 ---

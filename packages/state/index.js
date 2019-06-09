@@ -17,7 +17,7 @@ var configDefaults = {
 		port: 9001
 	},
 	options: {
-		ignore_inline_svg: true,
+		ignore_data_urls: true,
 		ignore_mailto: true,
 		ignore_cc_editor_links: true,
 		scan_js: true
@@ -103,7 +103,7 @@ module.exports = function (gulp, config) {
 		gulp.src(
 			[srcPath + ".html", srcPath + ".css", srcPath + ".js"], 
 			{ nodir: true })
-		.pipe(dependencies(config.options, filenameList))
+		.pipe(dependencies.run(config.options, filenameList))
 		.on("data", function (data) {
 			dependenciesGraph[data[0]] = data[1];
 		}).on("end", function () {
