@@ -35,16 +35,20 @@ describe("Chunk helper functions", function() {
 });
 
 describe("Correct parsing", function() {
+    this.timeout(8000);
     it("Correctly parses Ja test cases", async function() {
         let chunks = await wrapParser.segment("六本木ヒルズで、「ご飯」を食べます。", "ja");
         assert(chunks.list[0].word.trim() === "六本木");
         assert(chunks.list[1].word.trim() === "ヒルズで、");
         assert(chunks.list[2].word.trim() === "「ご飯」を");
         assert(chunks.list[3].word.trim() === "食べます。");
+    });
 
-        chunks = await wrapParser.segment("これは Android です。", "ja");
-        assert(chunks.list[0].word.trim() === "これは");
-        assert(chunks.list[1].word.trim() === "Androidです。");
+    it("Correctly parses more Ja test cases", async function() {
+        let chunks = await wrapParser.segment("これは Android です。", "ja");
+        let list = chunks.list.filter(chunk => chunk.POS !== "BREAK");
+        assert(list[0].word.trim() === "これは");
+        assert(list[1].word.trim() === "Android です。");
     });
 
     it("Correctly parses Zh test cases", async function() {
