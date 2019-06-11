@@ -82,7 +82,7 @@ Below is the default configuration for the Proofer package.
 	log_level: ":info",
 	only_4xx: false,
 	src: "dist/site",
-	output: "dist/reports/proofer.json",
+	output: "reports/proofer.json",
 	url_ignore: [],
 	url_swap: {},
 	verbose: false,

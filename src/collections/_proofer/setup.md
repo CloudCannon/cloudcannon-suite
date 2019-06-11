@@ -15,5 +15,5 @@ suite.proofer(gulp);
 
 ### Usage
 
-Running `gulp proof` will run a check of your compiled site. Errors are logged to your terminal, and saved with more details to `dist/reports/proofer.json`.
+Running `gulp proof` will run a check of your compiled site. Errors are logged to your terminal, and saved with more details to `reports/proofer.json`.
  
