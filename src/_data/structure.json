@@ -13,7 +13,7 @@
 	},
 	{
 		"path": "package.json",
-		"description_markdown": "Defines the required installs and repo information.",
+		"description_markdown": "Defines the required installs and repo information. Create this with `npm init`.",
 		"required": true,
 		"committed": true
 	},
@@ -62,6 +62,12 @@
 		"committed": false
 	},
 	{
+		"path": "dist/state",
+		"description_markdown": "The output for the `gulp state` command.",
+		"required": false,
+		"committed": false
+	},
+	{
 		"path": "dist/prod",
 		"description_markdown": "The output for the `gulp dist` command.",
 		"required": false,
@@ -70,6 +76,12 @@
 	{
 		"path": "dist/translated_site",
 		"description_markdown": "The output for the `gulp i18n` command.",
+		"required": false,
+		"committed": false
+	},
+	{
+		"path": "reports",
+		"description_markdown": "The output location for information gathering commands, like `gulp proof`",
 		"required": false,
 		"committed": false
 	},

@@ -37,6 +37,10 @@ collections:
     title: I18n
     permalink: /i18n/:title/
     output: true
+  screenshots:
+    title: Screenshots
+    permalink: /screenshots/:title/
+    output: true
   state:
     title: State
     permalink: /state/:title/
@@ -118,6 +122,13 @@ defaults:
   - scope:
       path: ""
       type: "state"
+    values:
+      layout: packages
+      seo:
+        type: Article
+  - scope:
+      path: ""
+      type: "screenshots"
     values:
       layout: packages
       seo:
