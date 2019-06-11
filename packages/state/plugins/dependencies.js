@@ -15,19 +15,19 @@ module.exports = function (config, filenameList) {
         }
 
         file.sitePath = file.path.substring(file.base.length);
-        file.sitePath = file.sitePath.replace(/\/index.html?/i, "/");
         
         var ext = file.path.split(".").pop();
-        var data = { "Internal Assets": [], "External Assets": [], "Internal Links": [], "External Links": [] };
+        var data = {"Internal Assets": [], "External Assets": [], "Internal Links": [], "External Links": []};
+
         if (ext === "html") {
             var $ = cheerio.load(file.contents.toString(encoding), { lowerCaseAttributeNames:false, decodeEntities: false });
-            data = process.processHTML($, options, files);
+            data = process.processHTML($, file.sitePath, options, files);
         } else if (ext === "css") {
             var content = file.contents.toString(encoding);
-            data = process.processCSS(content.replace(/\s/g, ""), options);
+            data = process.processCSS(content.replace(/\s/g, ""), file.sitePath, options);
         } else if (ext === "js" && "scan_js" in options && options["scan_js"] === true) {
             var content = file.contents.toString(encoding);
-            data = process.processJS(content.replace(/\s/g, ""), options, files);
+            data = process.processJS(content.replace(/\s/g, ""), file.sitePath, options, files);
         }
 
         this.push([file.sitePath, data]);

@@ -11,7 +11,6 @@ module.exports = function (config, data) {
             return callback(null, file);
         }
         file.sitePath = file.path.substring(file.base.length);
-        file.sitePath = file.sitePath.replace(/\/index.html?/i, "/");
         
         var dependents = {
             "Required By": []
