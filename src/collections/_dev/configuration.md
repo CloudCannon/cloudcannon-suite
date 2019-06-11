@@ -9,6 +9,8 @@ config_options:
     use: Sets the input folder for Jekyll
   - key: jekyll.dest
     use: Sets the output folder for dev build
+  - key: flags
+    use: Adds [flags](https://jekyllrb.com/docs/configuration/) to use with the Jekyll build command (e.g. "--drafts").
   - key: tasks
     use: Adds additional tasks to be run before the Jekyll build. This is useful for reducing build time in Jekyll.
   - key: serve.port
@@ -22,6 +24,7 @@ jekyll: {
     src: "src",
     dest: "dist/site"
 },
+flags: [],
 tasks: [],
 serve: {
     port: 4000
