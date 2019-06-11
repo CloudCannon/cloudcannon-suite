@@ -103,7 +103,7 @@ module.exports = function (gulp, config) {
 		gulp.src(
 			[srcPath + ".html", srcPath + ".css", srcPath + ".js"], 
 			{ nodir: true })
-		.pipe(dependencies.run(config.options, filenameList))
+		.pipe(dependencies(config.options, filenameList))
 		.on("data", function (data) {
 			dependenciesGraph[data[0]] = data[1];
 		}).on("end", function () {
