@@ -85,7 +85,6 @@ module.exports = function (options) {
 
 		$("style").each(function () {
 			var style = $(this).html().replace(/\s/g, "");
-			console.log(style);
 			var startIndex = 0;
 			while (startIndex < style.length) {
 				var urlIndex = style.indexOf("url(", startIndex),
@@ -93,8 +92,11 @@ module.exports = function (options) {
 				if (urlIndex === -1 || endIndex === -1) {
 					break;
 				}
-				var url = style.slice(urlIndex + 5, endIndex -1),
-					updated = rewritePath(file, url);
+				var url = content.slice(urlIndex + 4, endIndex);
+				if (url.startsWith('"') || url.startsWith("'")) {
+					url = url.slice(1, url.length - 1);
+				}
+				var updated = rewritePath(file, url);
 				style = style.replace(url, updated);
 				startIndex = style.indexOf(")", urlIndex);
 			}
