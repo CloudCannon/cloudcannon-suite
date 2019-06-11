@@ -18,6 +18,14 @@
         #top-bar div {
             flex: 1;
         }
+        .top-bar-options {
+            display: flex;
+            align-items: center;
+            border-left: 1px solid black;
+        }
+        .top-bar-options > div {
+            padding: 0px 5px;
+        }
         #toggle-button h1 {
             font-size: 1.2em;
         }
@@ -54,9 +62,6 @@
             overflow-x: hidden;
             overflow-y: scroll;
         }
-        .list.hidden {
-            display: none;
-        }
         .list h2 {
             font-size: 1em;
             font-style: italic;
@@ -80,22 +85,21 @@
             background-color: black;
             color: white;
         }
-        .node.hiddenByFilter, .node.hiddenByCollapse, .node.hiddenUsed, .node.hiddenUnused {
+        .hidden, .node.hiddenByFilter, .node.hiddenByCollapse, .node.hiddenUsed, .node.hiddenUnused {
             display: none;
         }
     </style>
 </head>
 <body>
-
     <div id="top-bar">
         <div id="toggle-button" onclick="toggleMode()"></div>
-        <div class="option-buttons">
+        <div class="option-buttons top-bar-options">
             <div>
-                <label for="hide-unused">Hide Unused</label>
+                <label id="hide-unused-label" for="hide-unused">Hide Unused</label>
                 <input type="checkbox" name="hide-unused" id="toggle-hide-unused">
             </div>
             <div>
-                <label for="hide-used">Hide Used</label>
+                <label id="hide-used-label" for="hide-used">Hide Used</label>
                 <input type="checkbox" name="hide-used" id="toggle-hide-used">
             </div>
             <div>
@@ -103,7 +107,7 @@
                 <input type="checkbox" name="acyclic-graph" id="toggle-acyclic" checked>
             </div>
         </div>
-        <div class="sorting-buttons">
+        <div class="sorting-buttons top-bar-options">
             <div>
                 <label>Sort highest</label>
                 <input type="radio" name="sorting" class="sort-mode-button" value="sort-high" checked>
@@ -119,7 +123,6 @@
         </div>
     </div>
     <div id="container"></div>
-
     <script>
         var container = document.getElementById("container");
         var button = document.getElementById("toggle-button");
@@ -128,6 +131,8 @@
         var dependentsGraph = {};
         var hideUsedToggle = document.getElementById("toggle-hide-used");
         var hideUnusedToggle = document.getElementById("toggle-hide-unused");
+        var hideUsedLabel = document.getElementById("hide-used-label");
+        var hideUnusedLabel = document.getElementById("hide-unused-label");
         var acyclicToggle = document.getElementById("toggle-acyclic");
         var sortMode = "sort-high";
 
@@ -146,6 +151,7 @@
                     element.classList.remove("hiddenUsed");
                 });
             }
+            updateAllSublistNumbers();
         });
         hideUnusedToggle.addEventListener("change", function (event) {
             if (event.target.checked) {
@@ -159,6 +165,7 @@
                     element.classList.remove("hiddenUnused");
                 });
             }
+            updateAllSublistNumbers();
         });
         document.querySelectorAll(".sort-mode-button").forEach(function(radio) {
             radio.onclick = function () {
@@ -200,7 +207,6 @@
         function initFirstLists () {
             function makeList (graph) {
                 usedGraph = graph;
-                console.log(graph);
                 var list = document.createElement("div");
                 list.classList.add("list");
                 list.setAttribute("data-list-num", 0);
@@ -236,12 +242,29 @@
                 dependentsList.classList.remove("hidden");
                 dependencyList.classList.add("hidden");
                 button.innerHTML = "<h1>Toggle Direction ←</h1><p>(X is referenced by Y)</p>";
+                hideUnusedLabel.innerHTML = "Hide unused";
+                hideUsedLabel.innerHTML = "Hide used";
+                
             } else {
                 usedGraph = dependencyGraph;
                 dependentsList.classList.add("hidden");
                 dependencyList.classList.remove("hidden");
                 button.innerHTML = "<h1>Toggle Direction →</h1><p>(X references Y)</p>";
+                hideUnusedLabel.innerHTML = "Hide items with no references";
+                hideUsedLabel.innerHTML = "Hide items with references";
             }
+        }
+
+        function updateAllSublistNumbers() {
+            document.querySelectorAll(".list").forEach(function (list) {
+                updateSublistNumbers(list);
+            });
+        }
+        function updateSublistNumbers(list) {
+            list.querySelectorAll(".sublist").forEach(function (element) {
+                let numChildren = [...element.children].filter(node => node.classList.contains("node") && !isHidden(node)).length;
+                element.querySelector("span.sublist-num").innerHTML = numChildren;
+            });
         }
         
         function filterByString (filter) {
@@ -259,6 +282,7 @@
                     }
                 });
             }
+            updateSublistNumbers(filter.closest(".list"));
         }
 
         function sortLowestFirst (a, b) {
@@ -326,7 +350,7 @@
             sublist.classList.add("sublist");
             list.appendChild(sublist);
             var header = document.createElement("h3");
-            header.innerHTML = `${key} [${listData[key].length}]`;
+            header.innerHTML = `${key} [<span class='sublist-num'>${listData[key].length}</span>]`;
             header.onclick = function () {
                 toggleSublist(sublist);
             }
@@ -347,7 +371,7 @@
             if (usedGraph === dependencyGraph) {
                 header.innerText = filename + "  →";
             } else {
-                header.innerText = filename + "  ←";
+                header.innerText = "←  " + filename;
             }
             
             list.appendChild(header);
@@ -383,7 +407,8 @@
             return element.classList.contains("hiddenByFilter") 
                 || element.classList.contains("hiddenUsed")
                 || element.classList.contains("hiddenUnused")
-                || element.classList.contains("hiddenByCollapse");
+                || element.classList.contains("hiddenByCollapse")
+                || element.closest(".list").classList.contains("hidden");
         }
 
         function getNumChildren(filename){
