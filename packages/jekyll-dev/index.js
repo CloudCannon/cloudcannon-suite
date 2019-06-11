@@ -13,6 +13,7 @@ var configDefaults = {
 		src: "src",
 		dest: "dist/site",
 	},
+	flags: [],
 	tasks: [],
 	serve: {
 		port: 4000,
@@ -87,6 +88,7 @@ module.exports = function (gulp, config) {
 	config.serve = defaults(config.serve, configDefaults.serve);
 	config.namespace = config.namespace || configDefaults.namespace;
 	config.tasks = config.tasks || configDefaults.tasks;
+	config.flags = config.flags || configDefaults.flags;
 
 	var cwd = process.cwd();
 	config.jekyll._src = config.jekyll.src;
@@ -133,6 +135,9 @@ module.exports = function (gulp, config) {
 				commands.push(arg, JEKYLL_OPTIONS[arg]);
 			}
 		}
+		config.flags.forEach(function(flag) {
+			commands.push(flag);
+		});
 
 		return runBundleCommand(commands, false, done);
 	});
@@ -155,11 +160,32 @@ module.exports = function (gulp, config) {
 	// -----
 	// Serve
 
+	function watchDebounce (func, waitTime) {
+		let watchTimeout = null;
+		return function debouncewatch (done) {
+			let callNow = watchTimeout === null;
+			clearTimeout(watchTimeout);
+
+			watchTimeout = setTimeout(function() {
+				watchTimeout = null;
+			}, waitTime);
+
+			if (callNow) {
+				func();
+			}
+			done();
+		};
+	}
+
+
 	gulp.task(nspc + ":watch", function (done) {
+
 		var jekyllWatchFiles = [config.jekyll._src + "/**/*"];
 		for (var taskName in config.tasks) {
 			if (config.tasks.hasOwnProperty(taskName)) {
-				gulp.watch(config.tasks[taskName].watch, gulp.series(nspc + ":" + taskName));
+				//gulp.watch(config.tasks[taskName].watch, gulp.series(nspc + ":" + taskName));
+				let debounce = watchDebounce(gulp.series(nspc + ":" + taskName), 500);
+				gulp.watch(config.tasks[taskName].watch, gulp.series(debounce()));
 
 				config.tasks[taskName].watch.forEach(function (glob) {
 					jekyllWatchFiles.push("!" + glob);
@@ -169,7 +195,9 @@ module.exports = function (gulp, config) {
 
 		function completeWatch(watches) {
 			log(c.grey("👓 watching: " + jekyllWatchFiles.join("\n\t")));
-			gulp.watch(jekyllWatchFiles, gulp.series(nspc + ":reload"));
+			//gulp.watch(jekyllWatchFiles, gulp.series(nspc + ":reload"));
+			let debounceWatch = watchDebounce(gulp.series(nspc + ":reload"), 500);
+			gulp.watch(jekyllWatchFiles, gulp.series(debounceWatch));
 			log(c.grey("✔ done"));
 			done();
 		}

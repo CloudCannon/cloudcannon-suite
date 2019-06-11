@@ -69,8 +69,27 @@ module.exports = function (gulp, config) {
 	// -----
 	// Serve
 
+	function watchDebounce (func, waitTime) {
+		let watchTimeout = null;
+		return function debouncewatch (done) {
+			let callNow = watchTimeout === null;
+			clearTimeout(watchTimeout);
+
+			watchTimeout = setTimeout(function() {
+				watchTimeout = null;
+			}, waitTime);
+
+			if (callNow) {
+				func();
+			}
+			done();
+		};
+	}
+
 	gulp.task("dist:watch", function () {
-		gulp.watch(config.dist._src + "/**/*", gulp.series("dist:reload"));
+		let debounceWatch = watchDebounce(gulp.series("dist:reload"), 1000);
+		//gulp.watch(config.dist._src + "/**/*", gulp.series("dist:reload"));
+		gulp.watch(config.dist._src + "/**/*", debounceWatch);
 	});
 
 	gulp.task("dist:browser-sync", function (done) {
