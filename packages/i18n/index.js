@@ -55,8 +55,6 @@ module.exports = function (gulp, config) {
 		var returnedLocales = {};
 		fs.readdir(dir, function(err, files) {
 			if (err) {
-				log(c.red("Unable to read locales") + " from "
-					+ c.blue(dir) + ": " + err.message);
 				return done(err);
 			}
 
@@ -170,6 +168,9 @@ module.exports = function (gulp, config) {
 				locales = returnedLocales;
 				locales[config.i18n.default_language] = null;
 				localeNames = Object.keys(locales);
+			} else {
+				log(c.red("Unable to read locales") + " from "
+					+ c.blue(dir) + ": " + err.message);
 			}
 			done(err);
 		});
@@ -185,9 +186,11 @@ module.exports = function (gulp, config) {
 						locales[localeName] = returnedLocales[localeName];
 					}
 				}
+			} else {
+				log(c.yellow("Wrapped files not found: ") + c.red(err.message));
 			}
 
-			done(err);
+			done();
 		});
 	});
 
@@ -342,29 +345,9 @@ module.exports = function (gulp, config) {
 	// -----
 	// Serve
 
-	function watchDebounce (func, waitTime) {
-		let watchTimeout = null;
-		return function debouncewatch (done) {
-			let callNow = watchTimeout === null;
-			clearTimeout(watchTimeout);
-
-			watchTimeout = setTimeout(function() {
-				watchTimeout = null;
-			}, waitTime);
-
-			if (callNow) {
-				func();
-			}
-			done();
-		};
-	}
-
 	gulp.task("i18n:watch", function () {
-		let debouncereload = watchDebounce(gulp.parallel("i18n:reload"), 500);
-		gulp.watch(config.i18n._locale_src + "/*.json", debouncereload);
-
-		let debounceregenerate = watchDebounce(gulp.parallel("i18n:reload", "i18n:generate"), 500);
-		gulp.watch(config.i18n._src + "/**/*", debounceregenerate);
+		gulp.watch(config.i18n._locale_src + "/*.json", {delay: 1000}, gulp.parallel("i18n:reload"));
+		gulp.watch(config.i18n._src + "/**/*", {delay: 1000}, gulp.parallel("i18n:reload", "i18n:generate"));
 	});
 
 	gulp.task("i18n:browser-sync", function (done) {

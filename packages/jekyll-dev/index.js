@@ -160,32 +160,11 @@ module.exports = function (gulp, config) {
 	// -----
 	// Serve
 
-	function watchDebounce (func, waitTime) {
-		let watchTimeout = null;
-		return function debouncewatch (done) {
-			let callNow = watchTimeout === null;
-			clearTimeout(watchTimeout);
-
-			watchTimeout = setTimeout(function() {
-				watchTimeout = null;
-			}, waitTime);
-
-			if (callNow) {
-				func();
-			}
-			done();
-		};
-	}
-
-
 	gulp.task(nspc + ":watch", function (done) {
-
 		var jekyllWatchFiles = [config.jekyll._src + "/**/*"];
 		for (var taskName in config.tasks) {
 			if (config.tasks.hasOwnProperty(taskName)) {
-				//gulp.watch(config.tasks[taskName].watch, gulp.series(nspc + ":" + taskName));
-				let debounce = watchDebounce(gulp.series(nspc + ":" + taskName), 500);
-				gulp.watch(config.tasks[taskName].watch, gulp.series(debounce()));
+				gulp.watch(config.tasks[taskName].watch, {delay: 500}, gulp.series(nspc + ":" + taskName));
 
 				config.tasks[taskName].watch.forEach(function (glob) {
 					jekyllWatchFiles.push("!" + glob);
@@ -193,11 +172,9 @@ module.exports = function (gulp, config) {
 			}
 		}
 
-		function completeWatch(watches) {
+		function completeWatch() {
 			log(c.grey("👓 watching: " + jekyllWatchFiles.join("\n\t")));
-			//gulp.watch(jekyllWatchFiles, gulp.series(nspc + ":reload"));
-			let debounceWatch = watchDebounce(gulp.series(nspc + ":reload"), 500);
-			gulp.watch(jekyllWatchFiles, gulp.series(debounceWatch));
+			gulp.watch(jekyllWatchFiles, {delay: 500}, gulp.series(nspc + ":reload"));
 			log(c.grey("✔ done"));
 			done();
 		}
