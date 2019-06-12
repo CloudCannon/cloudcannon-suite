@@ -104,41 +104,68 @@ function handleHTMLFile(options) {
 
 module.exports = {
 	generate: function (options) {
-		options = options || {};
+		options = options || {version: 2};
 		var locale = {};
+
+		function addLocale(key, value, file) {
+			if (!locale[key]) {
+				locale[key] = {
+					"original": value,
+					"pages": {},
+					"total": 0
+				};
+			} else if (locale[key].original !== value) {
+				log(c.yellow("Duplicate & mismatched data-i18n") + " " + c.grey(key));
+			}
+
+			var filePath = file.path.substring(file.base.length);
+			if (!locale[key].pages[filePath]) {
+				locale[key].pages[filePath] = 1;
+			} else {
+				locale[key].pages[filePath]++;
+			}
+
+			locale[key].total++;
+		}
 
 		return handleHTMLFile({
 			processElement: function (file, $el, key, attributes) {
-				var additions = {};
-
-				additions[key] = $el.html();
+				addLocale(key, $el.html(), file);
 				attributes.forEach(function (attr) {
-					additions[key + "." + attr] = $el.attr(attr) || "";
+					addLocale(key + "." + attr, $el.attr(attr) || "", file);
 				});
-
-				for (var newKey in additions) {
-					if (additions.hasOwnProperty(newKey)) {
-						if (locale[newKey] && locale[newKey] !== additions[newKey]) {
-							log(c.yellow("Duplicate data-i18n") + " "
-								+ c.grey(newKey));
-						} else {
-							locale[newKey] = additions[newKey];
-						}
-					}
-				}
 			},
 			complete: function (callback) {
 				var sorted = sortObject(locale);
 				cleanObj(sorted);
+				var keys = Object.keys(sorted);
+
+				var contents;
+				switch (options.version) {
+					case 2:
+						contents = {
+							"version": 2,
+							"keys": sorted
+						};
+						break;
+					default:
+						log(c.yellow("Using legacy format, please use 2 for i18n.sourceVersion"));
+						contents = {};
+
+						for (let i = 0; i < keys.length; i++) {
+							const key = keys[i];
+							contents[key] = sorted[key].original;
+						}
+				}
 
 				this.push(new Vinyl({
 					path: "source.json",
-					contents: Buffer.from(JSON.stringify(sorted, null, "\t"))
+					contents: Buffer.from(JSON.stringify(contents, null, options.delimeter || ""))
 				}));
 
 				log(c.green("Generation complete") + " "
-					+ c.grey("i18n/source.json")
-					+ " available with " + Object.keys(sorted).length + " keys");
+					+ c.blue("i18n/source.json")
+					+ " available with " + keys.length + " keys");
 
 				callback();
 			}
@@ -237,7 +264,6 @@ module.exports = {
 		for (var i = 0; i < localeNames.length; i++) {
 			localeLookup[localeNames[i]] = true;
 		}
-
 
 		var redirectLookup = {};
 

@@ -20,6 +20,8 @@ var configDefaults = {
 		default_language: "en",
 		locale_src: "i18n/locales",
 		generated_locale_dest: "i18n",
+		sourceVersion: 2,
+		sourceDelimeter: "\t",
 
 		legacy_path: "_locales",
 
@@ -145,14 +147,14 @@ module.exports = function (gulp, config) {
 	// ---------------
 	// Generate Source
 
-	gulp.task("i18n:generate",  function (done) {
+	gulp.task("i18n:generate",  function () {
 		log(c.green("Generating source locale") + " from "
 			+ c.blue(config.i18n._src)
 			+ " to "
 			+ c.blue(config.i18n._generated_locale_dest));
 
 		return gulp.src(config.i18n._src + "/**/*.html")
-			.pipe(i18n.generate({}))
+			.pipe(i18n.generate({version: config.i18n.sourceVersion, delimeter: config.i18n.sourceDelimeter}))
 			.pipe(gulp.dest(config.i18n._generated_locale_dest));
 	});
 

@@ -1,1 +1,12 @@
-{}
+{
+	"version": 2,
+	"keys": {
+		"tut": {
+			"original": "Check out our tutorials",
+			"pages": {
+				"/index.html": 1
+			},
+			"total": 1
+		}
+	}
+}
