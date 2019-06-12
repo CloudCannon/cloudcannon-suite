@@ -15,6 +15,10 @@ config_options:
     use: Sets the folder to output the source json file from i18n:generate.
   - key: i18n.legacy\_path
     use: Sets the folder to transfer legacy locale files with `i18n:legacy-transfer`.
+  - key: i18n.source_version
+    use: What version should be expected and generated for `i18n/source.json`.
+  - key: i18n.source_delimeter
+    use: What character should be used to format the json in `i18n:generate`.
   - key: serve.port
     use: Specifies the port to serve the built site from.
 ---
@@ -29,6 +33,9 @@ Below is the default configuration for the I18n package:
     default_language: "en",
     locale_src: "i18n/locales",
     generated_locale_dest: "i18n",
+
+		source_version: 2,
+		source_delimeter: "\t",
 
     legacy_path: "_locales"
   },

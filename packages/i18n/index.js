@@ -20,8 +20,8 @@ var configDefaults = {
 		default_language: "en",
 		locale_src: "i18n/locales",
 		generated_locale_dest: "i18n",
-		sourceVersion: 2,
-		sourceDelimeter: "\t",
+		source_version: 2,
+		source_delimeter: "\t",
 
 		legacy_path: "_locales",
 
@@ -154,8 +154,123 @@ module.exports = function (gulp, config) {
 			+ c.blue(config.i18n._generated_locale_dest));
 
 		return gulp.src(config.i18n._src + "/**/*.html")
-			.pipe(i18n.generate({version: config.i18n.sourceVersion, delimeter: config.i18n.sourceDelimeter}))
+			.pipe(i18n.generate({version: config.i18n.source_version, delimeter: config.i18n.source_delimeter}))
 			.pipe(gulp.dest(config.i18n._generated_locale_dest));
+	});
+
+	// ---------------
+	// Check Sources
+
+	gulp.task("i18n:check", function (done) {
+		readLocalesFromDir(config.i18n.locale_src, function (err, returnedLocales) {
+			if (err) {
+				log(c.red("Unable to read locales") + " from "
+					+ c.blue(dir) + ": " + err.message);
+				return done();
+			}
+
+			log("Loading " + path.join(config.i18n.generated_locale_dest, "source.json") + "...");
+			fs.readFile(path.join(config.i18n.generated_locale_dest, "source.json"), function (err, data) {
+				if (err) {
+					log(err);
+					return done(err);
+				}
+
+				let source = JSON.parse(data);
+				let sourceLookup;
+
+				if (source.version) {
+					sourceLookup = source.keys;
+				} else {
+					sourceLookup = source;
+				}
+
+				let sourceKeys = Object.keys(sourceLookup);
+				let output = {};
+				let localeCodes = Object.keys(returnedLocales);
+
+				function compareTranslations(source, target) {
+					if (!target) {
+						return "missing";
+					}
+
+					if (config.i18n.source_version > 1) {
+						let sourceString = source.original;
+						let targetString = target.translation.original;
+
+						return sourceString === targetString ? "current" : "outdated";
+					}
+					return "current";
+				}
+
+				for (let i = 0; i < localeCodes.length; i++) {
+					const localeCode = localeCodes[i];
+					let translations = returnedLocales[localeCode];
+					output[localeCode] = {
+						current: true,
+						sourceTotal: sourceKeys.length,
+						total: Object.keys(translations).length,
+						states: {
+							missing: 0,
+							current: 0,
+							outdated: 0,
+							unused: 0,
+						},
+						keys: {}
+					};
+
+					for (let j = 0; j < sourceKeys.length; j++) {
+						const sourceKey = sourceKeys[j];
+						const sourceTranslation = sourceLookup[sourceKey];
+						const targetTranslation = translations[sourceKey];
+
+						let state = compareTranslations(sourceTranslation, targetTranslation);
+						output[localeCode].current = output[localeCode].current && state === "current";
+						output[localeCode].states[state]++;
+						output[localeCode].keys[sourceKey] = state;
+						delete translations[sourceKey];
+					}
+
+					let extraKeys = Object.keys(translations);
+					for (let x = 0; x < extraKeys.length; x++) {
+						const extraKey = extraKeys[x];
+						output[localeCode].current = false;
+						output[localeCode].keys[extraKey] = "unused";
+						output[localeCode].states["unused"]++;
+					}
+
+					if (output[localeCode].current) {
+						log("✅  '" + localeCode + "' is all up to date");
+					} else {
+						let logMessages = [];
+						
+						if (output[localeCode].states.missing) {
+							logMessages.push(output[localeCode].states.missing + " missing");
+						}
+
+						if (output[localeCode].states.outdated) {
+							logMessages.push(output[localeCode].states.outdated + " outdated");
+						}
+
+						if (output[localeCode].states.unused) {
+							logMessages.push(output[localeCode].states.unused + " unused");
+						}
+
+						let logMessage = "⚠️  '" + localeCode + "' translations include ";
+						if (logMessages.length > 1) {
+							logMessage += logMessages.slice(0, -1).join(', ') + ' and ' + logMessages.slice(-1);
+						} else {
+							logMessage += logMessages[0];
+						}
+						log(logMessage);
+					}
+				}
+
+				let outputFilename = path.join(config.i18n.generated_locale_dest, "checks.json");
+				fs.writeFile(outputFilename, JSON.stringify(output, null, "\t"), done);
+			});
+
+		});
 	});
 
 

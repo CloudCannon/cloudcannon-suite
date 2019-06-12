@@ -1,1 +1,10 @@
-{}
+{
+    "tut": {
+        "original": "Check out our tutorials",
+        "value": "Check out our tuts"
+    },
+    "tut2": {
+        "original": "Check out our tutorials",
+        "value": "Check out our tuts"
+    }
+}

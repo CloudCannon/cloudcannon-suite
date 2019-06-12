@@ -149,7 +149,7 @@ module.exports = {
 						};
 						break;
 					default:
-						log(c.yellow("Using legacy format, please use 2 for i18n.sourceVersion"));
+						log(c.yellow("Using legacy format, please use 2 for i18n.source_version"));
 						contents = {};
 
 						for (let i = 0; i < keys.length; i++) {

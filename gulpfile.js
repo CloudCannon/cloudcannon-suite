@@ -8,7 +8,11 @@ suite.dist(gulp, {
     }
 });
 suite.screenshots(gulp);
-suite.i18n(gulp);
+suite.i18n(gulp, {
+    "i18n": {
+        "source_version": 2
+    }
+});
 suite.state(gulp, {});
 suite.help(gulp);
 suite.proofer(gulp, { 
