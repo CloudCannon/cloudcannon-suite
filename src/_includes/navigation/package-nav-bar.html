@@ -8,9 +8,11 @@
                 {% assign package = site.collections | where: "title", section.name | first %}
                 {% if package.docs %}
                     {% assign first_in_package = package.docs | sort: "order_number" | first %}
-                    <li class="doc-nav-section">
+                    <li {%if page.url contains section.url%}id="make-visible"{%endif%}class="doc-nav-section">
                         <a href="{{first_in_package.url}}" class="doc-nav-section-link {% if page.url contains section.url %}current{% endif %}">
-                            <i class="material-icons">{{ section.icon }}</i>
+                            <div class="package-icon">
+                                {% include components/package-nav-icon.html icon=section.icon %}
+                            </div>
                             <strong>{{section.name}}</strong>
                         </a>
                     </li>
@@ -22,3 +24,16 @@
         <div class="doc-nav-sections-empty-fix"></div>
     {% endunless %}
 </div>
+
+<script>
+(function () {
+    var elmnt = document.getElementById("make-visible");
+    if (elmnt) {
+        elmnt.scrollIntoView(true);
+        if (screen.width < 800) { 
+            elmnt.scrollIntoView({inline: "center"});
+        }
+    }
+})();
+</script>
+        

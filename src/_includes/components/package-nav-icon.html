@@ -1,0 +1,16 @@
+{% case include.icon %}
+    {% when "build" %}
+        {% include svg/build.svg %}
+    {% when "help" %}
+        {% include svg/help.svg %}
+    {% when "map" %}
+        {% include svg/map.svg %}
+    {% when "photo_camera" %}
+        {% include svg/photo_camera.svg %}
+    {% when "shipping" %}
+        {% include svg/shipping.svg %}
+    {% when "spellcheck" %}
+        {% include svg/spellcheck.svg %}
+    {% when "translate" %}
+        {% include svg/translate.svg %}
+{% endcase %}

@@ -72,36 +72,6 @@ body_class: package-nav-open
 
 		<section class="docs-main" id="doc">
 			<article class="content">
-				
-				<div class="doc-nav-mobile" id="doc-nav-mobile">
-					<label>
-						Package
-						<select>
-							{% for section in sorted_sections %}
-								{% assign package = site.collections | where: "title", section.name | first %}
-								{% assign first_in_package = package.docs | sort: "order_number" | first %}
-								<option value="{{ first_in_package.url }}" {% if page.url contains section.url %}selected{% endif %}>
-									{{ section.name }}
-								</option>
-							{% endfor %}
-						</select>
-					</label>
-					{% if package.docs %}
-						{% assign package = site.collections | where: "title", page.package | first %}
-						{% assign package_items = package.docs | sort: "order_number" %}
-						<label>
-							Document
-							<select>
-								{% for item in package_items %}
-									<option value="{{ item.url }}" {% if item.url == page.url %}selected{% endif %}>
-										{{ item.title }}
-									</option>
-								{% endfor %}
-							</select>
-						</label>
-					{% endif %}
-				</div>
-
 				<h1 class="doc-category-header">{{ page.package }}</h1>
 				{% if page.heading %}
 					<h2 class="doc-main-header">{{ page.heading }}</h2>
@@ -142,7 +112,6 @@ body_class: package-nav-open
 				<div class="split-choice">
 					<div class="split-choice-content">
 						<i class="material-icons">{{prev_section.icon}}</i>
-						<!--<img width="80" height="80" src="{{prev_section.image}}">-->
 						{% assign last_in_package = prev_package.docs | sort: "order_number" | last %}
 						<h1 class="doc-category-header">{{ last_in_package.package }}</h1>
 						<h2>{{ last_in_package.title }}</h2>
@@ -199,20 +168,3 @@ body_class: package-nav-open
 {% endif %}
 
 <script src="/js/sticky-sidebar.js"></script>
-<script>
-	var mobileNav = document.getElementById("doc-nav-mobile");
-	if (mobileNav) {
-		var selects = mobileNav.getElementsByTagName("select");
-		function selectNavigation (event) {
-			window.location = event.target.value;
-		}
-		for (var i = 0; i < selects.length; i++) {
-			selects[i].addEventListener("change", selectNavigation);
-		}
-	}
-
-	var sidebar = new StickySidebar("#docs-nav", {
-		topSpacing: 20,
-		bottomSpacing: 20
-	});
-</script>

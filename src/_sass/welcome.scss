@@ -132,57 +132,14 @@ h2.doc-main-header {
 	padding: 0;
 	max-width: 1200px;
 	margin: 0 auto;
-}
-
-.doc-nav-mobile {
-	display: none;
-}
-
-.doc-nav-mobile {
-	label {
-		flex: 1 1 200px;
-		margin: 10px;
-		text-transform: uppercase;
-		color: #888;
-		font-weight: bold;
-		font-size: 0.9rem;
-	}
-
-	select {
-		display: block;
-		padding: 10px;
-		border: 1px solid #eee;
-		font-size: 1rem;
-		min-width: 0;
-		width: 100%;
-		box-sizing: border-box;
-		margin: 5px 0 0 0;
-		-webkit-appearance: none;
-		background: #fafafafa;
-		border-radius: 4px;
-		box-sizing: border-box;
-	}
-}
-
-@media (max-width: 800px) {
-	.docs-nav,
-	.doc-category-header,
-	.doc-nav-sections {
-		display: none;
-	}
-
-	.doc-nav-mobile {
-		display: flex;
-		margin: 0 -10px;
-		flex-wrap: wrap;
-	}
+	padding-bottom: 10px;
 }
 
 li.doc-nav-section {
-	flex: 1;
+	flex: 1 0 75px;
 	display: flex;
 	flex-direction: column;
-	margin: 0 -1px;
+	padding-top: 10px;
 }
 
 $docs-nav-bottom-curve-size: 10px;
@@ -190,7 +147,6 @@ $docs-nav-background: rgba(0, 0, 0, 0.1);
 .doc-nav {
 	overflow: hidden;
 	position: relative;
-	padding-top: 10px;
 
 	&:before {
 		content: "";
@@ -202,6 +158,10 @@ $docs-nav-background: rgba(0, 0, 0, 0.1);
 		left: 0;
 		width: 100%;
 		background: $docs-nav-background;
+
+		@media (max-width: 800px) {
+			background: transparent;
+		}
 	}
 }
 
@@ -226,6 +186,13 @@ a.doc-nav-section-link {
 	fill: #666;
 	position: relative;
 	z-index: 10;
+	font-size: 0.9rem;
+	line-height: 1.2rem;
+
+	@media (max-width: 800px) {
+	    padding: 10px 0 10px 0;
+	    border-radius: 10px;
+	}
 
 	svg,
 	i {
@@ -253,14 +220,26 @@ a.doc-nav-section-link {
 			left: 100%;
 			width: 9999px;
 			background: $docs-nav-background;
-			bottom: 0;
+			bottom: -10px;
 			border-radius: 0 0 0 $docs-nav-bottom-curve-size;
+
+			@media (max-width: 800px) {
+				background: rgba(0, 0, 0, 0.1);;
+				border-radius: 0;
+				height: 0px;
+			}
 		}
 
 		&:after {
 			right: 100%;
 			left: auto;
 			border-radius: 0 0 $docs-nav-bottom-curve-size 0;
+
+			@media (max-width: 800px) {
+				background: rgba(0, 0, 0, 0.1);
+				border-radius: 0;
+				height: 0px;
+			}
 		}
 	}
 }

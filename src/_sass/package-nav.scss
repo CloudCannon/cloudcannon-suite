@@ -4,9 +4,17 @@ $nav-bar-background: mix($white, $black, 99%);
 
 div.doc-nav {
     max-height: 0;
-    padding: 0;
-    background-color: $nav-bar-background;
+    background-color: #fff;
     transition: max-height 0.2s ease-in, padding 0.2s linear;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    box-shadow: 0px 15px 15px #fff;
+    
+    @media (max-width: 800px) {
+        overflow-x: auto;
+        box-shadow: 0px 0px 0px transparent;
+    }
 
     li a {
         color: #666;
@@ -14,37 +22,54 @@ div.doc-nav {
             color: #222;
         }
     }
-
-    .package-nav-open & {
-        max-height: 200px;
-        padding-top: 10px;
+    
+    .package-icon {
+        line-height: 0;
+        padding: 5px 0;
     }
 
-    &.none ul {
+    .package-nav-open &,
+    &.bottom {
+        max-height: 200px;
+    }
+
+    &.none:not(.bottom) ul {
         margin-top: -10px;
     }
 
-}
+    &.bottom {
+        background-color: transparent;
+        padding-top: 0;
+        padding-bottom: 10px;
 
-@media (min-width: 930px) {
-    #packages-nav-button {
-        &:after {
-            content: "";
-            width: 0;
-            height: 0;
-            border-left: 5px solid transparent;
-            border-right: 5px solid transparent;
-            border-bottom: 5px solid white;
-
-            display: inline-block;
-            vertical-align: middle;
-            margin-left: 4px;
+        &:before {
+            top: 10px;
+            bottom: 0;
         }
-        &.arrow-down {
+
+        &.none {
+            padding-bottom: 0;
+        }
+
+        .doc-nav-sections-empty-fix {
+            top: 0;
+        }
+
+        a.doc-nav-section-link.current {
+            border-radius: 0 0 $docs-nav-bottom-curve-size $docs-nav-bottom-curve-size;
+            &:before, &:after {
+                top: 0;
+                border-radius: $docs-nav-bottom-curve-size 0 0 0;
+            }
             &:after {
-                border-bottom: 0px solid transparent;
-                border-top: 5px solid white;
+                right: 100%;
+                left: auto;
+                border-radius: 0 $docs-nav-bottom-curve-size 0 0;
             }
         }
+    }
+
+    @media (max-width: 800px) {
+        background-color: #e6e5e6;
     }
 }
