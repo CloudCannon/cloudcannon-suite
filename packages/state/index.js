@@ -75,7 +75,7 @@ module.exports = function (gulp, config) {
 			console.log("Skipping - filename list is only needed for scanning JavaScript. Enable scan_js if you want this.")
 			return done();
 		}
-
+		filenameList = [];
 		gulp.src([config.state.src + "/**/*"], { nodir: true })
 			.on("data", function (file) {
 				filenameList.push(file.path.substring(file.base.length));
@@ -100,8 +100,7 @@ module.exports = function (gulp, config) {
 					}).catch(done);
 				});	
 		}
-
-
+		dependenciesGraph = {};
 		if (config.options.scan_js && (!filenameList || filenameList.length === 0)) {
 			console.log("Filename List not found, loading from file...");
 			fs.readFile(path.join(config.state.dest, listFilename), "utf8", function (err, data) {
@@ -131,7 +130,7 @@ module.exports = function (gulp, config) {
 					}).catch(done);
 				});
 		}
-
+		dependentsGraph = {};
 		if (!dependenciesGraph || Object.keys(dependenciesGraph).length === 0) {
 			console.log("Dependencies not found, loading from file...");
 			fs.readFile(path.join(config.state.dest, dependenciesFilename), "utf8", function (err, data) {
@@ -155,6 +154,16 @@ module.exports = function (gulp, config) {
 	gulp.task("state:add-interface", function (done) {
 		fs.copyFile(path.join(__dirname, "./index.html"), path.join(config.state.dest, "/index.html"), done);
 	});
+
+	gulp.task("state:watch", function() {
+		gulp.watch(config.state.src + "/**/*", {delay: 1000}, gulp.series("state:build"));
+		gulp.watch(config.state.dest + "/**/*", {delay: 1000}, gulp.series("state:browser-sync"));
+	});
+
+	gulp.task("state:browser-sync", function (done) {
+		browserSync.reload();
+		done();
+	});
 	
 	gulp.task("state:serve", function (done) {
 		browserSync.init({
@@ -174,5 +183,5 @@ module.exports = function (gulp, config) {
 
 	gulp.task("state:build-tree", gulp.series("state:get-filename-list", "state:dependencies", "state:dependents"));
 	gulp.task("state:build", gulp.series("state:build-tree", "state:add-interface"));
-	gulp.task("state", gulp.series("state:build", "state:serve"));
+	gulp.task("state", gulp.series("state:build", "state:serve", "state:watch"));
 };

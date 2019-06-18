@@ -146,6 +146,7 @@ module.exports = {
                 var script = $(this).html();
                 // for each filename, add url if script.includes(filename)
                 files.forEach(function(filename) {
+                    filename = helpers.makeURLAbsolute(currentPath, filename, options);
                     if (script.includes(`"${filename}"`) || script.includes(`'${filename}'`)) {
                         if (helpers.ignoreChecks(filename, options)) {
                             return;
