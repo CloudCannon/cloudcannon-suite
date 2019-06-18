@@ -1,5 +1,5 @@
 const log = require("fancy-log");
-const Promise = require("bluebird");
+const c = require("ansi-colors");
 const fs = require("fs-extra");
 
 var reporter = function reporter(){
@@ -13,12 +13,14 @@ var reporter = function reporter(){
 			message: message,
 			startIndex: this.getStartIndex($el)
 		};
-
-		log(this.outputError(l));
 		
 		this.logs.push(l);
 
 		return l;
+	}
+
+	this.flushLogs = function() {
+		this.logs = [];
 	}
 
 	this.getStartIndex = function ($el) {
@@ -44,18 +46,34 @@ var reporter = function reporter(){
 			throw new Error("This object cannot be instantiated");
 	}
 
-	this.output = function (options) {
+	this.output = function (options, files) {
 
 		log(this.logs.length + " errors found");
+
+		files.forEach(file => {
+			var errors = this.logs.filter(report => report.path === file.sitePath);
+			errors.sort(function(a, b) {
+				return a.lineNumber - b.lineNumber;
+			});
+			if (errors.length === 0) {
+				log("✅ " + c.green(file.sitePath));
+			} else {
+				log("❌ " + file.sitePath);
+				errors.forEach(function(error) {
+					log(c.red(`Line ${error.lineNumber}: `) + "\t" + error.message);
+				});
+			}
+		});
 		
 		if ('output' in options && options.output !== '') {
 			var json = JSON.stringify(this.logs);
-			return fs.ensureFile(options.output)
+			return fs.ensureDir(options.output)
 			.then(() => {
-				return fs.writeJson(options.output, this.logs)
+				return fs.writeJson(options.output + "/results.json", this.logs)
 			})
 			.then(() => {
 				log("Output logs to " + options.output);
+				this.logs = [];
 			}).catch((err) => {
 				console.log(err);
 			});

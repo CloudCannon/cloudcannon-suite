@@ -9,6 +9,9 @@ const concurrency = 5;
 
 module.exports = {
 	start: function (options) {
+		reporter.flushLogs();
+		checker.flush();
+
 		options = options || {};
 		
 		var files = [];
@@ -50,7 +53,7 @@ module.exports = {
 			return checker.finalize();
 		})
 		.then(() => {
-			return reporter.output(options)
+			return reporter.output(options, files)
 		})
 		.then(() => {
 			return cache.persist()

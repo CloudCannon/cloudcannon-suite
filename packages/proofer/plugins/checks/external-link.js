@@ -10,6 +10,10 @@ var externalLink = function externalLink() {
 
 	this.links = {};
 
+	this.flushLinks = function () {
+		this.links = {};
+	}
+
 	this.run = function ($el, attr, value, file, options) {
 		if (this.skipChecks(value, options)) {
 			return true;
@@ -163,7 +167,7 @@ var externalLink = function externalLink() {
 			return res.statusCode;
 		}).catch((err) => {
 			throw err;
-		});
+		});	
 	},
 
 	this.makeRequest = function (p) {

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<head>
+    <title>Proofer</title>
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+        .container {
+            padding: 0 30%;
+            display: flex;
+            flex-direction: column;
+        }
+        .container h1 {
+            text-align: center;
+        }
+        #circle {
+            border-radius: 50%;
+            border: 2px solid black;
+            width: 150px;
+            height: 150px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-size: 2em;
+        }
+        #filter {
+            margin: 10px;
+        }
+        .report {
+            background-color: #eee;
+            padding: 0 5px;
+        }
+        .report .line-num {
+            font-weight: bold;
+        }
+        .report .index-num {
+            font-size: 0.8em;
+            font-style: italic;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Site Report</h1>
+        <div id="circle"></div>
+        <label for="search">Search:</label>
+        <input id="filter" name="search" type="text">
+        <div id="reports"></div>
+    </div>
+
+
+    <script>
+        var circle = document.getElementById("circle");
+        var reportsContainer = document.getElementById("reports");
+        var reports = [];
+
+        var filter = document.getElementById("filter");
+        filter.addEventListener("change", function() {
+            document.querySelectorAll(".report").forEach(function (element) {
+                if (element.innerText.toLowerCase().includes(filter.value.toLowerCase())) {
+                    element.classList.remove("hidden");
+                } else {
+                    element.classList.add("hidden");
+                }
+            });
+        });
+
+        // start 
+        fetchJSONFile("results.json", function (data) {
+            data.sort(function(a, b) {
+                if (a.path === b.path) {
+                    return a.lineNumber - b.lineNumber;
+                } else {
+                    return a.path - b.path;
+                }
+            });
+            reports = data;
+
+            // add reports to page
+            let prevReport, box;
+            reports.forEach(function(report) {
+                if (report.path !== prevReport) {
+                    box = document.createElement("div");
+                    
+                    box.classList.add("report");
+                    reportsContainer.appendChild(box);
+
+                    var header  = document.createElement("h2");
+                    header.innerHTML = report.path;
+                    box.appendChild(header);
+                }
+
+                var desc = document.createElement("p");
+                desc.innerHTML = `<span class="line-num">Line ${report.lineNumber}:</span> ${report.message}<br><span class="index-num">Start index: ${report.startIndex}</span>`;
+                box.appendChild(desc);
+
+                prevReport = report.path;                
+            });
+            circle.innerHTML = reports.length + " total errors";
+        });
+
+        function makeReport(report) {
+            
+        }
+
+        function fetchJSONFile(path, callback) {
+            var httpRequest = new XMLHttpRequest();
+            httpRequest.onreadystatechange = function() {
+                if (httpRequest.readyState === 4) {
+                    if (httpRequest.status === 200 || httpRequest.status === 0) {
+                        var data = JSON.parse(httpRequest.responseText);
+                        if (callback) callback(data);
+                    }
+                }
+            };
+            httpRequest.open('GET', path);
+            httpRequest.send(); 
+        }
+    </script>
+</body>

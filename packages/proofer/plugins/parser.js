@@ -1,4 +1,4 @@
-const	cheerio = require("cheerio");
+const cheerio = require("cheerio");
 const cache = require('./cache');
 
 module.exports = {
@@ -9,7 +9,9 @@ module.exports = {
 	},
 
 	sitePath: function (file) {
-		return "/" + file.path.substring(file.base.length);
+		let sitePath = file.path.substring(file.base.length);
+		if (sitePath[0] === "/") return sitePath;
+		return "/" + sitePath;
 	},
 
 	processFile: function (file, options) {

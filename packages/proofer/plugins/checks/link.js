@@ -38,6 +38,10 @@ const elements = {
 
 module.exports = {
 
+	flush: function () {
+		externalLink.flushLinks();
+	},
+
 	run: function (file, options) {
 		return new Promise((resolve, reject) => {
 			this.check(file, options);

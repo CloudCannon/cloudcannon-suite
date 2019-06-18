@@ -7,6 +7,10 @@ const checkers = [
 ];
 
 module.exports = {
+	flush: function () {
+		checkers[2].flush();
+	},
+
 	check: function (file, options) {
 		return Promise.map(checkers, (check) => { 
 			return check.run(file, options);
