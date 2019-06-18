@@ -27,8 +27,10 @@
 		}
 	}
 
+	padding: 40px 0;
+
 	@media (min-width: 800px) {
-		padding: 40px 0;
+		
 
 		.docs-main {
 			padding: 0 20px;
@@ -49,6 +51,12 @@
 				transform: translate3d(0, 0, 0);
 				will-change: position, transform;
 			}
+		}
+	}
+
+	@media (max-width: 800px) {
+		nav.full-navigation {
+			display: none;
 		}
 	}
 
