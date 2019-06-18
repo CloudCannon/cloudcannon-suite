@@ -50,7 +50,7 @@ describe('parser', function() {
         base: '/mike/test/site/dest/'
       }
 
-      assert(parser.processFile(file, { file_ignore: [/about.htm./]}).skip);
+      assert(parser.processFile(file, { file_ignore: [/\/about.htm./]}).skip);
     });
 
     it('doesn\'t skips unignored files using regex', function() {
@@ -60,7 +60,7 @@ describe('parser', function() {
         base: '/mike/test/site/dest/'
       }
 
-      assert.equal(false, parser.processFile(file, { file_ignore: [/about.htm./]}).skip);
+      assert.equal(false, parser.processFile(file, { file_ignore: [/\/about.htm./]}).skip);
     });
   });
 

@@ -95,9 +95,8 @@ describe("Dependency tree", function () {
 
     describe("File processing", function() {
         it("Process HTML", function() {
-            let content = cheerio.load(fs.readFileSync("test/helper/state/state-test.html", "utf8"));
-            let data = processing.processHTML(content, {"scan_js": true}, ["/about", "/images/pic.svg"]);
-
+            let file = fs.readFileSync("test/helper/state/state-test.html", "utf8");
+            let data = processing.processHTML(cheerio.load(file), "test/helper/state/state-test.html", {"scan_js": true}, ["/about", "/images/pic.svg"]);
             assert(data["Internal Assets"].length == 10);
             assert(data["External Assets"].length == 2);
             assert(data["Internal Links"].length == 1);
@@ -105,14 +104,14 @@ describe("Dependency tree", function () {
         });
         it("Process CSS", function() {
             let content = fs.readFileSync("test/helper/state/state-test.css", "utf8");
-            let data = processing.processCSS(content, {});
+            let data = processing.processCSS(content, "test/helper/state/state-test.html", {});
 
             assert(data["Internal Assets"].length == 4);
             assert(data["External Assets"].length == 4);
         });  
         it("Process JavaScript", function() {
             let content = fs.readFileSync("test/helper/state/state-test.js", "utf8");
-            let data = processing.processJS(content.replace(/\s/g, ""), {}, [
+            let data = processing.processJS(content.replace(/\s/g, ""), "test/helper/state/state-test.html", {}, [
                 "pic1.svg", "pic2.jpg", "pic3.png",
                 "/about", "/blog", "/index"
             ]);
