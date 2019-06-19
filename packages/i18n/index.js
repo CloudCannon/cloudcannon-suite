@@ -433,7 +433,11 @@ module.exports = function (gulp, config) {
 				next(err);
 			});
 		}, function (err) {
-			done(err, err ? null : JSON.stringify(output, null, "\t"));
+			let sortedOutput = {};
+			Object.keys(output).sort().forEach(function(key){
+				sortedOutput[key] = output[key]; 
+			});
+			done(err, err ? null : JSON.stringify(sortedOutput, null, "\t"));
 		});
 	}
 
