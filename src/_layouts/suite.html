@@ -16,6 +16,7 @@ header_class: short
 {% endif %}
 
 <div class="docs-container">
+	{% include navigation/mobile-doc-selector-standalone.html %}
 	<div class="wrapper wrapper-large">
 		{% unless page.hide_contents %}
 			{% include page-nav.html %}
@@ -43,6 +44,7 @@ header_class: short
 
 {% unless page.hide_contents %}
 <script src="/js/sticky-sidebar.js"></script>
+<script src="/assets/js/mobile-doc-selector.js"></script>
 <script>
 	var sidebar = new StickySidebar("#docs-nav", {
 		topSpacing: 20,
