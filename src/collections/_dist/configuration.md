@@ -8,9 +8,10 @@ Below is the default configuration for the Distribute package.
 ```js
 {
   dist: {
-  src: "dist/site",
-  dest: "dist/prod",
-  baseurl: ""
+    src: "dist/site",
+    dest: "dist/prod",
+    baseurl: "",
+    extraSrcAttrs: []
   },
   serve: {
   port: 9000,
@@ -35,6 +36,10 @@ Sets the input folder for dist task
 #### dist.dest
 
 Sets the output folder for dist build
+
+#### dist.extraSrcAttrs
+
+An array of extra attributes to be rewritten (e.g. data-src)
 
 #### serve.port
 
