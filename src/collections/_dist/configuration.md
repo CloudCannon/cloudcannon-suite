@@ -19,7 +19,8 @@ Below is the default configuration for the Distribute package.
   dist: {
     src: "dist/site",
     dest: "dist/prod",
-    baseurl: ""
+    baseurl: "",
+    extraSrcAttrs: []
   },
   serve: {
     port: 9000,
@@ -41,5 +42,27 @@ suite.dist(gulp, {
     }
 });
 ```
+
+#### dist.baseurl `required` 
+
+Sets the baseurl to append to urls.
+
+#### dist.src
+
+Sets the input folder for dist task
+
+#### dist.dest
+
+Sets the output folder for dist build
+
+#### dist.extraSrcAttrs
+
+An array of extra attributes to be rewritten (e.g. data-src)
+
+#### serve.port
+
+Specifies the port to serve the built site from.
+
+#### serve.open
 
 {% include package-config.md %}

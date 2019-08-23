@@ -38,16 +38,22 @@ module.exports = function (options) {
 			}
 		});
 
-		$("[src]").each(function () {
-			var $el = $(this),
-				src = $el.attr("src"),
-				updated = rewritePath(file, src);
 
-			if (updated !== src) {
-				$el.attr("src", updated);
-			}
-		});
+		let srcAttrs = ["src", "poster"].concat(options.extraSrcAttrs || []);
+		for (let i = 0; i < srcAttrs.length; i++) {
+			const srcAttr = srcAttrs[i];
 
+			$("[" + srcAttr + "]").each(function () {
+				var $el = $(this),
+					originalValue = $el.attr(srcAttr),
+					updated = rewritePath(file, originalValue);
+
+				if (updated !== originalValue) {
+					$el.attr(srcAttr, updated);
+				}
+			});
+		}
+		
 		$("[srcset]").each(function () {
 			var $el = $(this),
 				srcset = $el.attr("srcset"),

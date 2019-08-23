@@ -1,12 +1,12 @@
 GIT
   remote: git://github.com/CloudCannon/jekyll-theme-cloudcannon.git
-  revision: 6ebf87c2030046cf8d108f4c7dc1cc7f66cf95de
+  revision: d8100f4c712594e393fc3fb42b062287a3140e1d
   branch: master
   specs:
-    jekyll-theme-cloudcannon (0.1.0)
+    jekyll-theme-cloudcannon (0.1.1)
       jekyll (~> 3.6)
       jekyll-data (~> 1.0)
-      jekyll-feed (= 0.9.2)
+      jekyll-feed (> 0.9.2)
       jekyll-include-cache (= 0.1.0)
       jekyll-seo-tag (= 2.3.0)
       jekyll-sitemap (= 1.1.1)
@@ -42,8 +42,8 @@ GEM
       safe_yaml (~> 1.0)
     jekyll-data (1.0.0)
       jekyll (~> 3.3)
-    jekyll-feed (0.9.2)
-      jekyll (~> 3.3)
+    jekyll-feed (0.12.1)
+      jekyll (>= 3.7, < 5.0)
     jekyll-include-cache (0.1.0)
       jekyll (~> 3.3)
     jekyll-sass-converter (1.5.2)

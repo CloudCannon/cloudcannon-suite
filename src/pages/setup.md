@@ -3,6 +3,7 @@ title: Setup
 description: Install CloudCannon Suite to your site
 permalink: /setup/
 layout: suite
+_mobile_doc_selector: true
 ---
 This guide covers how to install CloudCannon Suite and use it with a Jekyll project.
 
@@ -55,7 +56,7 @@ Open your package.json and add dependencies for Gulp and the CloudCannon Suite a
 ```json
 "dependencies": {
      "gulp": "^4.0.0",
-     "@cloudcannon/suite": "^2.0.0-rc5"
+     "@cloudcannon/suite": "^2.0.0-rc6"
 }
 ```
 

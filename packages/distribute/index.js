@@ -45,7 +45,7 @@ module.exports = function (gulp, config) {
 
 	gulp.task("dist:rewrite-html", function () {
 		return gulp.src(config.dist.src + "/**/*.html")
-			.pipe(htmlRewrite({baseurl: config.dist.baseurl}))
+			.pipe(htmlRewrite({baseurl: config.dist.baseurl, extraSrcAttrs: config.dist.extraSrcAttrs}))
 			.pipe(gulp.dest(fullDest));
 	});
 
