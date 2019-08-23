@@ -46,14 +46,15 @@ body_class: package-nav-open
 </header>
 
 <div class="docs-container">
+	{% include navigation/collection-nav.html docs_nav=true %}
 	<div class="wrapper wrapper-large">
 
 		<nav class="docs-nav full-navigation" id="docs-nav">
 			<ul class="docs-nav-list">
-				{% assign package = site.collections | where: "title", page.package | first %}
-				{% if package.docs %}
+				{% assign collection = site.collections | where: "title", page.package | first %}
+				{% if collection.docs %}
 					<li class="nav-item top-level current">
-						{% assign sorted = package.docs | sort: "order_number" %}
+						{% assign sorted = collection.docs | sort: "order_number" %}
 						<a href="">{{ page.package | default: "General" }} ({{ sorted | size }})</a>
 						<ul>
 						{% for item in sorted %}
@@ -70,37 +71,10 @@ body_class: package-nav-open
 			</ul>
 		</nav>
 
+		{% include navigation/mobile-doc-selector.html %}
+
 		<section class="docs-main" id="doc">
 			<article class="content">
-				
-				<div class="doc-nav-mobile" id="doc-nav-mobile">
-					<label>
-						Package
-						<select>
-							{% for section in sorted_sections %}
-								{% assign package = site.collections | where: "title", section.name | first %}
-								{% assign first_in_package = package.docs | sort: "order_number" | first %}
-								<option value="{{ first_in_package.url }}" {% if page.url contains section.url %}selected{% endif %}>
-									{{ section.name }}
-								</option>
-							{% endfor %}
-						</select>
-					</label>
-					{% if package.docs %}
-						{% assign package = site.collections | where: "title", page.package | first %}
-						{% assign package_items = package.docs | sort: "order_number" %}
-						<label>
-							Document
-							<select>
-								{% for item in package_items %}
-									<option value="{{ item.url }}" {% if item.url == page.url %}selected{% endif %}>
-										{{ item.title }}
-									</option>
-								{% endfor %}
-							</select>
-						</label>
-					{% endif %}
-				</div>
 
 				<h1 class="doc-category-header">{{ page.package }}</h1>
 				{% if page.heading %}
@@ -124,6 +98,7 @@ body_class: package-nav-open
 		</section>
 	</div>
 </div>
+
 
 {% if current_section %}
 	<div class="split-choice-wrapper">
@@ -199,20 +174,4 @@ body_class: package-nav-open
 {% endif %}
 
 <script src="/js/sticky-sidebar.js"></script>
-<script>
-	var mobileNav = document.getElementById("doc-nav-mobile");
-	if (mobileNav) {
-		var selects = mobileNav.getElementsByTagName("select");
-		function selectNavigation (event) {
-			window.location = event.target.value;
-		}
-		for (var i = 0; i < selects.length; i++) {
-			selects[i].addEventListener("change", selectNavigation);
-		}
-	}
-
-	var sidebar = new StickySidebar("#docs-nav", {
-		topSpacing: 20,
-		bottomSpacing: 20
-	});
-</script>
+<script src="/assets/js/mobile-doc-selector.js"></script>

@@ -3,6 +3,7 @@ title: Setup
 description: Install CloudCannon Suite to your site
 permalink: /setup/
 layout: suite
+_mobile_doc_selector: true
 ---
 This guide covers how to install CloudCannon Suite and use it with a Jekyll project.
 
