@@ -91,6 +91,9 @@ body_class: package-nav-open
 				{% endif %}
 
 				<a href="cloudcannon:collections/{{ page.path }}" class="editor-link button"><strong>&#9998;</strong> Edit package</a>
+				{% if current_section.wip %}
+					<p class="wip-warning">This package is a work-in-progress. Some aspects may be awaiting improvement.</p>
+				{% endif %}
 
 				{{ content }}
 			</article>
