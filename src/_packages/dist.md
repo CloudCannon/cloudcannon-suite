@@ -49,7 +49,8 @@ default_json_code: |
     dist: {
         src: "dist/site",
         dest: "dist/prod",
-        baseurl: ""
+        baseurl: "",
+        extraSrcAttrs: []
     },
     serve: {
         port: 9000,
@@ -66,6 +67,9 @@ config:
     required: false
   - key: "dist.dest"
     description_markdown: "Sets the output folder for dist build"
+    required: false
+  - key: "dist.extraSrcAttrs"
+    description_markdown: "An array of extra attributes to be rewritten (e.g. data-src)"
     required: false
   - key: "serve.port"
     description_markdown: "Specifies the port to serve the built site from."

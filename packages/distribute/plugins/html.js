@@ -38,15 +38,20 @@ module.exports = function (options) {
 			}
 		});
 
-		$("[src]").each(function () {
-			var $el = $(this),
-				src = $el.attr("src"),
-				updated = rewritePath(file, src);
+		let srcAttrs = ["src", "poster"].concat(options.extraSrcAttrs || []);
+		for (let i = 0; i < srcAttrs.length; i++) {
+			const srcAttr = srcAttrs[i];
 
-			if (updated !== src) {
-				$el.attr("src", updated);
-			}
-		});
+			$("[" + srcAttr + "]").each(function () {
+				var $el = $(this),
+					originalValue = $el.attr(srcAttr),
+					updated = rewritePath(file, originalValue);
+
+				if (updated !== originalValue) {
+					$el.attr(srcAttr, updated);
+				}
+			});
+		}
 
 		$("[srcset]").each(function () {
 			var $el = $(this),
