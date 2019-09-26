@@ -25,20 +25,21 @@ module.exports = function (options) {
 
 		var css = file.contents.toString(encoding);
 
-		var rewriter = new URLRewriter(function(href) {
-			if (IGNORE_URL_REGEX.test(href)) {
-				return prepHref(href);
-			}
+		if (css) {
+			var rewriter = new URLRewriter(function(href) {
+				if (IGNORE_URL_REGEX.test(href)) {
+					return prepHref(href);
+				}
 
-			log(path.dirname(file.sitePath), href);
-			var absolutePath = path.resolve(path.dirname(file.sitePath), href);
-			log(absolutePath);
-			return prepHref("/" + path.join(options.baseurl, absolutePath));
-		});
+				var absolutePath = path.resolve(path.dirname(file.sitePath), href);
+				return prepHref("/" + path.join(options.baseurl, absolutePath));
+			});
 
-		var rewritten = rewriter.rewrite(css);
+			var rewritten = rewriter.rewrite(css);
 
-		file.contents = Buffer.from(rewritten);
+			file.contents = Buffer.from(rewritten);
+		}
+
 		this.push(file);
 		callback();
 	});
