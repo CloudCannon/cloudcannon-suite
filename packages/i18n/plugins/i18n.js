@@ -120,9 +120,9 @@ module.exports = {
 
 				for (var newKey in additions) {
 					if (additions.hasOwnProperty(newKey)) {
-						if (locale[newKey] && locale[newKey] !== additions[newKey]) {
+						if (locale[newKey] && locale[newKey] !== additions[newKey] && options.showDuplicateLocaleWarnings) {
 							log(c.yellow("Duplicate data-i18n") + " "
-								+ c.grey(newKey));
+								+ c.grey(newKey) + ": " + locale[newKey] + " !== " + additions[newKey]);
 						} else {
 							locale[newKey] = additions[newKey];
 						}
@@ -195,7 +195,7 @@ module.exports = {
 				if (locale[key]) {
 					$el.html(locale[key].wrappedTranslation || locale[key].translation);
 					locale[key].count++;
-				} else if ($el.html()) {
+				} else if ($el.html() && options.showMissingLocaleWarnings) {
 					log(c.yellow("Missing translation") + " "
 						+ c.grey(targetLocale + file.sitePath) +
 						" [data-i18n=" + key + "]");
@@ -205,7 +205,7 @@ module.exports = {
 					if (locale[key + "." + attr]) {
 						$el.attr(attr, locale[key + "." + attr].translation);
 						locale[key + "." + attr].count++;
-					} else if ($el.attr(attr)) {
+					} else if ($el.attr(attr) && options.showMissingLocaleWarnings) {
 						log(c.yellow("Missing translation") + " "
 							+ c.grey(targetLocale + file.sitePath) +
 							" [data-i18n=" + key + "][" + attr + "]");

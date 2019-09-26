@@ -23,6 +23,10 @@ var configDefaults = {
 
 		legacy_path: "_locales",
 
+
+		show_duplicate_locale_warnings: true,
+		show_missing_locale_warnings: true,
+
 		character_based_locales: ["ja", "ja_jp", "ja-jp"],
 		google_credentials_filename: null
 	},
@@ -167,7 +171,9 @@ module.exports = function (gulp, config) {
 			+ c.blue(config.i18n._generated_locale_dest));
 
 		return gulp.src(config.i18n._src + "/**/*.html")
-			.pipe(i18n.generate({}))
+			.pipe(i18n.generate({
+				showDuplicateLocaleWarnings: config.i18n.show_duplicate_locale_warnings
+			}))
 			.pipe(gulp.dest(config.i18n._generated_locale_dest));
 	});
 
@@ -217,6 +223,7 @@ module.exports = function (gulp, config) {
 		async.each(localeNames, function (targetLocale, next) {
 			return gulp.src(config.i18n.src + "/**/*.html")
 				.pipe(i18n.translate({
+					showMissingLocaleWarnings: config.i18n.show_missing_locale_warnings,
 					targetLocale: targetLocale,
 					localeNames: localeNames,
 					locales: locales
