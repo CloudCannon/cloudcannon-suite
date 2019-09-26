@@ -2,7 +2,14 @@ var PluginError = require("plugin-error"),
 	through = require("through2").obj,
 	cheerio = require("cheerio"),
 	srcsetParser = require("srcset"),
+	URLRewriter = require("cssurl").URLRewriter,
 	path = require("path");
+
+
+function prepHref(href) {
+	return "'" + href.replace(/'/g, "\'") + "'";
+}
+
 
 var IGNORE_URL_REGEX = /^([a-z]+\:|\/\/|\#)/;
 module.exports = function (options) {
@@ -69,6 +76,43 @@ module.exports = function (options) {
 			}
 		});
 
+		$("[style]").each(function () {
+			var $el = $(this),
+				css = $el.attr("style");
+
+			var rewriter = new URLRewriter(function(href) {
+				if (IGNORE_URL_REGEX.test(href)) {
+					return prepHref(href);
+				}
+
+				return prepHref(rewritePath(file, href));
+			});
+
+			var updated = rewriter.rewrite(css);
+
+			if (updated !== css) {
+				$el.attr("style", updated);
+			}
+		});
+
+		$("style").each(function () {
+			var $el = $(this),
+				css = $el.html();
+
+			var rewriter = new URLRewriter(function(href) {
+				if (IGNORE_URL_REGEX.test(href)) {
+					return prepHref(href);
+				}
+
+				return prepHref(rewritePath(file, href));
+			});
+
+			var updated = rewriter.rewrite(css);
+			if (updated !== css) {
+				$el.html(updated);
+			}
+		});
+
 		$("meta[http-equiv='refresh']").each(function () {
 			var $el = $(this),
 				content = $el.attr("content"),
@@ -88,7 +132,8 @@ module.exports = function (options) {
 			}
 		});
 
-		file.contents = new Buffer($.html());
+
+		file.contents = Buffer.from($.html());
 		this.push(file);
 		callback();
 	});
