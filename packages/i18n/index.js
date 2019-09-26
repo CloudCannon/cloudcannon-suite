@@ -224,6 +224,7 @@ module.exports = function (gulp, config) {
 			return gulp.src(config.i18n.src + "/**/*.html")
 				.pipe(i18n.translate({
 					showMissingLocaleWarnings: config.i18n.show_missing_locale_warnings,
+					addOtherLocaleAlternates: true,
 					targetLocale: targetLocale,
 					localeNames: localeNames,
 					locales: locales
@@ -247,6 +248,8 @@ module.exports = function (gulp, config) {
 		async.each(localeNames, function (targetLocale, next) {
 			return gulp.src(config.i18n.src + "/" + targetLocale + "/**/*.html")
 				.pipe(i18n.translate({
+					showMissingLocaleWarnings: config.i18n.show_missing_locale_warnings,
+					addOtherLocaleAlternates: false,
 					targetLocale: targetLocale,
 					localeNames: localeNames,
 					locales: locales

@@ -216,12 +216,15 @@ module.exports = {
 				$("html").attr("lang", targetLocale);
 				$("meta[http-equiv='content-language']").remove();
 				$("head").append('<meta http-equiv="content-language" content="' + targetLocale + '">\n');
-				localeNames.forEach(function (localeName) {
-					if (localeName != targetLocale) {
-						var redirectUrl = localeName + file.sitePath;
-						$("head").append('<link rel="alternate" href="/' + redirectUrl + '" hreflang="' + localeName + '">\n');
-					}
-				});
+
+				if (options.addOtherLocaleAlternates) {
+					localeNames.forEach(function (localeName) {
+						if (localeName != targetLocale) {
+							var redirectUrl = localeName + file.sitePath;
+							$("head").append('<link rel="alternate" href="/' + redirectUrl + '" hreflang="' + localeName + '">\n');
+						}
+					});
+				}
 
 				file.contents = Buffer.from($.html());
 				this.push(file);
