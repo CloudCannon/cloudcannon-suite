@@ -43,7 +43,9 @@ function handleHTMLFile(options) {
 		file.sitePath = file.sitePath.replace(/\/index.html?/i, "/");
 
 		if (options.skipFile && options.skipFile(file)) {
-			log("Skipping HTML " + c.grey("'" + file.sitePath + "'"));
+			if (options.showSkippedUpdates) {
+				log("Skipping HTML " + c.grey("'" + file.sitePath + "'"));
+			}
 			return callback();
 		}
 
@@ -171,7 +173,9 @@ module.exports = {
 
 				var baseFolder = getBaseFolder(href);
 				if (localeLookup[baseFolder]) {
-					log("Skipping link " + c.grey("'" + href + "'"));
+					if (options.showSkippedUpdates) {
+						log("Skipping link " + c.grey("'" + href + "'"));
+					}
 					return;
 				}
 

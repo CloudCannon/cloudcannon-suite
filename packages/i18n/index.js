@@ -26,6 +26,7 @@ var configDefaults = {
 
 		show_duplicate_locale_warnings: true,
 		show_missing_locale_warnings: true,
+		show_skipped_updates: true,
 
 		character_based_locales: ["ja", "ja_jp", "ja-jp"],
 		google_credentials_filename: null
@@ -248,6 +249,7 @@ module.exports = function (gulp, config) {
 		async.each(localeNames, function (targetLocale, next) {
 			return gulp.src(config.i18n.src + "/" + targetLocale + "/**/*.html")
 				.pipe(i18n.translate({
+					showSkippedUpdates: config.i18n.show_skipped_updates,
 					showMissingLocaleWarnings: config.i18n.show_missing_locale_warnings,
 					addOtherLocaleAlternates: false,
 					targetLocale: targetLocale,
