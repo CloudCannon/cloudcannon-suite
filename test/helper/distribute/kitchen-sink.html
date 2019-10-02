@@ -1,0 +1,41 @@
+<html>
+    <head>
+
+        <link rel="stylesheet" href="/css/styles.css">
+        <link href="https://fonts.googleapis.com">
+        
+        <style>
+            body {
+                background-image: url(pic1.png);
+            }
+            div {
+                background-image:url("pic2.png");
+            }
+            p {
+                background-image: url('pic3.png'), url("pic4.svg");
+            }
+        </style>
+
+        <script>
+            const link = "/about"
+            const asset = '/images/pic.svg';
+        </script>
+    </head>
+    <body>
+
+        <a href="about">About</a>
+        <a href="/about">About</a>
+        <a href="/about#section-one">About - Section 1</a>
+        <a href="https://cloudcannon.com">CloudCannon</a>
+        <a href=""></a>
+        <a></a>
+
+        <script src="/js/script.js"></script>
+        <script src="https://outside-script.js"></script>
+
+        <img src="/images/picture.png">
+        <img srcset="/images/pic-320w.jpg 320w,
+                     /images/pic-480w.jpg 480w">
+
+    </body>
+</html>

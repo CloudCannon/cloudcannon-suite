@@ -3,8 +3,8 @@ var del = require("del"),
 	path = require("path"),
 	defaults = require("defaults"),
 	browserSync = require('browser-sync').create(),
-	htmlRewrite = require("./plugins/html"),
-	cssRewrite = require("./plugins/css"),
+	htmlRewrite = require("./plugins/html").plugin,
+	cssRewrite = require("./plugins/css").plugin,
 	log = require("fancy-log");
 
 var configDefaults = {
