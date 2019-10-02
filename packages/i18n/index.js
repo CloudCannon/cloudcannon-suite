@@ -1,16 +1,16 @@
-var async = require("async"),
-	fs = require("fs-extra"),
-	del = require("del"),
-	c = require("ansi-colors"),
-	log = require("fancy-log"),
-	path = require("path"),
-	defaults = require("defaults"),
-	browserSync = require('browser-sync').create(),
-	prop = require("properties"),
-	props2json = require("gulp-props2json"),
-	i18n = require("./plugins/i18n"),
-	rename = require("gulp-rename"),
-	wordwrap = require("./plugins/wordwrap-json");
+const async = require("async");
+const fs = require("fs-extra");
+const del = require("del");
+const c = require("ansi-colors");
+const log = require("fancy-log");
+const path = require("path");
+const defaults = require("defaults");
+const browserSync = require('browser-sync').create();
+const prop = require("properties");
+const props2json = require("gulp-props2json");
+const i18n = require("./plugins/i18n");
+const rename = require("gulp-rename");
+const wordwrap = require("./plugins/wordwrap-json");
 
 var configDefaults = {
 	i18n: {
@@ -25,7 +25,13 @@ var configDefaults = {
 
 		legacy_path: "_locales",
 
-		character_based_locales: ["ja", "ja_jp", "ja-jp"]
+
+		show_duplicate_locale_warnings: true,
+		show_missing_locale_warnings: true,
+		show_skipped_updates: true,
+
+		character_based_locales: ["ja", "ja_jp", "ja-jp"],
+		google_credentials_filename: null
 	},
 	serve: {
 		port: 8000,
@@ -154,7 +160,11 @@ module.exports = function (gulp, config) {
 			+ c.blue(config.i18n._generated_locale_dest));
 
 		return gulp.src(config.i18n._src + "/**/*.html")
-			.pipe(i18n.generate({version: config.i18n.source_version, delimeter: config.i18n.source_delimeter}))
+			.pipe(i18n.generate({
+				version: config.i18n.source_version, 
+				delimeter: config.i18n.source_delimeter,
+				showDuplicateLocaleWarnings: config.i18n.show_duplicate_locale_warnings
+			}))
 			.pipe(gulp.dest(config.i18n._generated_locale_dest));
 	});
 
@@ -320,6 +330,8 @@ module.exports = function (gulp, config) {
 		async.each(localeNames, function (targetLocale, next) {
 			return gulp.src(config.i18n.src + "/**/*.html")
 				.pipe(i18n.translate({
+					showMissingLocaleWarnings: config.i18n.show_missing_locale_warnings,
+					addOtherLocaleAlternates: true,
 					targetLocale: targetLocale,
 					localeNames: localeNames,
 					locales: locales
@@ -343,6 +355,9 @@ module.exports = function (gulp, config) {
 		async.each(localeNames, function (targetLocale, next) {
 			return gulp.src(config.i18n.src + "/" + targetLocale + "/**/*.html")
 				.pipe(i18n.translate({
+					showSkippedUpdates: config.i18n.show_skipped_updates,
+					showMissingLocaleWarnings: config.i18n.show_missing_locale_warnings,
+					addOtherLocaleAlternates: false,
 					targetLocale: targetLocale,
 					localeNames: localeNames,
 					locales: locales

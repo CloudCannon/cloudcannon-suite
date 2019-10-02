@@ -43,7 +43,9 @@ function handleHTMLFile(options) {
 		file.sitePath = file.sitePath.replace(/\/index.html?/i, "/").replace(/\/+/i, "/");
 
 		if (options.skipFile && options.skipFile(file)) {
-			log("Skipping HTML " + c.grey("'" + file.sitePath + "'"));
+			if (options.showSkippedUpdates) {
+				log("Skipping HTML " + c.grey("'" + file.sitePath + "'"));
+			}
 			return callback();
 		}
 
@@ -114,7 +116,7 @@ module.exports = {
 					"pages": {},
 					"total": 0
 				};
-			} else if (locale[key].original !== value) {
+			} else if (locale[key].original !== value && options.showDuplicateLocaleWarnings) {
 				log(c.yellow("Duplicate & mismatched data-i18n") + " " + c.grey(key));
 			}
 
@@ -196,7 +198,9 @@ module.exports = {
 
 				var baseFolder = getBaseFolder(href);
 				if (localeLookup[baseFolder]) {
-					log("Skipping link " + c.grey("'" + href + "'"));
+					if (options.showSkippedUpdates) {
+						log("Skipping link " + c.grey("'" + href + "'"));
+					}
 					return;
 				}
 
@@ -220,7 +224,7 @@ module.exports = {
 				if (locale[key]) {
 					$el.html(locale[key].wrappedTranslation || locale[key].translation);
 					locale[key].count++;
-				} else if ($el.html()) {
+				} else if ($el.html() && options.showMissingLocaleWarnings) {
 					log(c.yellow("Missing translation") + " "
 						+ c.grey(targetLocale + file.sitePath) +
 						" [data-i18n=" + key + "]");
@@ -230,7 +234,7 @@ module.exports = {
 					if (locale[key + "." + attr]) {
 						$el.attr(attr, locale[key + "." + attr].translation);
 						locale[key + "." + attr].count++;
-					} else if ($el.attr(attr)) {
+					} else if ($el.attr(attr) && options.showMissingLocaleWarnings) {
 						log(c.yellow("Missing translation") + " "
 							+ c.grey(targetLocale + file.sitePath) +
 							" [data-i18n=" + key + "][" + attr + "]");
@@ -241,12 +245,15 @@ module.exports = {
 				$("html").attr("lang", targetLocale);
 				$("meta[http-equiv='content-language']").remove();
 				$("head").append('<meta http-equiv="content-language" content="' + targetLocale + '">\n');
-				localeNames.forEach(function (localeName) {
-					if (localeName != targetLocale) {
-						var redirectUrl = localeName + file.sitePath;
-						$("head").append('<link rel="alternate" href="/' + redirectUrl + '" hreflang="' + localeName + '">\n');
-					}
-				});
+				
+				if (options.addOtherLocaleAlternates) {
+					localeNames.forEach(function (localeName) {
+						if (localeName != targetLocale) {
+							var redirectUrl = localeName + file.sitePath;
+							$("head").append('<link rel="alternate" href="/' + redirectUrl + '" hreflang="' + localeName + '">\n');
+						}
+					});
+				}
 
 				file.contents = Buffer.from($.html());
 				this.push(file);
