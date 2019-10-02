@@ -1,16 +1,16 @@
-var async = require("async"),
-	fs = require("fs-extra"),
-	del = require("del"),
-	c = require("ansi-colors"),
-	log = require("fancy-log"),
-	path = require("path"),
-	defaults = require("defaults"),
-	webserver = require("gulp-webserver"),
-	prop = require("properties"),
-	props2json = require("gulp-props2json"),
-	i18n = require("./plugins/i18n"),
-	rename = require("gulp-rename"),
-	PythonShell = require("python-shell");
+const async = require("async");
+const fs = require("fs-extra");
+const del = require("del");
+const c = require("ansi-colors");
+const log = require("fancy-log");
+const path = require("path");
+const defaults = require("defaults");
+const browserSync = require('browser-sync').create();
+const prop = require("properties");
+const props2json = require("gulp-props2json");
+const i18n = require("./plugins/i18n");
+const rename = require("gulp-rename");
+const wordwrap = require("./plugins/wordwrap-json");
 
 var configDefaults = {
 	i18n: {
@@ -20,6 +20,8 @@ var configDefaults = {
 		default_language: "en",
 		locale_src: "i18n/locales",
 		generated_locale_dest: "i18n",
+		source_version: 2,
+		source_delimeter: "\t",
 
 		legacy_path: "_locales",
 
@@ -59,22 +61,10 @@ module.exports = function (gulp, config) {
 	config.i18n.generated_locale_dest = path.join(cwd, config.i18n.generated_locale_dest);
 	config.i18n.legacy_path = path.join(cwd, config.i18n.legacy_path);
 
-	function runBudou(targetLocale, inputFilename, outputFilename, done) {
-		var options = {
-			mode: 'text',
-			scriptPath: __dirname,
-			args: [config.i18n.google_credentials_filename, inputFilename, outputFilename, targetLocale]
-		};
-
-		PythonShell.run('wordwrap-json.py', options, done);
-	}
-
 	function readLocalesFromDir(dir, done) {
 		var returnedLocales = {};
 		fs.readdir(dir, function(err, files) {
 			if (err) {
-				log(c.red("Unable to read locales") + " from "
-					+ c.blue(dir) + ": " + err.message);
 				return done(err);
 			}
 
@@ -129,10 +119,6 @@ module.exports = function (gulp, config) {
 			.pipe(gulp.dest(config.i18n.locale_src));
 	});
 
-	// Transfers json files from the new CloudCannon format
-	// to the old i18n folder structure
-	gulp.task("i18n:legacy-update", gulpSequence("i18n:load-locales", "i18n:add-character-based-wordwraps", "i18n:load-wordwraps", "i18n:legacy-save-to-properties-files"));
-
 	gulp.task("i18n:legacy-save-to-properties-files", function (done) {
 		log(c.green("Transferring files") + " from "
 			+ c.blue(config.i18n.locale_src + "/*.json")
@@ -145,11 +131,15 @@ module.exports = function (gulp, config) {
 			}
 
 			var json = {};
-			for (var key in locales[localeName]) {
+
+			var keys = Object.keys(locales[localeName]).sort();
+			for (let i = 0; i < keys.length; i++) {
+				const key = keys[i];
+
 				if (locales[localeName].hasOwnProperty(key)) {
 					json[key] = locales[localeName][key].translation;
 				}
-			}
+			}	
 
 			if (localeName === "th") {
 				localeName = "th_TH";
@@ -165,7 +155,7 @@ module.exports = function (gulp, config) {
 	// ---------------
 	// Generate Source
 
-	gulp.task("i18n:generate",  function (done) {
+	gulp.task("i18n:generate",  function () {
 		log(c.green("Generating source locale") + " from "
 			+ c.blue(config.i18n._src)
 			+ " to "
@@ -173,9 +163,126 @@ module.exports = function (gulp, config) {
 
 		return gulp.src(config.i18n._src + "/**/*.html")
 			.pipe(i18n.generate({
+				version: config.i18n.source_version, 
+				delimeter: config.i18n.source_delimeter,
 				showDuplicateLocaleWarnings: config.i18n.show_duplicate_locale_warnings
 			}))
 			.pipe(gulp.dest(config.i18n._generated_locale_dest));
+	});
+
+	// ---------------
+	// Check Sources
+
+	gulp.task("i18n:check", function (done) {
+		readLocalesFromDir(config.i18n.locale_src, function (err, returnedLocales) {
+			if (err) {
+				log(c.red("Unable to read locales") + " from "
+					+ c.blue(dir) + ": " + err.message);
+				return done();
+			}
+
+			log("Loading " + path.join(config.i18n.generated_locale_dest, "source.json") + "...");
+			fs.readFile(path.join(config.i18n.generated_locale_dest, "source.json"), function (err, data) {
+				if (err) {
+					log(err);
+					return done(err);
+				}
+
+				let source = JSON.parse(data);
+				let sourceLookup;
+
+				if (source.version) {
+					sourceLookup = source.keys;
+				} else {
+					sourceLookup = source;
+				}
+
+				let sourceKeys = Object.keys(sourceLookup);
+				let output = {};
+				let localeCodes = Object.keys(returnedLocales);
+
+				function compareTranslations(source, target) {
+					if (!target) {
+						return "missing";
+					}
+
+					if (config.i18n.source_version > 1) {
+						let sourceString = source.original;
+						let targetString = target.translation.original;
+
+						return sourceString === targetString ? "current" : "outdated";
+					}
+					return "current";
+				}
+
+				for (let i = 0; i < localeCodes.length; i++) {
+					const localeCode = localeCodes[i];
+					let translations = returnedLocales[localeCode];
+					output[localeCode] = {
+						current: true,
+						sourceTotal: sourceKeys.length,
+						total: Object.keys(translations).length,
+						states: {
+							missing: 0,
+							current: 0,
+							outdated: 0,
+							unused: 0,
+						},
+						keys: {}
+					};
+
+					for (let j = 0; j < sourceKeys.length; j++) {
+						const sourceKey = sourceKeys[j];
+						const sourceTranslation = sourceLookup[sourceKey];
+						const targetTranslation = translations[sourceKey];
+
+						let state = compareTranslations(sourceTranslation, targetTranslation);
+						output[localeCode].current = output[localeCode].current && state === "current";
+						output[localeCode].states[state]++;
+						output[localeCode].keys[sourceKey] = state;
+						delete translations[sourceKey];
+					}
+
+					let extraKeys = Object.keys(translations);
+					for (let x = 0; x < extraKeys.length; x++) {
+						const extraKey = extraKeys[x];
+						output[localeCode].current = false;
+						output[localeCode].keys[extraKey] = "unused";
+						output[localeCode].states["unused"]++;
+					}
+
+					if (output[localeCode].current) {
+						log("✅  '" + localeCode + "' is all up to date");
+					} else {
+						let logMessages = [];
+						
+						if (output[localeCode].states.missing) {
+							logMessages.push(output[localeCode].states.missing + " missing");
+						}
+
+						if (output[localeCode].states.outdated) {
+							logMessages.push(output[localeCode].states.outdated + " outdated");
+						}
+
+						if (output[localeCode].states.unused) {
+							logMessages.push(output[localeCode].states.unused + " unused");
+						}
+
+						let logMessage = "⚠️  '" + localeCode + "' translations include ";
+						if (logMessages.length > 1) {
+							logMessage += logMessages.slice(0, -1).join(', ') + ' and ' + logMessages.slice(-1);
+						} else {
+							logMessage += logMessages[0];
+						}
+						log(logMessage);
+					}
+				}
+
+				let outputFilename = path.join(config.i18n.generated_locale_dest, "checks.json");
+				fs.writeFile(outputFilename, JSON.stringify(output, null, "\t"), done);
+			});
+
+		});
 	});
 
 
@@ -190,16 +297,15 @@ module.exports = function (gulp, config) {
 				locales = returnedLocales;
 				locales[config.i18n.default_language] = null;
 				localeNames = Object.keys(locales);
+			} else {
+				log(c.red("Unable to read locales") + " from "
+					+ c.blue(dir) + ": " + err.message);
 			}
 			done(err);
 		});
 	});
 
 	gulp.task("i18n:load-wordwraps", function (done) {
-		if (!config.i18n.google_credentials_filename) {
-			return done();
-		}
-
 		var wrappedDir = path.join(config.i18n.locale_src, "../wrapped");
 		readLocalesFromDir(wrappedDir, function (err, returnedLocales) {
 			if (!err) {
@@ -209,9 +315,11 @@ module.exports = function (gulp, config) {
 						locales[localeName] = returnedLocales[localeName];
 					}
 				}
+			} else {
+				log(c.yellow("Wrapped files not found: ") + c.red(err.message));
 			}
 
-			done(err);
+			done();
 		});
 	});
 
@@ -264,8 +372,15 @@ module.exports = function (gulp, config) {
 	// ---------
 	// Wordwraps
 
-	gulp.task("i18n:add-character-based-wordwraps", ["i18n:load-locales"], function (done) {
-		if (!config.i18n.google_credentials_filename) {
+	gulp.task("i18n:add-character-based-wordwraps", function (done) {
+		if (!localeNames) {
+			log("i18n:load-locales must be run to load the locales first");
+			return done();
+		}
+
+		if (!process.env.GOOGLE_APPLICATION_CREDENTIALS) {
+			log("Environment variable GOOGLE_APPLICATION_CREDENTIALS not found");
+			log("export GOOGLE_APPLICATION_CREDENTIALS=\"/PATH/TO/CREDENTIALS/google-creds.json\"");
 			return done();
 		}
 
@@ -277,21 +392,75 @@ module.exports = function (gulp, config) {
 					return next();
 				}
 
+				if (!wordwrap.isLanguageSupported(targetLocale)) {
+					log(targetLocale + " is not supported");
+					return next();
+				}
+
 				var inputFilename = path.join(config.i18n.locale_src, targetLocale + ".json"),
 					outputFilename = path.join(wrappedDir, targetLocale + ".json");
 
-				runBudou(targetLocale, inputFilename, outputFilename, function (err) {
+				fs.readFile(inputFilename, function (err, data) {
 					if (err) {
-						console.error(targetLocale + ": failed to wrap", err);
-						return next(err);
+						return done(err);
 					}
-
-					log(targetLocale + ": is absolutely wrapped!");
-					return next();
+					
+					wordwrapLocale(targetLocale, data.toString("utf8"), function (err, output) {
+						if (err) {
+							console.error(targetLocale + ": failed to wrap", err);
+							return next(err);
+						}
+		
+						fs.writeFile(outputFilename, output, function (err) {
+							if (err) {
+								console.error(targetLocale + ": failed to wrap", err);
+								return next(err);
+							}
+		
+							return next();
+						});
+					});
 				});
 			}, done);
 		});
 	});
+
+	function wordwrapLocale(targetLocale, jsonString, done) {
+		let output = {};
+		let locale = JSON.parse(jsonString);
+		let keys = Object.keys(locale);
+
+		async.eachLimit(keys, 50, function (key, next) {	
+			let translation = locale[key];
+			if (translation.includes("</") || key.includes("meta:")) {
+				output[key] = translation;
+
+				return setImmediate(next);
+			}
+
+
+			wordwrap.parse({
+				text: translation, 
+				language: targetLocale, 
+				attributes: {"class":"wordwrap"}
+			}, function (err, parsed) {
+				if (parsed) {
+					output[key] = parsed.replace(/\n/g, ' ').replace(/\r/g, '');
+				}
+				next(err);
+			});
+		}, function (err) {
+			let sortedOutput = {};
+			Object.keys(output).sort().forEach(function(key){
+				sortedOutput[key] = output[key]; 
+			});
+			done(err, err ? null : JSON.stringify(sortedOutput, null, "\t"));
+		});
+	}
+
+	// Transfers json files from the new CloudCannon format
+	// to the old i18n folder structure
+	gulp.task("i18n:legacy-update", gulpSequence("i18n:load-locales", "i18n:add-character-based-wordwraps", "i18n:load-wordwraps", "i18n:legacy-save-to-properties-files"));
 
 	gulp.task("i18n:clean", function () {
 		return del(config.i18n.dest);
@@ -315,22 +484,32 @@ module.exports = function (gulp, config) {
 	// Serve
 
 	gulp.task("i18n:watch", function () {
-		gulp.watch(config.i18n._locale_src + "/**/*", ["i18n:build"]);
-		gulp.watch(config.i18n._src + "/**/*", ["i18n:build", "i18n:generate"]);
+		gulp.watch(config.i18n._locale_src + "/*.json", {delay: 1000}, ["i18n:reload"]);
+		gulp.watch(config.i18n._src + "/**/*", {delay: 1000}, ["i18n:reload", "i18n:generate"]);
 	});
 
-	gulp.task("i18n:serve", ["i18n:build"], function() {
-		return gulp.src(config.i18n.dest)
-			.pipe(webserver({
-				port: config.serve.port
-			}));
+	gulp.task("i18n:browser-sync", function (done) {
+		browserSync.reload();
+		done();
+	});
+	
+	gulp.task("i18n:reload", gulpSequence("i18n:build", "i18n:browser-sync"));
+
+	gulp.task("i18n:serve", function (done) {
+		browserSync.init({
+			server: {
+				baseDir: config.i18n.dest
+			},
+			port: config.serve.port,
+		});
+		done();
 	});
 
 
 	// -------
 	// Default
 
-	gulp.task("i18n", gulpSequence("i18n:serve", "i18n:watch"));
+	gulp.task("i18n", gulpSequence("i18n:build", "i18n:serve", "i18n:watch"));
 
 	gulp.task("i18n:kickoff", gulpSequence("dev:build", ["i18n:generate", "screenshots:dev"]));
 };

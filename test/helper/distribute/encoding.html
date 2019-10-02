@@ -1,0 +1,21 @@
+<html><head></head><body>
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;html&gt;</span>
+        <span class="nt">&lt;body&gt;</span>
+          <span class="c">&lt;!-- Add a placeholder for the Twitch embed --&gt;</span>
+          <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"twitch-embed"</span><span class="nt">&gt;&lt;/div&gt;</span>
+      
+          <span class="c">&lt;!-- Load the Twitch embed script --&gt;</span>
+          <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"https://embed.twitch.tv/embed/v1.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+      
+          <span class="c">&lt;!-- Create a Twitch.Embed object that will render within the "twitch-embed" root element. --&gt;</span>
+          <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/javascript"</span><span class="nt">&gt;</span>
+            <span class="k">new</span> <span class="nx">Twitch</span><span class="p">.</span><span class="nx">Embed</span><span class="p">(</span><span class="s2">"twitch-embed"</span><span class="p">,</span> <span class="p">{</span>
+              <span class="na">width</span><span class="p">:</span> <span class="mi">854</span><span class="p">,</span>
+              <span class="na">height</span><span class="p">:</span> <span class="mi">480</span><span class="p">,</span>
+              <span class="na">channel</span><span class="p">:</span> <span class="s2">"monstercat"</span>
+            <span class="p">});</span>
+          <span class="nt">&lt;/script&gt;</span>
+        <span class="nt">&lt;/body&gt;</span>
+      <span class="nt">&lt;/html&gt;</span>
+      </code></pre></div></div>
+</body></html>

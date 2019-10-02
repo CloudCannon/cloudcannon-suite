@@ -2,12 +2,11 @@ var del = require("del"),
 	c = require("ansi-colors"),
 	path = require("path"),
 	defaults = require("defaults"),
-	webserver = require("gulp-webserver"),
-	htmlRewrite = require("./plugins/html"),
-	cssRewrite = require("./plugins/css"),
-	log = require("fancy-log"),
-	rename = require("gulp-rename"),
+	browserSync = require('browser-sync').create(),
+	htmlRewrite = require("./plugins/html").plugin,
+	cssRewrite = require("./plugins/css").plugin,
 	gulpSequence = require("gulp-sequence");
+	log = require("fancy-log");
 
 var configDefaults = {
 	dist: {
@@ -72,20 +71,30 @@ module.exports = function (gulp, config) {
 	// Serve
 
 	gulp.task("dist:watch", function () {
-		gulp.watch(config.dist._src + "/**/*", ["dist:build"]);
+		gulp.watch(config.dist._src + "/**/*", {delay: 1000}, gulpSequence("dist:build"));
+		gulp.watch(config.dist._dest + "/**/*", {delay: 1000}, gulpSequence("dist:browser-sync"));
 	});
 
-	gulp.task("dist:serve", ["dist:build"], function() {
-		return gulp.src(config.dist.dest)
-			.pipe(webserver({
-				open: path.join(config.dist.baseurl, config.serve.path),
-				port: config.serve.port
-			}));
+	gulp.task("dist:browser-sync", function (done) {
+		browserSync.reload();
+		done();
+	});
+
+	gulp.task("dist:serve", function (done) {
+		browserSync.init({
+			startPath: path.join(config.dist.baseurl, config.serve.path),
+
+			server: {
+				baseDir: config.dist.dest
+			},
+			port: config.serve.port,
+		});
+		done();
 	});
 
 
 	// -------
 	// Default
 
-	gulp.task("dist", gulpSequence("dist:serve", "dist:watch"));
+	gulp.task("dist", gulpSequence("dist:build", "dist:serve", "dist:watch"));
 };

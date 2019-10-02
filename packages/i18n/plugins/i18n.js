@@ -40,7 +40,7 @@ function handleHTMLFile(options) {
 		}
 
 		file.sitePath = "/" + file.path.substring(file.base.length);
-		file.sitePath = file.sitePath.replace(/\/index.html?/i, "/");
+		file.sitePath = file.sitePath.replace(/\/index.html?/i, "/").replace(/\/+/i, "/");
 
 		if (options.skipFile && options.skipFile(file)) {
 			if (options.showSkippedUpdates) {
@@ -49,14 +49,12 @@ function handleHTMLFile(options) {
 			return callback();
 		}
 
-		var $ = cheerio.load(file.contents.toString(encoding), { lowerCaseAttributeNames:false, decodeEntities: false });
+		var $ = cheerio.load(file.contents.toString(encoding), { _useHtmlParser2: true, lowerCaseAttributeNames:false, decodeEntities: false });
 
 		$("[data-i18n]").each(function processElement() {
 			var $el = $(this),
 				key = $el.attr("data-i18n"),
-				attributes = $el.attr("data-i18n-attrs"),
-				value = $el.html(),
-				additions = {};
+				attributes = $el.attr("data-i18n-attrs");
 
 			if (!key) {
 				key = generateDefaultI18nKey($, $el);
@@ -108,41 +106,68 @@ function handleHTMLFile(options) {
 
 module.exports = {
 	generate: function (options) {
-		options = options || {};
+		options = options || {version: 2};
 		var locale = {};
+
+		function addLocale(key, value, file) {
+			if (!locale[key]) {
+				locale[key] = {
+					"original": value,
+					"pages": {},
+					"total": 0
+				};
+			} else if (locale[key].original !== value && options.showDuplicateLocaleWarnings) {
+				log(c.yellow("Duplicate & mismatched data-i18n") + " " + c.grey(key));
+			}
+
+			var filePath = file.path.substring(file.base.length);
+			if (!locale[key].pages[filePath]) {
+				locale[key].pages[filePath] = 1;
+			} else {
+				locale[key].pages[filePath]++;
+			}
+
+			locale[key].total++;
+		}
 
 		return handleHTMLFile({
 			processElement: function (file, $el, key, attributes) {
-				var additions = {};
-
-				additions[key] = $el.html();
+				addLocale(key, $el.html(), file);
 				attributes.forEach(function (attr) {
-					additions[key + "." + attr] = $el.attr(attr) || "";
+					addLocale(key + "." + attr, $el.attr(attr) || "", file);
 				});
-
-				for (var newKey in additions) {
-					if (additions.hasOwnProperty(newKey)) {
-						if (locale[newKey] && locale[newKey] !== additions[newKey] && options.showDuplicateLocaleWarnings) {
-							log(c.yellow("Duplicate data-i18n") + " "
-								+ c.grey(newKey) + ": " + locale[newKey] + " !== " + additions[newKey]);
-						} else {
-							locale[newKey] = additions[newKey];
-						}
-					}
-				}
 			},
 			complete: function (callback) {
 				var sorted = sortObject(locale);
 				cleanObj(sorted);
+				var keys = Object.keys(sorted);
+
+				var contents;
+				switch (options.version) {
+					case 2:
+						contents = {
+							"version": 2,
+							"keys": sorted
+						};
+						break;
+					default:
+						log(c.yellow("Using legacy format, please use 2 for i18n.source_version"));
+						contents = {};
+
+						for (let i = 0; i < keys.length; i++) {
+							const key = keys[i];
+							contents[key] = sorted[key].original;
+						}
+				}
 
 				this.push(new Vinyl({
 					path: "source.json",
-					contents: Buffer.from(JSON.stringify(sorted, null, "\t"))
+					contents: Buffer.from(JSON.stringify(contents, null, options.delimeter || ""))
 				}));
 
 				log(c.green("Generation complete") + " "
-					+ c.grey("i18n/source.json")
-					+ " available with " + Object.keys(sorted).length + " keys");
+					+ c.blue("i18n/source.json")
+					+ " available with " + keys.length + " keys");
 
 				callback();
 			}
@@ -220,7 +245,7 @@ module.exports = {
 				$("html").attr("lang", targetLocale);
 				$("meta[http-equiv='content-language']").remove();
 				$("head").append('<meta http-equiv="content-language" content="' + targetLocale + '">\n');
-
+				
 				if (options.addOtherLocaleAlternates) {
 					localeNames.forEach(function (localeName) {
 						if (localeName != targetLocale) {
@@ -247,7 +272,6 @@ module.exports = {
 			localeLookup[localeNames[i]] = true;
 		}
 
-
 		var redirectLookup = {};
 
 		localeNames.forEach(function (localeName) {
@@ -273,7 +297,7 @@ module.exports = {
 			}
 
 			file.sitePath = "/" + file.path.substring(file.base.length);
-			file.sitePath = file.sitePath.replace(/\/index.html?/i, "/");
+			file.sitePath = file.sitePath.replace(/\/index.html?/i, "/").replace(/\/+/i, "/");
 
 			var baseFolder = getBaseFolder(file.sitePath);
 			if (file.sitePath === "/404.html" || localeLookup[baseFolder]) {

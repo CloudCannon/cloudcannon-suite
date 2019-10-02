@@ -1,0 +1,25 @@
+body {
+    background-image: url('/p/pic1.png');
+}
+div {
+    background-image: url('/p/pic2.png');
+}
+p {
+    background-image:url('/p/pic3.png');
+}
+h1 {
+    background-image:url('/p/pic4.png');
+}
+
+h2 {
+    background-image: url('http://external-img1.png')
+}
+h3 {
+    background-image: url('http://external-img2.png')
+}
+h4 {
+    background-image:url('http://external-img3.png')
+}
+h5 {
+    background-image:url('http://external-img4.png')
+}
