@@ -428,15 +428,16 @@ module.exports = function (gulp, config) {
 		let locale = JSON.parse(jsonString);
 		let keys = Object.keys(locale);
 
-		async.eachLimit(keys, 50, function (key, next) {	
+		let count = 0;
+		async.eachLimit(keys, 5, function (key, next) {	
+			count++;
+
+			log("Wrapping " + count + " of " + keys.length);
 			let translation = locale[key];
 			if (translation.includes("</") || key.includes("meta:")) {
 				output[key] = translation;
-
 				return setImmediate(next);
 			}
-
-
 			wordwrap.parse({
 				text: translation, 
 				language: targetLocale, 
@@ -445,14 +446,12 @@ module.exports = function (gulp, config) {
 				if (parsed) {
 					output[key] = parsed.replace(/\n/g, ' ').replace(/\r/g, '');
 				}
-				next(err);
+				setTimeout(function () {
+					next(err);
+				}, 500);
 			});
 		}, function (err) {
-			let sortedOutput = {};
-			Object.keys(output).sort().forEach(function(key){
-				sortedOutput[key] = output[key]; 
-			});
-			done(err, err ? null : JSON.stringify(sortedOutput, null, "\t"));
+			done(err, err ? null : JSON.stringify(output, null, "\t"));
 		});
 	}
 

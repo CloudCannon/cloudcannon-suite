@@ -4,7 +4,7 @@ const language = require("@google-cloud/language");
 const client = new language.LanguageServiceClient();
 
 const supportedLanguages = [
-    'ja', 'ko', 'zh', 'zh-TW', 'zh-CN', 'zh-HK', 'zh-Hant'
+    'ja', 'ja-jp', 'ja_jp', 'ko', 'zh', 'zh-TW', 'zh-CN', 'zh-HK', 'zh-Hant'
 ];
 
 module.exports = {
