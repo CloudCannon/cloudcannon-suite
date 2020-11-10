@@ -17,6 +17,6 @@ $ npm version 1.1.7
 $ git push
 ...
 
-$ npm publish
+$ np
 ...
 ```
