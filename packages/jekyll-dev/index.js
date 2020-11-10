@@ -280,7 +280,7 @@ module.exports = function (gulp, config) {
 	// -------
 	// Default
 	if (customTasks.length > 0) {
-		gulp.task(npsc, gulp.series(customTasks, nspc + ":build", gulp.parallel(nspc + ":watch", nspc + ":serve")));
+		gulp.task(nspc, gulp.series(customTasks, nspc + ":build", gulp.parallel(nspc + ":watch", nspc + ":serve")));
 	} else {
 		gulp.task(nspc, gulp.series(nspc + ":build", gulp.parallel(nspc + ":watch", nspc + ":serve")));
 	}
