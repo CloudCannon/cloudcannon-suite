@@ -434,7 +434,7 @@ module.exports = function (gulp, config) {
 
 			log("Wrapping " + count + " of " + keys.length);
 			let translation = locale[key];
-			if (translation.includes("</") || key.includes("meta:")) {
+			if (translation.match(/<.+>/) || key.includes("meta:")) {
 				output[key] = translation;
 				return setImmediate(next);
 			}
