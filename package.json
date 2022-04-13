@@ -29,7 +29,7 @@
     "@cloudcannon/screenshot-util": "^1.1.12",
     "@google-cloud/language": "^4.1.0",
     "ansi-colors": "^3.2.1",
-    "async": "^2.6.1",
+    "async": "^3.2.2",
     "await-exec": "^0.1.2",
     "bluebird": "^3.5.3",
     "browser-sync": "^2.26.12",
